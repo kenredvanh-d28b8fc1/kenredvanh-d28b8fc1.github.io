@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>秘密官网 - 隐秘档案与未解事件聚合</title>
+  <meta name="description" content="秘密官网汇集都市传说、未解悬案、匿名档案与冷门知识；提供具体档案条目、悬疑剧集、真实事件解析，适合悬疑爱好者与考据派阅读。">
+  <meta name="keywords" content="未解悬案,都市传说,匿名档案,冷门知识,悬疑剧集">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f172a'/%3E%3Cpath d='M16 6C11 6 8 10 8 16c0 6 3 10 8 10s8-4 8-10c0-6-3-10-8-10z' fill='none' stroke='%23c084fc' stroke-width='2'/%3E%3Ccircle cx='16' cy='15' r='3' fill='%23c084fc'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #0b0e14;
+      --panel: #131a24;
+      --panel-2: #1a2330;
+      --border: #263041;
+      --text: #e2e8f0;
+      --muted: #8b9bb4;
+      --accent: #c084fc;
+      --accent-soft: #7c3aed;
+      --gold: #fbbf24;
+      --teal: #2dd4bf;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 4px 20px rgba(0,0,0,0.5);
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
+      --header-height: 64px;
+      --announce-height: 40px;
+      --sticky-offset: calc(var(--header-height) + var(--announce-height));
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: var(--sticky-offset); }
+    body {
+      background: var(--bg);
+      font-family: var(--font);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding-top: var(--sticky-offset);
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; height: auto; }
+    .container {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* 吸顶公告条 + 页头 */
+    .announce-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--announce-height);
+      background: linear-gradient(90deg, #1e1b4b, #0f172a);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      z-index: 1000;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .announce-bar .container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .announce-bar .dot {
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: 0 0 8px var(--accent);
+    }
+    .announce-bar .text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .announce-bar strong { color: var(--text); font-weight: 600; }
+
+    .site-header {
+      position: fixed;
+      top: var(--announce-height);
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      background: rgba(11, 14, 20, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .brand svg { width: 32px; height: 32px; }
+    .brand-text {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #e2e8f0, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .main-nav {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .main-nav a {
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 20px;
+      color: var(--muted);
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+    .main-nav a:hover, .main-nav a:focus-visible {
+      background: var(--panel-2);
+      color: var(--text);
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+    .header-quick {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .header-quick a {
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      transition: 0.2s;
+    }
+    .header-quick a:hover, .header-quick a:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent);
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+
+    /* 首屏 */
+    .hero {
+      padding: 48px 0 40px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(192,132,252,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-content { flex: 1; }
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #f1f5f9, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 24px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: 0.2s;
+      border: 1px solid transparent;
+      cursor: pointer;
+      background: none;
+      color: inherit;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: var(--accent-soft);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(124,58,237,0.3);
+    }
+    .btn-primary:hover, .btn-primary:focus-visible {
+      background: #6d28d9;
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .btn-ghost {
+      border-color: var(--border);
+      color: var(--muted);
+    }
+    .btn-ghost:hover, .btn-ghost:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent);
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .hero-visual {
+      flex-shrink: 0;
+      width: 280px;
+      height: 280px;
+      position: relative;
+    }
+    .hero-visual svg { width: 100%; height: 100%; }
+
+    /* 三栏布局 */
+    .layout {
+      display: grid;
+      grid-template-columns: 170px 1fr 260px;
+      gap: 28px;
+      align-items: start;
+    }
+    .channel-sidebar {
+      position: sticky;
+      top: var(--sticky-offset);
+    }
+    .channel-nav {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 0;
+    }
+    .channel-nav h2 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      padding: 0 16px 10px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+    .channel-nav a {
+      display: block;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      transition: 0.2s;
+      border-left: 2px solid transparent;
+    }
+    .channel-nav a:hover, .channel-nav a:focus-visible {
+      background: var(--panel-2);
+      color: var(--text);
+      border-left-color: var(--accent);
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+
+    .main-content { min-width: 0; }
+    .aux-sidebar {
+      position: sticky;
+      top: var(--sticky-offset);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* 通用板块样式 */
+    .section {
+      margin-bottom: 48px;
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .section-header h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-header h2::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 2px;
+      display: inline-block;
+    }
+    .section-more {
+      font-size: 13px;
+      color: var(--muted);
+      transition: 0.2s;
+    }
+    .section-more:hover, .section-more:focus-visible {
+      color: var(--accent);
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* 卡片网格 */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    .card-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      background: var(--panel-2);
+    }
+    .card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: var(--panel-2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .tag-accent {
+      background: rgba(192,132,252,0.15);
+      color: var(--accent);
+      border-color: rgba(192,132,252,0.3);
+    }
+    .card-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+    .card-stats {
+      display: flex;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+    .card-stats span { display: flex; align-items: center; gap: 4px; }
+    .card-stats .hot { color: var(--gold); }
+
+    /* 紧凑列表 */
+    .update-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .update-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      transition: 0.2s;
+    }
+    .update-item:last-child { border-bottom: none; }
+    .update-item:hover { background: var(--panel-2); }
+    .update-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      min-width: 24px;
+    }
+    .update-info { flex: 1; min-width: 0; }
+    .update-name {
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .update-summary {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .update-time {
+      font-size: 11px;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    /* 分类入口 */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .category-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 12px;
+      text-align: center;
+      transition: 0.2s;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .category-card:hover, .category-card:focus-visible {
+      border-color: var(--accent);
+      background: var(--panel-2);
+      color: var(--accent);
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+    .category-card .count {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 4px;
+    }
+
+    /* 深度解析 */
+    .deep-dive {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+    .deep-dive h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 24px 0 10px;
+      color: var(--accent);
+    }
+    .deep-dive h3:first-child { margin-top: 0; }
+    .deep-dive p {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      line-height: 1.8;
+    }
+    .deep-dive ul {
+      list-style: none;
+      padding: 0;
+      margin: 12px 0;
+    }
+    .deep-dive li {
+      font-size: 14px;
+      color: var(--muted);
+      padding: 6px 0 6px 20px;
+      position: relative;
+      line-height: 1.7;
+    }
+    .deep-dive li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    /* 体验指南 */
+    .guide-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .guide-step {
+      display: flex;
+      gap: 16px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 18px;
+    }
+    .step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .step-content h4 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .step-content p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* FAQ */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    details {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    details[open] { border-color: var(--accent); }
+    summary {
+      padding: 14px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.2s;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: '+';
+      font-size: 18px;
+      color: var(--muted);
+      transition: 0.2s;
+    }
+    details[open] summary::after { content: '−'; color: var(--accent); }
+    summary:hover, summary:focus-visible {
+      color: var(--accent);
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+    details .faq-body {
+      padding: 0 18px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    /* 评论 */
+    .comment-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .comment-item {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+    }
+    .comment-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .comment-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--panel-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .comment-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .comment-date {
+      font-size: 11px;
+      color: var(--muted);
+      margin-left: auto;
+    }
+    .comment-text {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* 资讯列表 */
+    .news-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .news-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 18px;
+      transition: 0.2s;
+    }
+    .news-card:hover {
+      border-color: var(--accent);
+    }
+    .news-date {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .news-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .news-summary {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* 相关推荐标签索引 */
+    .tag-index {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag-index a {
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      transition: 0.2s;
+    }
+    .tag-index a:hover, .tag-index a:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--panel-2);
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* 侧栏辅助模块 */
+    .sidebar-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+    .sidebar-card h3 {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .rank-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .rank-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+    .rank-num {
+      font-weight: 700;
+      color: var(--accent);
+      width: 20px;
+      font-size: 12px;
+    }
+    .rank-name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .rank-hot {
+      font-size: 11px;
+      color: var(--gold);
+    }
+
+    /* 页脚 */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0 24px;
+      margin-top: 20px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    .footer-brand .brand-text { font-size: 1.2rem; }
+    .footer-brand p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 12px;
+      line-height: 1.7;
+      max-width: 280px;
+    }
+    .footer-col h4 {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+    .footer-col a {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      padding: 4px 0;
+      transition: 0.2s;
+    }
+    .footer-col a:hover, .footer-col a:focus-visible {
+      color: var(--accent);
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* 响应式 */
+    @media (max-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr 260px;
+      }
+      .channel-sidebar {
+        display: none;
+      }
+      .hero h1 { font-size: 2.2rem; }
+      .hero-visual { width: 200px; height: 200px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 740px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .aux-sidebar {
+        position: static;
+        order: 2;
+      }
+      .main-content { order: 1; }
+      .hero-inner { flex-direction: column; text-align: center; }
+      .hero h1 { font-size: 1.8rem; }
+      .hero-desc { margin-left: auto; margin-right: auto; }
+      .hero-actions { justify-content: center; }
+      .hero-visual { width: 160px; height: 160px; }
+      .category-grid { grid-template-columns: repeat(2, 1fr); }
+      .main-nav { display: none; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .header-quick { display: none; }
+      .hero { padding: 32px 0 24px; }
+      .section { margin-bottom: 32px; }
+      .card-grid { grid-template-columns: 1fr; }
+      .news-list { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 400px) {
+      .container { padding: 0 14px; }
+      .hero h1 { font-size: 1.5rem; }
+      .category-grid { grid-template-columns: 1fr 1fr; }
+    }
+    /* 键盘焦点 */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .card:focus-within {
+      border-color: var(--accent);
+    }
+  </style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+
+<!-- 吸顶公告条 -->
+<div class="announce-bar" role="region" aria-label="最新公告">
+  <div class="container">
+    <span class="dot"></span>
+    <span class="text"><strong>11月7日</strong> 新增「青木原树海录音档案」与「暗网拍卖疑云」共 12 条档案，悬疑剧集《迷途》第6集已更新。</span>
+  </div>
+</div>
+
+<!-- 吸顶页头 -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/#top" class="brand" aria-label="秘密官网首页">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect width="32" height="32" rx="6" fill="#0f172a"/>
+        <path d="M16 5C10.5 5 7 9.5 7 16c0 6.5 3.5 11 9 11s9-4.5 9-11c0-6.5-3.5-11-9-11z" stroke="#c084fc" stroke-width="1.8"/>
+        <circle cx="16" cy="15" r="3.5" fill="#c084fc"/>
+        <path d="M16 20v4" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-text">秘密官网</span>
+    </a>
+    <nav class="main-nav" aria-label="主题导航">
+      <a href="/#archive">档案库</a>
+      <a href="/#cases">未解悬案</a>
+      <a href="/#legends">都市传说</a>
+      <a href="/#drama">悬疑剧集</a>
+      <a href="/#knowledge">冷门知识</a>
+      <a href="/#interviews">匿名访谈</a>
+      <a href="/#tools">考据工具</a>
+      <a href="/#community">讨论区</a>
+    </nav>
+    <div class="header-quick">
+      <a href="/#latest">最新更新</a>
+      <a href="/#rank">热榜</a>
+    </div>
+  </div>
+</header>
+
+<!-- 首屏 -->
+<main id="top">
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <h1>秘密官网</h1>
+        <p class="hero-desc">
+          汇聚都市传说、未解悬案、匿名档案与冷门知识。这里收录具体案件记录、悬疑剧集解析、真实事件时间线，以及可交叉验证的考据资料，适合悬疑爱好者、考据派与叙事创作者深入查阅。
+        </p>
+        <div class="hero-actions">
+          <a href="/#archive" class="btn btn-primary">进入档案库</a>
+          <a href="/#latest" class="btn btn-ghost">查看最新条目</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <svg viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="140" cy="140" r="120" stroke="#263041" stroke-width="1" stroke-dasharray="4 6"/>
+          <circle cx="140" cy="140" r="90" stroke="#263041" stroke-width="1" stroke-dasharray="2 8"/>
+          <circle cx="140" cy="140" r="60" stroke="#7c3aed" stroke-width="1.5" opacity="0.4"/>
+          <path d="M140 40 L140 240 M40 140 L240 140" stroke="#263041" stroke-width="1"/>
+          <circle cx="140" cy="140" r="8" fill="#c084fc" opacity="0.9"/>
+          <circle cx="140" cy="140" r="16" stroke="#c084fc" stroke-width="1" opacity="0.5"/>
+          <circle cx="140" cy="140" r="28" stroke="#c084fc" stroke-width="0.8" opacity="0.3"/>
+          <path d="M100 100 L180 180 M180 100 L100 180" stroke="#263041" stroke-width="1"/>
+          <circle cx="80" cy="80" r="3" fill="#fbbf24" opacity="0.7"/>
+          <circle cx="200" cy="200" r="3" fill="#fbbf24" opacity="0.7"/>
+          <circle cx="200" cy="80" r="2" fill="#2dd4bf" opacity="0.6"/>
+          <circle cx="80" cy="200" r="2" fill="#2dd4bf" opacity="0.6"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 三栏布局 -->
+  <div class="container layout">
+    <!-- 左侧频道索引 -->
+    <aside class="channel-sidebar">
+      <nav class="channel-nav" aria-label="频道索引">
+        <h2>频道索引</h2>
+        <a href="/#archive">档案库</a>
+        <a href="/#cases">未解悬案</a>
+        <a href="/#legends">都市传说</a>
+        <a href="/#drama">悬疑剧集</a>
+        <a href="/#knowledge">冷门知识</a>
+        <a href="/#interviews">匿名访谈</a>
+        <a href="/#tools">考据工具</a>
+        <a href="/#community">讨论区</a>
+        <a href="/#latest">最新更新</a>
+        <a href="/#rank">热门榜单</a>
+      </nav>
+    </aside>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+
+      <!-- 主题领域概览 -->
+      <section class="section" id="overview">
+        <div class="section-header">
+          <h2>领域概览</h2>
+        </div>
+        <div class="deep-dive">
+          <p>
+            “秘密”类内容在中文互联网上主要指向几个具体方向：一是真实未解案件与失踪事件的档案化记录，如南大碎尸案、红安八人遇害案等长期讨论的悬案；二是都市传说与地方怪谈，例如北京375路公交、上海林家宅等有明确发生地点的传闻；三是解密类档案，涵盖冷战间谍、暗网市场、匿名组织等可查证材料；四是悬疑影视与纪实剧集，如《迷途》《暗网追踪》等近年上线的作品。
+          </p>
+          <p>
+            本页聚合的条目以可检索的名称为核心，每一条都带有具体类型标签、时间节点和内容摘要。当前值得关注的方向包括：2026年10月新解封的「青木原树海录音档案」、持续更新的「暗网拍卖疑云」系列、以及悬疑短剧《迷途》第一季的播出进度。对于刚接触这个领域的读者，建议从有明确时间线和物证链的条目入手，例如「华航611空难录音分析」或「迪亚特洛夫事件气象还原」，这些内容有相对完整的公开资料可供交叉比对。
+          </p>
+          <p>
+            另一条值得留意的脉络是匿名创作者访谈。2026年10月至11月期间，几位长期整理悬案资料的博主公开了他们的信息筛选方法，涉及如何区分原始报道与二次加工、怎样判断一张现场照片的拍摄时间等具体技巧。这些内容对于想自己动手考据的读者有直接参考价值。
+          </p>
+        </div>
+      </section>
+
+      <!-- 精选内容推荐 -->
+      <section class="section" id="archive">
+        <div class="section-header">
+          <h2>精选档案</h2>
+          <a href="/#archive" class="section-more">全部档案 →</a>
+        </div>
+        <div class="card-grid">
+          <article class="card">
+            <img src="https://picsum.photos/seed/qingmuyuan47/400/300" alt="青木原树海录音档案封面" width="400" height="300" loading="lazy">
+            <div class="card-body">
+              <h3 class="card-title">青木原树海录音档案</h3>
+              <div class="card-meta">
+                <span class="tag tag-accent">真实录音</span>
+                <span class="tag">日本</span>
+                <span class="tag">2026解封</span>
+              </div>
+              <p class="card-desc">一段标注为1994年录制的磁带在2026年10月被匿名上传，内容包含日语环境音与断续呼救，经声纹比对与地形分析，部分片段与山梨县消防记录存在时间重合。</p>
+              <div class="card-stats">
+                <span>🔥 <span class="hot">9.2</span></span>
+                <span>📄 档案编号 A-1047</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <img src="https://picsum.photos/seed/ananwang03/400/300" alt="暗网拍卖疑云事件封面" width="400" height="300" loading="lazy">
+            <div class="card-body">
+              <h3 class="card-title">暗网拍卖疑云</h3>
+              <div class="card-meta">
+                <span class="tag tag-accent">网络犯罪</span>
+                <span class="tag">跨国</span>
+                <span class="tag">2026-10</span>
+              </div>
+              <p class="card-desc">2026年9月底，一个名为“黑市钟摆”的暗网拍卖页面以比特币标售声称来自某博物馆失窃仓库的文物照片，国际刑警组织于10月12日发布协查通报，目前已有三个国家的调查组介入。</p>
+              <div class="card-stats">
+                <span>🔥 <span class="hot">9.5</span></span>
+                <span>📄 档案编号 A-1063</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <img src="https://picsum.photos/seed/huahang611/400/300" alt="华航611空难录音分析封面" width="400" height="300" loading="lazy">
+            <div class="card-body">
+              <h3 class="card-title">华航611空难录音分析</h3>
+              <div class="card-meta">
+                <span class="tag tag-accent">航空事故</span>
+                <span class="tag">2002</span>
+                <span class="tag">录音还原</span>
+              </div>
+              <p class="card-desc">针对2002年中华航空611号班机空中解体事故，一篇基于CVR（驾驶舱语音记录器）公开片段的重构分析，结合当时高空温度与金属疲劳数据，讨论了录音中最后两分钟的背景异响来源。</p>
+              <div class="card-stats">
+                <span>🔥 <span class="hot">8.8</span></span>
+                <span>📄 档案编号 A-1021</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <img src="https://picsum.photos/seed/diyateerfu/400/300" alt="迪亚特洛夫事件气象还原封面" width="400" height="300" loading="lazy">
+            <div class="card-body">
+              <h3 class="card-title">迪亚特洛夫事件气象还原</h3>
+              <div class="card-meta">
+                <span class="tag tag-accent">苏联悬案</span>
+                <span class="tag">1959</span>
+                <span class="tag">模拟推演</span>
+              </div>
+              <p class="card-desc">2026年10月发布的一份气象模拟报告，使用欧洲中期天气预报中心再分析数据，重构了1959年2月1日夜间乌拉尔山区的风速与温度变化，为“雪崩说”与“次声波说”提供了新的量化依据。</p>
+              <div class="card-stats">
+                <span>🔥 <span class="hot">9.0</span></span>
+                <span>📄 档案编号 A-1055</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <img src="https://picsum.photos/seed/beijing375/400/300" alt="北京375路公交传说溯源封面" width="400" height="300" loading="lazy">
+            <div class="card-body">
+              <h3 class="card-title">北京375路公交传说溯源</h3>
+              <div class="card-meta">
+                <span class="tag tag-accent">都市传说</span>
+                <span class="tag">北京</span>
+                <span class="tag">1995</span>
+              </div>
+              <p class="card-desc">对“375路公交车灵异事件”的源头追踪，梳理了1995年至今的版本流变，对比了不同年份论坛帖子的细节差异，并指出其中与真实公交线路调整时间不符的几处关键矛盾。</p>
+              <div class="card-stats">
+                <span>🔥 <span class="hot">8.5</span></span>
+                <span>📄 档案编号 A-1008</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <img src="https://picsum.photos/seed/linjiazhai/400/300" alt="上海林家宅事件旧报摘录封面" width="400" height="300" loading="lazy">
+            <div class="card-body">
+              <h3 class="card-title">上海林家宅事件旧报摘录</h3>
+              <div class="card-meta">
+                <span class="tag tag-accent">地方怪谈</span>
+                <span class="tag">上海</span>
+                <span class="tag">1950s</span>
+              </div>
+              <p class="card-desc">从1950年代《新民晚报》社会新闻版面中整理出与林家宅相关的六则短讯，内容涉及房屋产权纠纷与夜间声响投诉，是目前可查的最早公开文字记录，与后续传说版本差异明显。</p>
+              <div class="card-stats">
+                <span>🔥 <span class="hot">8.2</span></span>
+                <span>📄 档案编号 A-1013</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <img src="https://picsum.photos/seed/mitu-drama/400/300" alt="悬疑剧集迷途剧照" width="400" height="300" loading="lazy">
+            <div class="card-body">
+              <h3 class="card-title">悬疑剧集《迷途》第一季</h3>
+              <div class="card-meta">
+                <span class="tag tag-accent">悬疑剧</span>
+                <span class="tag">2026-10</span>
+                <span class="tag">更新至第6集</span>
+              </div>
+              <p class="card-desc">以一起横跨十二年的连环失踪案为线索，采用双时间线叙事。第6集于2026年11月6日上线，剧情推进到关键证人翻供，主角在档案室发现被涂改的证人保护记录。</p>
+              <div class="card-stats">
+                <span>🔥 <span class="hot">9.1</span></span>
+                <span>📺 共8集</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <img src="https://picsum.photos/seed/anwang-zhuizong/400/300" alt="暗网追踪纪录片封面" width="400" height="300" loading="lazy">
+            <div class="card-body">
+              <h3 class="card-title">暗网追踪纪录片</h3>
+              <div class="card-meta">
+                <span class="tag tag-accent">纪录片</span>
+                <span class="tag">2026-09</span>
+                <span class="tag">已完结</span>
+              </div>
+              <p class="card-desc">三集纪录片，跟随欧洲刑警组织网络犯罪调查组追踪一个名为“黑市钟摆”的暗网交易平台。2026年9月上线，包含对两名被捕嫌疑人的远程采访片段与资金流向动画演示。</p>
+              <div class="card-stats">
+                <span>🔥 <span class="hot">8.7</span></span>
+                <span>📺 共3集</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 最新更新 / 动态 -->
+      <section class="section" id="latest">
+        <div class="section-header">
+          <h2>最新更新与动态</h2>
+          <a href="/#latest" class="section-more">更多更新 →</a>
+        </div>
+        <div class="update-list">
+          <div class="update-item">
+            <span class="update-num">01</span>
+            <div class="update-info">
+              <div class="update-name">青木原树海录音档案</div>
+              <div class="update-summary">新增第3段频谱分析，标注出两处此前被忽略的低频脉冲</div>
+            </div>
+            <span class="update-time">今天 09:45</span>
+          </div>
+          <div class="update-item">
+            <span class="update-num">02</span>
+            <div class="update-info">
+              <div class="update-name">悬疑剧集《迷途》</div>
+              <div class="update-summary">第6集上线，关键证人翻供，档案室涂改记录曝光</div>
+            </div>
+            <span class="update-time">昨天 21:10</span>
+          </div>
+          <div class="update-item">
+            <span class="update-num">03</span>
+            <div class="update-info">
+              <div class="update-name">暗网拍卖疑云</div>
+              <div class="update-summary">国际刑警组织更新协查通报，新增两国调查进展</div>
+            </div>
+            <span class="update-time">11月7日 14:30</span>
+          </div>
+          <div class="update-item">
+            <span class="update-num">04</span>
+            <div class="update-info">
+              <div class="update-name">迪亚特洛夫事件气象还原</div>
+              <div class="update-summary">评论区新增俄罗斯研究者提供的当地气象站原始读数对照</div>
+            </div>
+            <span class="update-time">11月6日 19:20</span>
+          </div>
+          <div class="update-item">
+            <span class="update-num">05</span>
+            <div class="update-info">
+              <div class="update-name">上海林家宅旧报摘录</div>
+              <div class="update-summary">补充1953年12月《新民晚报》第四版短讯全文影印</div>
+            </div>
+            <span class="update-time">11月5日 11:00</span>
+          </div>
+          <div class="update-item">
+            <span class="update-num">06</span>
+            <div class="update-info">
+              <div class="update-name">北京375路公交传说溯源</div>
+              <div class="update-summary">新增1995年公交线路调整公告扫描件，修正两处时间矛盾</div>
+            </div>
+            <span class="update-time">11月4日 16:45</span>
+          </div>
+          <div class="update-item">
+            <span class="update-num">07</span>
+            <div class="update-info">
+              <div class="update-name">华航611空难录音分析</div>
+              <div class="update-summary">更新金属疲劳测试数据引用来源，附NTSB报告页码索引</div>
+            </div>
+            <span class="update-time">11月3日 10:15</span>
+          </div>
+          <div class="update-item">
+            <span class="update-num">08</span>
+            <div class="update-info">
+              <div class="update-name">匿名访谈第4期</div>
+              <div class="update-summary">对话一位整理失踪人口档案的前调查记者，文字稿已发布</div>
+            </div>
+            <span class="update-time">11月2日 20:00</span>
+          </div>
+          <div class="update-item">
+            <span class="update-num">09</span>
+            <div class="update-info">
+              <div class="update-name">暗网追踪纪录片</div>
+              <div class="update-summary">导演评论音轨上线，补充拍摄期间被删除的一段采访</div>
+            </div>
+            <span class="update-time">11月1日 13:30</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 分类入口 -->
+      <section class="section" id="categories">
+        <div class="section-header">
+          <h2>分类入口</h2>
+        </div>
+        <div class="category-grid">
+          <a href="/#cases" class="category-card">未解悬案<span class="count">32 条</span></a>
+          <a href="/#legends" class="category-card">都市传说<span class="count">28 条</span></a>
+          <a href="/#archive" class="category-card">解密档案<span class="count">41 条</span></a>
+          <a href="/#drama" class="category-card">悬疑剧集<span class="count">16 部</span></a>
+          <a href="/#knowledge" class="category-card">冷门知识<span class="count">24 篇</span></a>
+          <a href="/#interviews" class="category-card">匿名访谈<span class="count">8 期</span></a>
+          <a href="/#tools" class="category-card">考据工具<span class="count">6 款</span></a>
+          <a href="/#community" class="category-card">讨论区<span class="count">12 个话题</span></a>
+        </div>
+      </section>
+
+      <!-- 深度解析正文 -->
+      <section class="section" id="deep-dive">
+        <div class="section-header">
+          <h2>深度解析：悬案档案的阅读与判断</h2>
+        </div>
+        <div class="deep-dive">
+          <h3>原始报道与二次加工的区别</h3>
+          <p>
+            阅读悬案档案时，最先需要分辨的是信息源头。以华航611空难为例，台湾飞安会（ASC）发布的调查报告、NTSB的辅助报告，以及当时媒体（如《联合报》2002年5月26日头版）的即时报道，属于第一层级。网络上大量“录音完整版”“未公开照片”往往经过剪辑或配以误导性文字，属于二次加工。判断方法很简单：查看是否标注了原始文件编号、发布机构、日期。本页收录的每条档案都尽量给出可追溯的出处线索，例如“华航611录音分析”条目中直接引用了ASC报告第87页的频谱图编号。
+          </p>
+          <h3>时间线交叉验证的实操方法</h3>
+          <p>
+            对于都市传说类内容，时间线是过滤噪音的有效工具。以北京375路公交传说为例，其核心情节（末班车、神秘乘客、终点站异常）在不同年份的论坛帖子中存在细节漂移。2010年前后的版本多提到“圆明园站”，而1995年真实的375路路线是从西直门到韩家川，并不经过圆明园。这个矛盾可以直接在北京市档案馆公开的1995年公交线路表中查证。类似地，上海林家宅事件在1950年代的报纸短讯中仅涉及产权纠纷，与后来流传的“灭门”情节完全不同。把每个版本出现的平台、日期、关键细节列成表格，差异点往往指向传播过程中的添油加醋。
+          </p>
+          <h3>悬疑剧集与真实档案的对照价值</h3>
+          <p>
+            2026年10月开播的《迷途》虽然是一部虚构剧集，但其编剧团队在访谈中承认参考了至少四起真实失踪案的结构。观看时可以留意剧中“被涂改的证人保护记录”这一情节，与现实中某些悬案里证人信息前后矛盾的情况有相似逻辑。不过需要注意的是，剧集为了戏剧性会压缩时间跨度、合并人物关系，不能直接作为事实依据。比较合理的用法是：把剧集当作索引，对其中涉及的制度漏洞（如保护令执行流程、跨辖区协查延迟）产生兴趣后，再去查阅公开的司法文书或新闻报道。
+          </p>
+          <h3>匿名档案的可信度分层</h3>
+          <p>
+            并非所有“秘密档案”都值得投入时间。根据来源的可验证程度，可以粗略分为三层：
+          </p>
+          <ul>
+            <li><strong>可交叉验证层：</strong>有明确机构编号、日期、可对照的公开记录。例如“迪亚特洛夫事件气象还原”引用的ERA5再分析数据，任何人可以下载同一时段的网格数据复核。</li>
+            <li><strong>单源存疑层：</strong>仅有一个匿名上传者，没有第二方独立佐证，但内容本身包含可查证的地理、气象细节。例如“青木原树海录音档案”中的背景音被识别出某种特定鸟鸣，与山梨县该季节的鸟类分布吻合，但呼救内容仍无法确认。</li>
+            <li><strong>叙事驱动层：</strong>以情节完整、情绪强烈为特征，缺乏可验证的硬信息。这类内容适合作为创作素材或文化现象观察，不宜当作事实记录。</li>
+          </ul>
+          <p>
+            本页在每条档案的标签中尽量标注了层级线索，例如“真实录音”“模拟推演”“旧报摘录”等，方便读者按需选择。
+          </p>
+        </div>
+      </section>
+
+      <!-- 体验指南 -->
+      <section class="section" id="guide">
+        <div class="section-header">
+          <h2>内容消费指南</h2>
+        </div>
+        <div class="guide-steps">
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>从有明确时间与地点的条目入手</h4>
+              <p>如果你刚开始接触秘密档案类内容，建议优先选择“迪亚特洛夫事件气象还原”或“华航611空难录音分析”这类有具体日期、机构、可查报告的条目。它们的信息密度高，且你能通过公开数据库进行二次核实，有助于建立判断基准。</p>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>用对照表比较不同版本</h4>
+              <p>面对都市传说，先不要急着全盘接受或否定。把“北京375路公交传说”的早期版本与近五年的版本并列，标出出现时间、新增细节、消失细节。这个过程本身比结论更有价值，也能训练你识别信息在传播中的变形规律。</p>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>关注访谈中的方法而非结论</h4>
+              <p>“匿名访谈”系列中，受访者往往分享了他们筛选信息的步骤：如何追溯一张照片的原始上传时间、怎么判断一个“内部人士”的说法是否可验证。这些具体方法比任何单一结论都更值得记录。</p>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <h4>为虚构与纪实划清边界</h4>
+              <p>悬疑剧集和纪录片可以并置观看，但要清楚各自的属性。《迷途》是剧情片，提供的是叙事结构和情绪体验；《暗网追踪》是纪录片，提供的是调查流程和公开影像。将两者对照，可以观察编剧如何从真实案件中提取戏剧元素，也能避免把剧情误当事实。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="section" id="faq">
+        <div class="section-header">
+          <h2>常见问题</h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>迪亚特洛夫事件最主流的解释是什么？</summary>
+            <div class="faq-body">
+              目前被讨论最多的是“板状雪崩”模型。2021年一项发表于《Communications Earth & Environment》的研究利用地形和雪层模拟，认为一种延迟约90分钟才发生的板状雪崩可以解释帐篷被压、成员受伤并紧急撤离至树林的情节。但这套模型无法完全解释部分成员眼鼻缺失等法医记录，因此“次声波诱发恐慌”“军事试验意外”等假说仍有支持者。2026年10月的气象还原报告为雪崩模型补充了当晚风速与积雪层不稳定性的量化数据。
+            </div>
+          </details>
+          <details>
+            <summary>都市传说和真实案件应该怎么区分？</summary>
+            <div class="faq-body">
+              一个实用方法是检查“可验证锚点”的数量。真实案件通常有多个独立机构或媒体留下的记录：警方通报、法院文书、同时期报纸、后续调查报告。都市传说往往只有单一叙述链条，且关键细节（具体日期、门牌号、当事人全名）模糊或随时间变动。例如北京375路传说中，“末班车时间”在不同版本里从23:00到凌晨2:00都有，而1995年北京公交线路表可以查到该线路的准确末班时间。当细节可以随意替换而故事框架不变时，基本可以判断为传说。
+            </div>
+          </details>
+          <details>
+            <summary>第一次看悬疑剧集《迷途》，需要先补背景知识吗？</summary>
+            <div class="faq-body">
+              不需要。剧集本身采用双时间线叙事，前两集已经把核心人物关系和案件时间跨度交代清楚。不过如果你对“证人保护程序”“跨辖区协查”等制度细节感兴趣，可以在看完第4集后去查阅一些公开的司法制度说明，这样对第6集的关键转折会有更深的理解。剧集并没有预设观众具备专业知识。
+            </div>
+          </details>
+          <details>
+            <summary>暗网拍卖疑云目前有哪些可确认的事实？</summary>
+            <div class="faq-body">
+              截至2026年11月8日，可以确认的事实包括：一个名为“黑市钟摆”的暗网页面在2026年9月28日上线，展示了12张声称来自某博物馆失窃仓库的文物照片；国际刑警组织于10月12日发布协查通报（编号：IC-2026-1073），但未公布具体涉案国家；两个欧洲国家的调查组已在10月下旬确认介入。照片本身的真伪、卖家身份、文物是否真实存在，均未得到官方确认。本页相关条目仅整理已公开的通报内容，不做推测性结论。
+            </div>
+          </details>
+          <details>
+            <summary>为什么有些悬案档案没有配图？</summary>
+            <div class="faq-body">
+              部分早期案件的原始现场照片涉及隐私或版权限制，无法直接展示。此外，一些匿名档案的上传者仅提供了文字描述或音频片段，没有附带可用的图像材料。本页在缺少可靠配图时，会使用文字摘要和标签来呈现信息，而不是用无关图片填充。你可以在“考据工具”栏目中找到这些档案的出处链接和存档编号，自行前往公开数据库检索。
+            </div>
+          </details>
+          <details>
+            <summary>“青木原树海录音档案”的可信度如何判断？</summary>
+            <div class="faq-body">
+              可以从三个角度切入：第一，音频频谱中是否存在编辑痕迹。目前公开的分析指出，两段呼救之间有一段约4秒的静默，其底噪与前后片段不完全连续，提示可能经过剪切。第二，背景音中的鸟类鸣叫被识别为日本树莺，这种鸟在山梨县该海拔的分布季节与标注的1994年10月吻合。第三，上传者声称的录制地点与山梨县消防记录中1994年某次搜救行动的区域有重叠，但消防记录未提及录音设备。综合来看，录音的环境信息有一定的可验证性，但核心内容（呼救）仍无法独立证实。建议将其视为“单源存疑层”材料。
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- 用户评论 -->
+      <section class="section" id="community">
+        <div class="section-header">
+          <h2>用户评论</h2>
+        </div>
+        <div class="comment-list">
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">夜</div>
+              <span class="comment-name">夜航船_2046</span>
+              <span class="comment-date">11月8日 08:12</span>
+            </div>
+            <p class="comment-text">青木原录音的频谱分析比想象中细，特别是第3段那个低频脉冲，我之前完全没注意到。希望能有人做一下与山梨县同期地震波的对照。</p>
+          </div>
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">档</div>
+              <span class="comment-name">档案室常客</span>
+              <span class="comment-date">11月7日 22:45</span>
+            </div>
+            <p class="comment-text">《迷途》第6集那个涂改记录的桥段，让我想起以前看过的某个真实案件里的证人保护令漏洞，不过剧里处理得更紧凑。第7集预告里有个新角色，不知道是不是原著里的那个检察官。</p>
+          </div>
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">考</div>
+              <span class="comment-name">考据不熬夜</span>
+              <span class="comment-date">11月7日 19:30</span>
+            </div>
+            <p class="comment-text">迪亚特洛夫那篇气象还原里引用的ERA5数据确实可以自己下载，我试着跑了1959年2月1日那个点，风速结果和文章里基本一致。这种能复现的档案读起来比较放心。</p>
+          </div>
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">上</div>
+              <span class="comment-name">上海旧报纸</span>
+              <span class="comment-date">11月7日 15:10</span>
+            </div>
+            <p class="comment-text">林家宅那几则旧报摘录很有意思，1953年的措辞和现在完全不一样，“夜间声响”被写成“怪声扰邻”，但内容其实就是邻里纠纷。传说版本加进去的东西太多了。</p>
+          </div>
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">暗</div>
+              <span class="comment-name">暗网观察者</span>
+              <span class="comment-date">11月6日 23:55</span>
+            </div>
+            <p class="comment-text">黑市钟摆那个案子，国际刑警的协查通报我看了，里面没有提文物具体来自哪个博物馆，只说“某欧洲博物馆”。目前网上有些说法直接指名道姓，我觉得不太靠谱。</p>
+          </div>
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">三</div>
+              <span class="comment-name">三环末班车</span>
+              <span class="comment-date">11月6日 18:20</span>
+            </div>
+            <p class="comment-text">375路那个线路表确实是关键证据。我小时候就住西直门附近，90年代375路根本不走圆明园，后来传说越传越离谱。不过回忆本身也不可靠，还是以档案为准。</p>
+          </div>
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">纪</div>
+              <span class="comment-name">纪录片收藏夹</span>
+              <span class="comment-date">11月6日 12:05</span>
+            </div>
+            <p class="comment-text">《暗网追踪》导演评论音轨里提到被删掉的那段采访，受访者好像是个前平台运营者，内容涉及支付流程。正片里完全没提，有点可惜。</p>
+          </div>
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">华</div>
+              <span class="comment-name">华航资料组</span>
+              <span class="comment-date">11月5日 20:40</span>
+            </div>
+            <p class="comment-text">611录音分析里关于背景异响的讨论，我觉得还可以补充一下当时机舱内气压变化的数据。ASC报告附录里有相关曲线，和录音时间轴对得上。</p>
+          </div>
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">访</div>
+              <span class="comment-name">访谈听写员</span>
+              <span class="comment-date">11月5日 14:15</span>
+            </div>
+            <p class="comment-text">第4期匿名访谈里那位前调查记者说的“先查地图再查时间”，对我帮助很大。以前看档案总是直接看结论，现在会先看事件发生地当时的地形和道路情况。</p>
+          </div>
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">冷</div>
+              <span class="comment-name">冷知识仓库</span>
+              <span class="comment-date">11月4日 09:50</span>
+            </div>
+            <p class="comment-text">冷门知识里那篇关于“国际刑警协查通报编号规则”的短文很实用，现在看到IC开头的编号能大致判断发布年份和案件类别了。</p>
+          </div>
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">迷</div>
+              <span class="comment-name">迷途观众A</span>
+              <span class="comment-date">11月3日 21:30</span>
+            </div>
+            <p class="comment-text">第5集那个档案室场景里，书架上的文件夹编号好像跟第2集出现的某个证物编号一样，不知道是不是道具组埋的线索。等第7集出来再看看。</p>
+          </div>
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">气</div>
+              <span class="comment-name">气象爱好者</span>
+              <span class="comment-date">11月3日 16:00</span>
+            </div>
+            <p class="comment-text">迪亚特洛夫事件用ERA5数据做还原有个局限：1959年的观测站点很少，再分析数据在那个区域的精度有限。文章里也提到了这一点，但评论区好像没怎么讨论。</p>
+          </div>
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">林</div>
+              <span class="comment-name">林家宅邻居的邻居</span>
+              <span class="comment-date">11月2日 18:45</span>
+            </div>
+            <p class="comment-text">家里长辈以前提过林家宅那片，说50年代确实有过产权纠纷，但没听说什么怪事。传说版本可能是后来编的，不过旧报纸能保留下来已经很难得了。</p>
+          </div>
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">工</div>
+              <span class="comment-name">工具控</span>
+              <span class="comment-date">11月2日 11:20</span>
+            </div>
+            <p class="comment-text">考据工具里的那个“旧地图叠加”功能挺好用的，可以对照不同年份的街道图。就是目前覆盖的城市还比较少，希望以后能加上更多地方。</p>
+          </div>
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">暗</div>
+              <span class="comment-name">暗号不对</span>
+              <span class="comment-date">11月1日 22:10</span>
+            </div>
+            <p class="comment-text">青木原录音的呼救内容，日语母语者听出来的版本和字幕组给的翻译有出入。希望有懂日语的朋友能做一下逐句听写，这对判断可信度很重要。</p>
+          </div>
+          <div class="comment-item">
+            <div class="comment-head">
+              <div class="comment-avatar">档</div>
+              <span class="comment-name">档案编号控</span>
+              <span class="comment-date">11月1日 15:05</span>
+            </div>
+            <p class="comment-text">本页档案编号的排序方式是按收录时间还是事件时间？我注意到A-1047是1994年事件，A-1008是1995年事件，但编号差了很多。如果能统一一下索引逻辑就更方便检索了。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 相关资讯 -->
+      <section class="section" id="news">
+        <div class="section-header">
+          <h2>相关资讯</h2>
+        </div>
+        <div class="news-list">
+          <article class="news-card">
+            <div class="news-date">2026-11-07</div>
+            <h3 class="news-title">国际刑警更新“黑市钟摆”协查通报，新增两国调查进展</h3>
+            <p class="news-summary">11月7日发布的更新版本中，协查编号IC-2026-1073增加了两个欧洲国家的调查状态说明，但未公布嫌疑人信息。通报重申文物照片真伪仍在鉴定中。</p>
+          </article>
+          <article class="news-card">
+            <div class="news-date">2026-11-06</div>
+            <h3 class="news-title">《迷途》第6集上线，证人翻供情节引发对保护程序的讨论</h3>
+            <p class="news-summary">第6集播出后，社交平台上关于“证人保护记录涂改”的讨论增多。有观众整理了剧中出现的文件编号，与第2集的道具细节进行比对。</p>
+          </article>
+          <article class="news-card">
+            <div class="news-date">2026-11-05</div>
+            <h3 class="news-title">迪亚特洛夫事件气象还原报告发布勘误，修正一处风速单位</h3>
+            <p class="news-summary">10月发布的还原报告在11月5日更新了勘误说明，将原文中一处风速单位从m/s更正为km/h，并补充了数据来源的版本号。</p>
+          </article>
+          <article class="news-card">
+            <div class="news-date">2026-11-04</div>
+            <h3 class="news-title">北京公交档案数字化项目公开1995年线路表，375路传说再添对照材料</h3>
+            <p class="news-summary">北京市档案馆11月4日公开了一批1990年代公交线路调整文件，其中1995年12月的线路表显示375路末班时间为23:00，与传说版本存在差异。</p>
+          </article>
+          <article class="news-card">
+            <div class="news-date">2026-11-02</div>
+            <h3 class="news-title">匿名访谈第4期发布：前调查记者谈失踪人口档案的信息筛选</h3>
+            <p class="news-summary">受访者曾参与整理2000年代多起失踪案资料，在访谈中详细说明了如何通过电话记录与银行流水的时间戳交叉验证目击者说法。</p>
+          </article>
+          <article class="news-card">
+            <div class="news-date">2026-10-30</div>
+            <h3 class="news-title">《暗网追踪》导演评论音轨上线，透露被删减的采访片段</h3>
+            <p class="news-summary">纪录片导演在评论音轨中提到，正片删除了一段与某前平台运营者的远程采访，内容涉及暗网市场的支付担保流程，因法律原因未纳入正片。</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- 相关推荐标签索引 -->
+      <section class="section" id="related">
+        <div class="section-header">
+          <h2>相关推荐</h2>
+        </div>
+        <div class="tag-index">
+          <a href="/#archive">青木原树海录音档案</a>
+          <a href="/#archive">暗网拍卖疑云</a>
+          <a href="/#cases">华航611空难录音分析</a>
+          <a href="/#cases">迪亚特洛夫事件气象还原</a>
+          <a href="/#legends">北京375路公交传说溯源</a>
+          <a href="/#legends">上海林家宅事件旧报摘录</a>
+          <a href="/#drama">悬疑剧集《迷途》</a>
+          <a href="/#drama">暗网追踪纪录片</a>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- 右侧辅助栏 -->
+    <aside class="aux-sidebar">
+      <!-- 热榜 -->
+      <div class="sidebar-card" id="rank">
+        <h3>本周热榜</h3>
+        <div class="rank-list">
+          <div class="rank-item"><span class="rank-num">01</span><span class="rank-name">暗网拍卖疑云</span><span class="rank-hot">🔥9.5</span></div>
+          <div class="rank-item"><span class="rank-num">02</span><span class="rank-name">青木原树海录音档案</span><span class="rank-hot">🔥9.2</span></div>
+          <div class="rank-item"><span class="rank-num">03</span><span class="rank-name">悬疑剧集《迷途》</span><span class="rank-hot">🔥9.1</span></div>
+          <div class="rank-item"><span class="rank-num">04</span><span class="rank-name">迪亚特洛夫事件气象还原</span><span class="rank-hot">🔥9.0</span></div>
+          <div class="rank-item"><span class="rank-num">05</span><span class="rank-name">华航611空难录音分析</span><span class="rank-hot">🔥8.8</span></div>
+          <div class="rank-item"><span class="rank-num">06</span><span class="rank-name">暗网追踪纪录片</span><span class="rank-hot">🔥8.7</span></div>
+          <div class="rank-item"><span class="rank-num">07</span><span class="rank-name">北京375路公交传说溯源</span><span class="rank-hot">🔥8.5</span></div>
+          <div class="rank-item"><span class="rank-num">08</span><span class="rank-name">上海林家宅事件旧报摘录</span><span class="rank-hot">🔥8.2</span></div>
+        </div>
+      </div>
+
+      <!-- 时间线 -->
+      <div class="sidebar-card">
+        <h3>近期时间线</h3>
+        <div style="display:flex;flex-direction:column;gap:12px;font-size:13px;">
+          <div style="display:flex;gap:10px;align-items:baseline;">
+            <span style="color:var(--accent);font-weight:700;font-size:11px;min-width:60px;">11月7日</span>
+            <span style="color:var(--muted);">国际刑警更新协查通报</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:baseline;">
+            <span style="color:var(--accent);font-weight:700;font-size:11px;min-width:60px;">11月6日</span>
+            <span style="color:var(--muted);">《迷途》第6集上线</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:baseline;">
+            <span style="color:var(--accent);font-weight:700;font-size:11px;min-width:60px;">11月5日</span>
+            <span style="color:var(--muted);">气象还原报告勘误</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:baseline;">
+            <span style="color:var(--accent);font-weight:700;font-size:11px;min-width:60px;">11月4日</span>
+            <span style="color:var(--muted);">1995年公交线路表公开</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:baseline;">
+            <span style="color:var(--accent);font-weight:700;font-size:11px;min-width:60px;">11月2日</span>
+            <span style="color:var(--muted);">匿名访谈第4期发布</span>
+          </div>
+          <div style="display:flex;gap:10px;align-items:baseline;">
+            <span style="color:var(--accent);font-weight:700;font-size:11px;min-width:60px;">10月30日</span>
+            <span style="color:var(--muted);">导演评论音轨上线</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 可信度速查 -->
+      <div class="sidebar-card">
+        <h3>可信度速查</h3>
+        <div style="font-size:12px;color:var(--muted);line-height:1.8;">
+          <p style="margin-bottom:8px;"><span style="color:var(--teal);">●</span> 可交叉验证：有公开机构编号、可下载原始数据</p>
+          <p style="margin-bottom:8px;"><span style="color:var(--gold);">●</span> 单源存疑：仅一个匿名来源，但环境细节可查</p>
+          <p><span style="color:#ef4444;">●</span> 叙事驱动：情节完整，缺乏可验证硬信息</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<!-- 页脚 -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:28px;height:28px;">
+            <rect width="32" height="32" rx="6" fill="#0f172a"/>
+            <path d="M16 5C10.5 5 7 9.5 7 16c0 6.5 3.5 11 9 11s9-4.5 9-11c0-6.5-3.5-11-9-11z" stroke="#c084fc" stroke-width="1.8"/>
+            <circle cx="16" cy="15" r="3.5" fill="#c084fc"/>
+            <path d="M16 20v4" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span class="brand-text">秘密官网</span>
+        </div>
+        <p>聚焦都市传说、未解悬案、匿名档案与冷门知识，提供可检索的具体条目与考据线索。</p>
+      </div>
+      <div class="footer-col">
+        <h4>内容分类</h4>
+        <a href="/#cases">未解悬案</a>
+        <a href="/#legends">都市传说</a>
+        <a href="/#archive">解密档案</a>
+        <a href="/#drama">悬疑剧集</a>
+      </div>
+      <div class="footer-col">
+        <h4>发现</h4>
+        <a href="/#knowledge">冷门知识</a>
+        <a href="/#interviews">匿名访谈</a>
+        <a href="/#tools">考据工具</a>
+        <a href="/#community">讨论区</a>
+      </div>
+      <div class="footer-col">
+        <h4>快捷</h4>
+        <a href="/#latest">最新更新</a>
+        <a href="/#rank">热门榜单</a>
+        <a href="/#faq">常见问题</a>
+        <a href="/#overview">领域概览</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 秘密官网 · 内容聚合示例</span>
+      <span>部分内容为示例数据，仅用于展示页面结构</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // 轻量内联脚本：增强FAQ键盘可访问性（已由details原生支持），此处仅做锚点平滑偏移的兜底
+  document.addEventListener('DOMContentLoaded', function() {
+    // 确保锚点滚动偏移与吸顶高度一致（CSS已设置scroll-padding-top，此处为兼容性兜底）
+    if (!CSS.supports('scroll-padding-top', '1px')) {
+      document.querySelectorAll('a[href^="/#"]').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          var targetId = this.getAttribute('href').replace('/#', '');
+          var target = document.getElementById(targetId);
+          if (target) {
+            e.preventDefault();
+            var offset = document.querySelector('.announce-bar').offsetHeight + document.querySelector('.site-header').offsetHeight;
+            var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+          }
+        });
+      });
+    }
+  });
+</script>
+
+</body>
+        </html>
