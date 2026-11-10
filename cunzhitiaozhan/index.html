@@ -1,0 +1,977 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>寸止挑战 - 自控训练档案与玩法指南</title>
+  <meta name="description" content="寸止挑战是围绕延迟满足与自我控制的练习玩法。本页汇集寸止挑战的规则解析、进阶路线、实战记录与社区问答，适合想系统练习控制力与专注力的玩家参考。">
+  <meta name="keywords" content="延迟满足训练,自控力练习,寸止规则,挑战记录,专注力玩法">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%231e2b3c'/%3E%3Cpath d='M10 20 L16 8 L22 20 Z' fill='%23e6b422'/%3E%3Ccircle cx='16' cy='22' r='2.5' fill='%23e6b422'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: #1a1f26;
+      --ink-soft: #3f4753;
+      --paper: #f7f5f0;
+      --panel: #ffffff;
+      --line: #e0dbd2;
+      --accent: #c0392b;
+      --accent-soft: #f7e6e3;
+      --gold: #b8860b;
+      --gold-soft: #faf3e0;
+      --radius: 10px;
+      --shadow: 0 2px 12px rgba(26, 31, 38, 0.07);
+      --font: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { display: block; max-width: 100%; height: auto; }
+    h1, h2, h3, h4 { line-height: 1.3; font-weight: 700; }
+    h2 { font-size: 1.55rem; margin-bottom: 0.4rem; }
+    h3 { font-size: 1.15rem; margin-bottom: 0.3rem; }
+    p { margin-bottom: 0.85rem; }
+    ul, ol { padding-left: 1.4rem; margin-bottom: 0.85rem; }
+    li { margin-bottom: 0.3rem; }
+
+    /* ===== 吸顶公告条 ===== */
+    .notice-bar {
+      background: var(--ink);
+      color: #f0ead8;
+      font-size: 0.85rem;
+      padding: 0.45rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 110;
+      border-bottom: 2px solid var(--gold);
+    }
+    .notice-bar .tag {
+      background: var(--gold);
+      color: var(--ink);
+      font-weight: 700;
+      padding: 0.1rem 0.55rem;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== 吸顶页头 ===== */
+    .site-header {
+      position: sticky;
+      top: 38px;
+      z-index: 100;
+      background: rgba(247, 245, 240, 0.96);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--line);
+      padding: 0.7rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
+    .brand { display: flex; align-items: center; gap: 0.55rem; }
+    .brand svg { width: 36px; height: 36px; flex-shrink: 0; }
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--ink);
+    }
+    .header-nav {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.9rem;
+      margin-left: auto;
+    }
+    .header-nav a { color: var(--ink-soft); font-weight: 500; }
+    .header-nav a:hover { color: var(--accent); text-decoration: none; }
+
+    /* ===== 布局：双栏标准（主内容 + 右辅助栏） ===== */
+    .page-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 2rem;
+    }
+    .layout-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 1.8rem;
+      align-items: start;
+    }
+
+    /* ===== 首屏 ===== */
+    .hero {
+      background: linear-gradient(135deg, #1a1f26 0%, #2d3a4a 70%, #3e4d5e 100%);
+      color: #f4efe4;
+      border-radius: var(--radius);
+      padding: 2.4rem 2rem 2rem;
+      margin-bottom: 1.8rem;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .hero h1 {
+      font-size: clamp(1.9rem, 4vw, 2.6rem);
+      letter-spacing: 2px;
+      margin-bottom: 0.6rem;
+      color: #f4efe4;
+    }
+    .hero .hero-sub {
+      font-size: 1rem;
+      max-width: 560px;
+      color: #c9c3b6;
+      line-height: 1.8;
+    }
+    .hero .hero-links {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .hero .hero-links a {
+      background: var(--gold);
+      color: var(--ink);
+      font-weight: 700;
+      padding: 0.45rem 1.1rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .hero .hero-links a:hover { background: #d4a017; text-decoration: none; }
+    .hero-visual {
+      flex-shrink: 0;
+      width: 150px;
+      height: 150px;
+      opacity: 0.9;
+    }
+
+    /* ===== 板块通用 ===== */
+    .section {
+      margin-bottom: 2.2rem;
+      scroll-margin-top: 110px;
+    }
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .section-head h2 { margin: 0; font-size: 1.35rem; }
+    .section-head .hint { font-size: 0.85rem; color: #8a8478; }
+
+    /* ===== 卡片网格 ===== */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.2rem;
+    }
+    .card {
+      background: var(--panel);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.15s;
+    }
+    .card:hover { transform: translateY(-3px); }
+    .card img { width: 100%; height: 150px; object-fit: cover; }
+    .card-body { padding: 0.9rem 1rem 1rem; flex: 1; display: flex; flex-direction: column; }
+    .card-body h3 { font-size: 1.02rem; margin-bottom: 0.3rem; }
+    .card-meta {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.5rem;
+    }
+    .tag-sm {
+      font-size: 0.72rem;
+      background: var(--gold-soft);
+      color: #7a5c00;
+      padding: 0.1rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #e8d9b0;
+      white-space: nowrap;
+    }
+    .tag-sm.accent { background: var(--accent-soft); color: var(--accent); border-color: #e8c4be; }
+    .card-desc { font-size: 0.85rem; color: var(--ink-soft); line-height: 1.65; flex: 1; }
+    .card-foot {
+      margin-top: 0.6rem;
+      font-size: 0.78rem;
+      color: #9a9388;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* ===== 紧凑列表 ===== */
+    .brief-list { list-style: none; padding: 0; }
+    .brief-list li {
+      display: flex;
+      gap: 0.8rem;
+      padding: 0.65rem 0;
+      border-bottom: 1px dashed var(--line);
+      align-items: baseline;
+    }
+    .brief-list li:last-child { border-bottom: none; }
+    .brief-list .item-name { font-weight: 600; white-space: nowrap; }
+    .brief-list .item-note { font-size: 0.85rem; color: var(--ink-soft); }
+    .brief-list .item-time { margin-left: auto; font-size: 0.75rem; color: #b0a99c; white-space: nowrap; }
+
+    /* ===== 分类入口 ===== */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.7rem;
+    }
+    .cat-item {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0.7rem 0.9rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-align: center;
+      color: var(--ink);
+      transition: background 0.15s, border-color 0.15s;
+      display: block;
+    }
+    .cat-item:hover { background: var(--gold-soft); border-color: var(--gold); text-decoration: none; }
+    .cat-item small { display: block; font-weight: 400; color: #9a9388; font-size: 0.72rem; margin-top: 0.1rem; }
+
+    /* ===== 深度解析 ===== */
+    .deep-read {
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.8rem;
+      border: 1px solid var(--line);
+    }
+    .deep-read h3 { margin-top: 1.2rem; color: var(--accent); }
+    .deep-read h3:first-of-type { margin-top: 0; }
+    .deep-read p, .deep-read li { font-size: 0.93rem; }
+    .deep-read blockquote {
+      border-left: 3px solid var(--gold);
+      background: var(--gold-soft);
+      padding: 0.7rem 1rem;
+      margin: 0.8rem 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.9rem;
+    }
+
+    /* ===== 对照面板 ===== */
+    .compare-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .compare-col {
+      background: #fdfcf9;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+    }
+    .compare-col h4 { font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--ink); }
+    .compare-col ul { font-size: 0.85rem; padding-left: 1.2rem; margin-bottom: 0; }
+
+    /* ===== 步骤 ===== */
+    .steps { counter-reset: step; list-style: none; padding: 0; }
+    .steps li {
+      counter-increment: step;
+      padding: 0.7rem 0 0.7rem 2.6rem;
+      position: relative;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.9rem;
+    }
+    .steps li:last-child { border-bottom: none; }
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0.7rem;
+      width: 1.8rem;
+      height: 1.8rem;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ===== FAQ ===== */
+    .faq details {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-bottom: 0.6rem;
+      padding: 0.7rem 1rem;
+    }
+    .faq summary {
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.93rem;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: "+";
+      font-size: 1.3rem;
+      color: var(--accent);
+      font-weight: 400;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .faq details[open] summary::after { content: "−"; }
+    .faq details p { margin-top: 0.6rem; font-size: 0.88rem; color: var(--ink-soft); margin-bottom: 0.2rem; }
+
+    /* ===== 评论 ===== */
+    .comment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 0.8rem;
+    }
+    .comment-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      font-size: 0.85rem;
+    }
+    .comment-card .cmt-head {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.35rem;
+      font-size: 0.8rem;
+    }
+    .comment-card .cmt-name { font-weight: 700; color: var(--ink); }
+    .comment-card .cmt-time { color: #b0a99c; }
+    .comment-card p { margin-bottom: 0; color: var(--ink-soft); }
+
+    /* ===== 资讯 ===== */
+    .news-item {
+      display: flex;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--line);
+      align-items: flex-start;
+    }
+    .news-item:last-child { border-bottom: none; }
+    .news-item img {
+      width: 110px;
+      height: 74px;
+      object-fit: cover;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .news-item h4 { font-size: 0.95rem; margin-bottom: 0.2rem; }
+    .news-item .news-date { font-size: 0.75rem; color: #b0a99c; white-space: nowrap; }
+    .news-item p { font-size: 0.83rem; color: var(--ink-soft); margin-bottom: 0; }
+
+    /* ===== 右辅助栏 ===== */
+    .aside-box {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      margin-bottom: 1.2rem;
+    }
+    .aside-box h3 {
+      font-size: 0.95rem;
+      margin-bottom: 0.7rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink);
+    }
+    .rank-list { list-style: none; padding: 0; }
+    .rank-list li {
+      display: flex;
+      gap: 0.5rem;
+      align-items: baseline;
+      padding: 0.4rem 0;
+      font-size: 0.85rem;
+      border-bottom: 1px dashed #ece7dd;
+    }
+    .rank-list li:last-child { border-bottom: none; }
+    .rank-list .rank-no {
+      width: 1.4rem;
+      height: 1.4rem;
+      border-radius: 4px;
+      background: var(--gold-soft);
+      color: #7a5c00;
+      font-weight: 700;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .rank-list .rank-no.top { background: var(--accent); color: #fff; }
+    .rank-list .rank-name { flex: 1; }
+    .rank-list .rank-score { font-size: 0.75rem; color: #b0a99c; }
+
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tag-cloud a {
+      font-size: 0.78rem;
+      background: #f0ece4;
+      color: var(--ink-soft);
+      padding: 0.2rem 0.6rem;
+      border-radius: 50px;
+      border: 1px solid #e4ded3;
+    }
+    .tag-cloud a:hover { background: var(--gold-soft); border-color: var(--gold); text-decoration: none; }
+
+    /* ===== 相关推荐 ===== */
+    .rel-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .rel-tags a {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 0.35rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      color: var(--ink);
+    }
+    .rel-tags a:hover { background: var(--gold-soft); border-color: var(--gold); text-decoration: none; }
+
+    /* ===== 页尾 ===== */
+    .site-footer {
+      background: var(--ink);
+      color: #b8b1a3;
+      margin-top: 2.5rem;
+      padding: 2rem 1.5rem 1.2rem;
+      font-size: 0.85rem;
+    }
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 1.8rem;
+    }
+    .footer-inner h4 { color: #f0ead8; font-size: 0.9rem; margin-bottom: 0.6rem; }
+    .footer-inner a { color: #b8b1a3; display: block; margin-bottom: 0.3rem; font-size: 0.83rem; }
+    .footer-inner a:hover { color: var(--gold); text-decoration: none; }
+    .footer-brand { font-size: 1.1rem; font-weight: 800; color: #f0ead8; margin-bottom: 0.4rem; }
+    .footer-note {
+      max-width: 1280px;
+      margin: 1.5rem auto 0;
+      padding-top: 1rem;
+      border-top: 1px solid #3a4048;
+      font-size: 0.75rem;
+      color: #7d766a;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 1024px) {
+      .layout-main { grid-template-columns: 1fr; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 740px) {
+      .site-header { top: 0; position: relative; }
+      .notice-bar { position: relative; }
+      .section { scroll-margin-top: 20px; }
+      .page-wrap { padding: 1rem 0.8rem; }
+      .hero { padding: 1.5rem 1.2rem; }
+      .hero h1 { font-size: 1.7rem; }
+      .cat-grid { grid-template-columns: 1fr 1fr; }
+      .compare-panel { grid-template-columns: 1fr; }
+      .card-grid { grid-template-columns: 1fr; }
+      .comment-grid { grid-template-columns: 1fr; }
+      .news-item { flex-direction: column; }
+      .news-item img { width: 100%; height: 120px; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .header-nav { font-size: 0.8rem; gap: 0.6rem; }
+    }
+  </style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+
+  <!-- 吸顶公告条 -->
+  <div class="notice-bar" role="status">
+    <span class="tag">更新</span>
+    <span>11 月 7 日新增「七日寸止」训练计划与 5 条挑战实录 · 「稳态控制」评分标准已上线</span>
+  </div>
+
+  <!-- 吸顶页头 -->
+  <header class="site-header">
+    <div class="brand">
+      <svg viewBox="0 0 40 40" width="36" height="36" aria-hidden="true">
+        <circle cx="20" cy="20" r="18" fill="#1a1f26"/>
+        <path d="M12 25 L20 9 L28 25 Z" fill="#e6b422" stroke="none"/>
+        <circle cx="20" cy="28" r="3" fill="#e6b422"/>
+        <path d="M10 31 Q20 36 30 31" fill="none" stroke="#e6b422" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-name">寸止挑战</span>
+    </div>
+    <nav class="header-nav" aria-label="主题导航">
+      <a href="/#overview">领域概览</a>
+      <a href="/#featured">精选条目</a>
+      <a href="/#latest">最新动态</a>
+      <a href="/#categories">分类入口</a>
+      <a href="/#deep">深度解析</a>
+      <a href="/#faq">常见问题</a>
+    </nav>
+  </header>
+
+  <div class="page-wrap">
+
+    <!-- 首屏 -->
+    <section class="hero" aria-label="主题首屏">
+      <div>
+        <h1>寸止挑战</h1>
+        <p class="hero-sub">围绕延迟满足与自我控制的练习玩法。这里汇集寸止挑战的规则拆解、进阶训练档案、玩家实战记录与评分标准，适合想系统提升专注力与冲动管理能力的练习者。</p>
+        <div class="hero-links">
+          <a href="/#featured">查看挑战档案</a>
+          <a href="/#deep">了解评分标准</a>
+        </div>
+      </div>
+      <svg class="hero-visual" viewBox="0 0 160 160" width="150" height="150" aria-hidden="true">
+        <circle cx="80" cy="80" r="72" fill="none" stroke="#e6b422" stroke-width="2" opacity="0.4"/>
+        <circle cx="80" cy="80" r="52" fill="none" stroke="#e6b422" stroke-width="2" opacity="0.6"/>
+        <circle cx="80" cy="80" r="32" fill="none" stroke="#e6b422" stroke-width="2" opacity="0.8"/>
+        <line x1="80" y1="8" x2="80" y2="152" stroke="#e6b422" stroke-width="1.2" opacity="0.3"/>
+        <line x1="8" y1="80" x2="152" y2="80" stroke="#e6b422" stroke-width="1.2" opacity="0.3"/>
+        <circle cx="80" cy="80" r="6" fill="#e6b422"/>
+      </svg>
+    </section>
+
+    <!-- 主体：双栏布局 -->
+    <div class="layout-main">
+
+      <!-- 主内容区 -->
+      <main>
+
+        <!-- 1. 主题领域概览 -->
+        <section class="section" id="overview">
+          <div class="section-head">
+            <h2>寸止挑战领域概览</h2>
+            <span class="hint">规则、类型与当前趋势</span>
+          </div>
+          <p>寸止挑战是一种以“延迟满足”为核心的自我控制练习形式。参与者需要在接近目标或情绪临界点时主动暂停，通过计时、记录与复盘来训练冲动管理能力。这一玩法在 2025 年前后从个人打卡发展为社区化的挑战体系，逐渐分化出多种类型，包括以时间长度为核心的耐力型、以频率控制为核心的周期型，以及以场景干扰为核心的抗扰型。</p>
+          <p>从当前的内容生态来看，寸止挑战主要围绕几条线索展开：其一是规则设计，不同挑战对“寸止”的定义和判定窗口存在明显差异；其二是训练路径，从单次 3 分钟到连续 21 天的进阶路线各有对应档案；其三是记录与评分，社区中流行的「稳态控制分」「恢复速率」等指标正在被更多人参考。此外，围绕挑战场景的讨论也在增加，例如在阅读、写作、体能训练等日常活动中嵌入寸止练习的可行性。</p>
+          <p>2026 年秋季以来，寸止挑战的社区内容呈现出两个明显变化：一是挑战周期从“单次极限”转向“可持续的周计划”，二是评分维度从单一计时扩展为包含心率恢复、注意力维持与复盘质量的综合评估。这些变化让寸止挑战从一种猎奇式打卡，逐步演变为有明确训练目标的练习体系。</p>
+        </section>
+
+        <!-- 2. 精选内容推荐 -->
+        <section class="section" id="featured">
+          <div class="section-head">
+            <h2>精选挑战档案</h2>
+            <span class="hint">6 个具体条目，含类型标签与看点</span>
+          </div>
+          <div class="card-grid">
+            <article class="card">
+              <img src="https://picsum.photos/seed/cunzhi-dangan01/400/300" alt="七日寸止训练计划档案封面" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3>七日寸止训练计划</h3>
+                <div class="card-meta">
+                  <span class="tag-sm accent">周期型</span>
+                  <span class="tag-sm">入门</span>
+                  <span class="tag-sm">7 天</span>
+                </div>
+                <p class="card-desc">按天递增的暂停时长设计，每天记录三次暂停反应。适合第一次接触寸止挑战、想建立基础节奏的练习者，配套有每日复盘模板。</p>
+                <div class="card-foot"><span>参与 3.2 万人</span><span>评分 8.6</span></div>
+              </div>
+            </article>
+            <article class="card">
+              <img src="https://picsum.photos/seed/cunzhi-dangan02/400/300" alt="三分钟极限寸止挑战档案封面" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3>三分钟极限寸止</h3>
+                <div class="card-meta">
+                  <span class="tag-sm accent">耐力型</span>
+                  <span class="tag-sm">进阶</span>
+                  <span class="tag-sm">单次</span>
+                </div>
+                <p class="card-desc">在 180 秒窗口内完成三次主动暂停，每次暂停需维持 10 秒不动作。考验短时冲动压制与呼吸调节的配合，社区纪录为 2 分 47 秒。</p>
+                <div class="card-foot"><span>参与 1.8 万人</span><span>评分 8.9</span></div>
+              </div>
+            </article>
+            <article class="card">
+              <img src="https://picsum.photos/seed/cunzhi-dangan03/400/300" alt="抗扰阅读寸止挑战档案封面" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3>抗扰阅读寸止</h3>
+                <div class="card-meta">
+                  <span class="tag-sm accent">抗扰型</span>
+                  <span class="tag-sm">场景</span>
+                  <span class="tag-sm">专注</span>
+                </div>
+                <p class="card-desc">在阅读长文时设置随机暂停点，要求在干扰出现时保持 30 秒不切换任务。适合需要提升深度阅读耐受力的学习者，可搭配任意书籍进行。</p>
+                <div class="card-foot"><span>参与 9,600 人</span><span>评分 8.2</span></div>
+              </div>
+            </article>
+            <article class="card">
+              <img src="https://picsum.photos/seed/cunzhi-dangan04/400/300" alt="21 天稳态控制计划档案封面" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3>21 天稳态控制计划</h3>
+                <div class="card-meta">
+                  <span class="tag-sm accent">周期型</span>
+                  <span class="tag-sm">高阶</span>
+                  <span class="tag-sm">习惯</span>
+                </div>
+                <p class="card-desc">三周渐进方案，每天两次寸止练习并记录恢复速率。重点不在于单次时长，而在于连续完成率与情绪波动幅度的下降趋势。</p>
+                <div class="card-foot"><span>参与 2.4 万人</span><span>评分 9.1</span></div>
+              </div>
+            </article>
+            <article class="card">
+              <img src="https://picsum.photos/seed/cunzhi-dangan05/400/300" alt="双人同步寸止挑战档案封面" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3>双人同步寸止</h3>
+                <div class="card-meta">
+                  <span class="tag-sm accent">协作型</span>
+                  <span class="tag-sm">双人</span>
+                  <span class="tag-sm">同步</span>
+                </div>
+                <p class="card-desc">两名参与者通过共享计时器同步开始，各自独立暂停并在同一时刻结束。考验对他人节奏的感知与自我节奏的稳定，适合朋友组队练习。</p>
+                <div class="card-foot"><span>参与 7,300 人</span><span>评分 8.4</span></div>
+              </div>
+            </article>
+            <article class="card">
+              <img src="https://picsum.photos/seed/cunzhi-dangan06/400/300" alt="低刺激环境寸止挑战档案封面" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3>低刺激环境寸止</h3>
+                <div class="card-meta">
+                  <span class="tag-sm accent">环境型</span>
+                  <span class="tag-sm">基础</span>
+                  <span class="tag-sm">安静</span>
+                </div>
+                <p class="card-desc">在无屏幕、无声音的安静环境中完成 15 分钟寸止，每 3 分钟记录一次身体感受。适合想先脱离外部刺激干扰、再进入正式挑战的练习者。</p>
+                <div class="card-foot"><span>参与 1.1 万人</span><span>评分 7.8</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- 3. 最新更新 / 动态 -->
+        <section class="section" id="latest">
+          <div class="section-head">
+            <h2>最新更新与挑战动态</h2>
+            <span class="hint">2026 年 11 月 1 日—8 日</span>
+          </div>
+          <ul class="brief-list">
+            <li><span class="item-name">七日寸止训练计划</span><span class="item-note">第 4 期开放报名，新增心率恢复记录栏</span><span class="item-time">11 月 8 日</span></li>
+            <li><span class="item-name">三分钟极限寸止</span><span class="item-note">社区纪录刷新至 2 分 47 秒，由玩家「慢半拍」完成</span><span class="item-time">11 月 7 日</span></li>
+            <li><span class="item-name">稳态控制评分标准</span><span class="item-note">正式发布 1.2 版，调整了恢复速率的权重占比</span><span class="item-time">11 月 6 日</span></li>
+            <li><span class="item-name">21 天稳态控制计划</span><span class="item-note">第 9 期结营数据公布，连续完成率 67%</span><span class="item-time">11 月 5 日</span></li>
+            <li><span class="item-name">抗扰阅读寸止</span><span class="item-note">新增「长文干扰」模式，支持 8000 字以上文本</span><span class="item-time">11 月 4 日</span></li>
+            <li><span class="item-name">双人同步寸止</span><span class="item-note">匹配池扩容，晚间时段平均等待缩短至 40 秒</span><span class="item-time">11 月 3 日</span></li>
+            <li><span class="item-name">低刺激环境寸止</span><span class="item-note">发布 15 分钟引导音轨，含三次暂停提示</span><span class="item-time">11 月 2 日</span></li>
+            <li><span class="item-name">寸止挑战复盘模板</span><span class="item-note">更新为 2.0 版，增加情绪波动曲线记录区</span><span class="item-time">11 月 1 日</span></li>
+          </ul>
+        </section>
+
+        <!-- 4. 分类入口 -->
+        <section class="section" id="categories">
+          <div class="section-head">
+            <h2>按类型查找挑战</h2>
+            <span class="hint">8 个分类入口</span>
+          </div>
+          <div class="cat-grid">
+            <a class="cat-item" href="/#featured">耐力型<small>单次时长挑战</small></a>
+            <a class="cat-item" href="/#featured">周期型<small>多天连续计划</small></a>
+            <a class="cat-item" href="/#featured">抗扰型<small>干扰环境练习</small></a>
+            <a class="cat-item" href="/#featured">协作型<small>双人同步挑战</small></a>
+            <a class="cat-item" href="/#featured">环境型<small>低刺激基础训练</small></a>
+            <a class="cat-item" href="/#deep">评分标准<small>稳态控制分说明</small></a>
+            <a class="cat-item" href="/#guide">体验路径<small>从哪开始练</small></a>
+            <a class="cat-item" href="/#faq">常见问题<small>规则与判断</small></a>
+          </div>
+        </section>
+
+        <!-- 5. 深度解析正文 -->
+        <section class="section" id="deep">
+          <div class="section-head">
+            <h2>深度解析：寸止挑战的类型差异与评判维度</h2>
+          </div>
+          <div class="deep-read">
+            <h3>耐力型与周期型的核心区别</h3>
+            <p>耐力型寸止关注的是单次窗口内的表现，例如三分钟极限寸止要求在限定时间内完成多次主动暂停，并维持每次暂停的稳定状态。它的评判重点在于“峰值控制力”——你能在多大压力下保持暂停。周期型则把时间轴拉长到数天甚至数周，典型代表是七日训练计划和 21 天稳态控制计划，它们更在意“持续完成率”和“波动收敛趋势”。</p>
+            <p>选择哪种类型取决于练习目标：如果希望快速了解自己的冲动阈值，耐力型更直接；如果目标是培养长期习惯，周期型更合适。两者也可以组合，例如先用耐力型测出基线，再进入周期型进行系统训练。</p>
+
+            <h3>抗扰型挑战的场景设计</h3>
+            <p>抗扰型寸止把干扰作为核心变量。以抗扰阅读寸止为例，练习者需要在阅读过程中应对随机出现的暂停提示，并在提示出现后保持 30 秒不切换任务。这类挑战的难点不在于时长，而在于“打断后的回归速度”。常见的干扰源包括消息通知、环境噪音和自发的任务切换冲动。</p>
+            <p>判断一次抗扰挑战完成质量，可以观察三个信号：暂停期间是否出现明显的身体移动、恢复阅读后前两分钟的理解效率、以及整场练习中主动暂停的次数。这三个信号共同反映干扰管理的实际水平。</p>
+
+            <h3>稳态控制分的构成</h3>
+            <p>2026 年 11 月发布的稳态控制分 1.2 版包含三个维度：暂停完成度、恢复速率和复盘质量。暂停完成度记录你是否在预定时间点主动停止；恢复速率衡量暂停结束后回到任务状态所需的平均时间；复盘质量则来自你对每次暂停的感受记录是否具体。</p>
+            <blockquote>社区中常见的误区是只盯着暂停时长，而忽略恢复速率。实际上，能快速回归任务状态，往往比单次暂停更久更能说明控制力。</blockquote>
+            <p>评分标准中还设置了“波动容忍带”：允许单次表现出现一定范围内的起伏，但连续三次超出容忍带会触发提示，建议调整训练强度。这一设计让评分更贴近真实练习节奏，而非追求完美数据。</p>
+
+            <h3>入门者的判断依据</h3>
+            <p>面对多种挑战档案，入门者可以从三个问题入手：第一，自己每天能稳定投入多少时间，低于 10 分钟的建议从低刺激环境寸止开始；第二，是否已经有基础的专注习惯，没有的话优先选择七日训练计划而非三分钟极限；第三，是否需要外部监督，需要的话双人同步寸止或周期型的社群打卡会更适合。</p>
+            <p>无论选择哪种类型，前三次练习的建议是“宁短勿长”。短时完成能建立正反馈，而过早冲击极限容易让寸止挑战变成一次性的猎奇体验，难以形成持续练习。</p>
+          </div>
+        </section>
+
+        <!-- 6. 体验指南 / 消费路径 -->
+        <section class="section" id="guide">
+          <div class="section-head">
+            <h2>寸止挑战的体验路径</h2>
+            <span class="hint">从入门到进阶的顺序建议</span>
+          </div>
+          <ol class="steps">
+            <li><strong>先做低刺激环境寸止。</strong>用 15 分钟安静练习确认自己能否在无外部刺激的情况下保持暂停，记录三次身体感受。这一步的目的是建立基线，而不是追求时长。</li>
+            <li><strong>进入七日寸止训练计划。</strong>按天递增的节奏能让身体适应暂停—恢复的循环。重点观察每天第三次暂停时的情绪状态，如果明显焦躁，可以重复前一天的内容。</li>
+            <li><strong>尝试抗扰阅读寸止。</strong>在有干扰的环境中检验暂停后的回归速度。建议选择自己熟悉的书籍，这样能区分“读不懂”和“被打断”带来的不同影响。</li>
+            <li><strong>用三分钟极限寸止测试峰值。</strong>在完成前两步后，短时极限挑战更能反映真实水平。测试前确保休息充分，避免疲劳干扰结果。</li>
+            <li><strong>按需选择周期型或协作型。</strong>如果希望巩固习惯，21 天稳态控制计划是合适的选择；如果更需要外部节奏，双人同步寸止能提供同步压力。</li>
+          </ol>
+          <p style="font-size:0.85rem;color:#9a9388;margin-top:0.5rem;">判断一个挑战是否值得投入时间，可以看它是否明确写出了暂停次数、恢复记录要求与复盘模板。缺少这些要素的挑战往往偏重娱乐性，训练价值有限。</p>
+        </section>
+
+        <!-- 7. FAQ -->
+        <section class="section faq" id="faq">
+          <div class="section-head">
+            <h2>寸止挑战常见问题</h2>
+          </div>
+          <details>
+            <summary>寸止挑战一般多久更新一次训练计划？</summary>
+            <p>周期型计划通常按月或按季度更新，例如七日寸止训练计划在 2026 年保持每月开放一期。耐力型和抗扰型的规则更新频率较低，多在评分标准调整时同步修订。</p>
+          </details>
+          <details>
+            <summary>耐力型和周期型寸止挑战有什么区别？</summary>
+            <p>耐力型聚焦单次窗口内的暂停表现，看重峰值控制力；周期型拉长到数天至数周，看重连续完成率和波动收敛。前者适合测基线，后者适合养习惯。</p>
+          </details>
+          <details>
+            <summary>第一次接触寸止挑战，从哪个条目开始比较好？</summary>
+            <p>建议从低刺激环境寸止开始，用 15 分钟安静练习确认基础状态，再进入七日训练计划。直接挑战三分钟极限容易因挫败感中断。</p>
+          </details>
+          <details>
+            <summary>稳态控制分是怎么计算的？</summary>
+            <p>1.2 版包含暂停完成度、恢复速率和复盘质量三个维度，权重不同。连续三次超出波动容忍带会触发强度提示，建议调整计划而非硬撑。</p>
+          </details>
+          <details>
+            <summary>抗扰阅读寸止适合搭配什么类型的书？</summary>
+            <p>建议选择自己熟悉领域的非虚构类书籍，篇幅在 8000 字以上。熟悉的内容能让你区分理解困难和干扰影响，更好地评估暂停后的回归效率。</p>
+          </details>
+          <details>
+            <summary>双人同步寸止需要两人水平接近吗？</summary>
+            <p>不需要完全一致，但差距过大会让节奏感知失衡。匹配池会参考双方近期完成记录，尽量让参与者的平均暂停时长接近。</p>
+          </details>
+        </section>
+
+        <!-- 8. 用户评论 -->
+        <section class="section" id="comments">
+          <div class="section-head">
+            <h2>练习者评论</h2>
+            <span class="hint">来自社区的具体反馈</span>
+          </div>
+          <div class="comment-grid">
+            <div class="comment-card"><div class="cmt-head"><span class="cmt-name">慢半拍</span><span class="cmt-time">11 月 8 日</span></div><p>三分钟极限终于进到 2 分 40 秒了，关键是第三次暂停别憋气，呼吸稳住就能多撑几秒。</p></div>
+            <div class="comment-card"><div class="cmt-head"><span class="cmt-name">纸飞机不飞</span><span class="cmt-time">11 月 8 日</span></div><p>七日计划做到第 5 天，发现每天晚上那次暂停比早上难很多，可能跟一天的疲劳有关。</p></div>
+            <div class="comment-card"><div class="cmt-head"><span class="cmt-name">青柠气泡</span><span class="cmt-time">11 月 7 日</span></div><p>抗扰阅读用了一篇 1 万字的报告，暂停提示响的时候正在关键段落，回归后前两分钟确实读不进去。</p></div>
+            <div class="comment-card"><div class="cmt-head"><span class="cmt-name">老陈练控制</span><span class="cmt-time">11 月 7 日</span></div><p>21 天计划连续完成率 67% 这个数据挺真实的，我第 3 周也断了一天，好在能续上。</p></div>
+            <div class="comment-card"><div class="cmt-head"><span class="cmt-name">南风知我意</span><span class="cmt-time">11 月 6 日</span></div><p>稳态控制分里的恢复速率很有用，我以前只看暂停时长，现在会留意自己多久能回到状态。</p></div>
+            <div class="comment-card"><div class="cmt-head"><span class="cmt-name">一颗卤蛋</span><span class="cmt-time">11 月 6 日</span></div><p>低刺激环境寸止第一遍做的时候特别想动，第三次暂停才慢慢稳下来，确实需要适应。</p></div>
+            <div class="comment-card"><div class="cmt-head"><span class="cmt-name">susu 不熬夜</span><span class="cmt-time">11 月 5 日</span></div><p>双人同步跟朋友试了一次，两个人节奏完全不一样，结束时间差了快 40 秒，挺有意思。</p></div>
+            <div class="comment-card"><div class="cmt-head"><span class="cmt-name">北纬三十度</span><span class="cmt-time">11 月 5 日</span></div><p>复盘模板 2.0 的情绪曲线挺好的，我发现自己周三到周五的波动明显比周末大。</p></div>
+            <div class="comment-card"><div class="cmt-head"><span class="cmt-name">阿七不拖延</span><span class="cmt-time">11 月 4 日</span></div><p>七日计划适合我这种坐不住的人，每天只加一点点，反而坚持下来了。</p></div>
+            <div class="comment-card"><div class="cmt-head"><span class="cmt-name">慢速快门</span><span class="cmt-time">11 月 4 日</span></div><p>抗扰阅读的随机暂停点有时候太密集，连续两次提示间隔不到 1 分钟，有点打断思路。</p></div>
+            <div class="comment-card"><div class="cmt-head"><span class="cmt-name">大橘为重</span><span class="cmt-time">11 月 3 日</span></div><p>三分钟极限我最好成绩 2 分 12 秒，感觉呼吸是最关键的，暂停时不能完全屏住。</p></div>
+            <div class="comment-card"><div class="cmt-head"><span class="cmt-name">晚风急</span><span class="cmt-time">11 月 3 日</span></div><p>21 天计划对我这种上班族来说每天两次有点多，后来改成早晚各一次才跟上节奏。</p></div>
+            <div class="comment-card"><div class="cmt-head"><span class="cmt-name">木子李</span><span class="cmt-time">11 月 2 日</span></div><p>低刺激环境那 15 分钟音轨不错，三次提示的间隔比较合理，没有压迫感。</p></div>
+            <div class="comment-card"><div class="cmt-head"><span class="cmt-name">一颗大白菜</span><span class="cmt-time">11 月 2 日</span></div><p>双人匹配池扩容后等的时间短了，昨晚匹配了三次，最长也就等了一分钟。</p></div>
+            <div class="comment-card"><div class="cmt-head"><span class="cmt-name">小满未满</span><span class="cmt-time">11 月 1 日</span></div><p>稳态控制分 1.2 版把复盘质量权重调低了，我觉得更合理，毕竟感受记录比较主观。</p></div>
+          </div>
+        </section>
+
+        <!-- 9. 相关资讯 -->
+        <section class="section" id="news">
+          <div class="section-head">
+            <h2>相关资讯</h2>
+            <span class="hint">近期社区动态与规则变化</span>
+          </div>
+          <article class="news-item">
+            <img src="https://picsum.photos/seed/cunzhi-news01/600/400" alt="七日寸止计划第四期开放报名资讯配图" width="600" height="400" loading="lazy">
+            <div>
+              <h4>七日寸止训练计划第四期开放报名，新增心率恢复记录栏</h4>
+              <div class="news-date">2026-11-08</div>
+              <p>第四期在原有每日复盘基础上增加了心率恢复记录，参与者可自愿填写暂停后的心率变化，用于后续稳态控制分参考。</p>
+            </div>
+          </article>
+          <article class="news-item">
+            <img src="https://picsum.photos/seed/cunzhi-news02/600/400" alt="三分钟极限寸止社区纪录刷新资讯配图" width="600" height="400" loading="lazy">
+            <div>
+              <h4>三分钟极限寸止社区纪录刷新至 2 分 47 秒</h4>
+              <div class="news-date">2026-11-07</div>
+              <p>玩家「慢半拍」在第三次尝试中完成 2 分 47 秒的暂停维持，刷新了此前 2 分 39 秒的社区纪录，其复盘提到呼吸节奏是突破关键。</p>
+            </div>
+          </article>
+          <article class="news-item">
+            <img src="https://picsum.photos/seed/cunzhi-news03/600/400" alt="稳态控制评分标准 1.2 版发布资讯配图" width="600" height="400" loading="lazy">
+            <div>
+              <h4>稳态控制评分标准发布 1.2 版，调整恢复速率权重</h4>
+              <div class="news-date">2026-11-06</div>
+              <p>新版将恢复速率的权重从 25% 提升至 30%，并细化了波动容忍带的判定方式，连续三次超出容忍带会触发强度提示。</p>
+            </div>
+          </article>
+          <article class="news-item">
+            <img src="https://picsum.photos/seed/cunzhi-news04/600/400" alt="21 天稳态控制计划结营数据资讯配图" width="600" height="400" loading="lazy">
+            <div>
+              <h4>21 天稳态控制计划第九期结营，连续完成率 67%</h4>
+              <div class="news-date">2026-11-05</div>
+              <p>第九期共有 2400 余人参与，最终连续完成 21 天全勤的比例为 67%，比上一期提升 4 个百分点，中断者多数集中在第 14 天前后。</p>
+            </div>
+          </article>
+          <article class="news-item">
+            <img src="https://picsum.photos/seed/cunzhi-news05/600/400" alt="抗扰阅读寸止新增长文干扰模式资讯配图" width="600" height="400" loading="lazy">
+            <div>
+              <h4>抗扰阅读寸止新增「长文干扰」模式，支持 8000 字以上文本</h4>
+              <div class="news-date">2026-11-04</div>
+              <p>新模式针对长文本阅读场景优化了暂停点分布，避免提示过于密集，同时增加了阅读进度与暂停次数的对照视图。</p>
+            </div>
+          </article>
+          <article class="news-item">
+            <img src="https://picsum.photos/seed/cunzhi-news06/600/400" alt="双人同步寸止匹配池扩容资讯配图" width="600" height="400" loading="lazy">
+            <div>
+              <h4>双人同步寸止匹配池扩容，晚间平均等待缩短至 40 秒</h4>
+              <div class="news-date">2026-11-03</div>
+              <p>匹配池扩容后，晚间 8 点至 10 点的平均匹配等待时间从 90 秒降至 40 秒，同时新增了按暂停目标时长筛选匹配的选项。</p>
+            </div>
+          </article>
+        </section>
+
+        <!-- 10. 相关推荐 -->
+        <section class="section" id="related">
+          <div class="section-head">
+            <h2>延伸方向与相关标签</h2>
+          </div>
+          <div class="rel-tags">
+            <a href="/#featured">呼吸节奏控制</a>
+            <a href="/#featured">暂停后回归训练</a>
+            <a href="/#deep">波动容忍带解析</a>
+            <a href="/#guide">周期性计划选择</a>
+            <a href="/#categories">抗扰场景设计</a>
+            <a href="/#faq">双人同步节奏感知</a>
+            <a href="/#latest">复盘模板使用</a>
+          </div>
+        </section>
+
+        <!-- 11. 补充板块：热门榜单 -->
+        <section class="section" id="ranking">
+          <div class="section-head">
+            <h2>本周热门挑战榜单</h2>
+            <span class="hint">按参与人次排序，截至 11 月 8 日</span>
+          </div>
+          <ul class="brief-list">
+            <li><span class="item-name">七日寸止训练计划</span><span class="item-note">第 4 期报名人数领先，连续三周榜首</span><span class="item-time">3.2 万人</span></li>
+            <li><span class="item-name">21 天稳态控制计划</span><span class="item-note">结营数据公布后参与度回升</span><span class="item-time">2.4 万人</span></li>
+            <li><span class="item-name">三分钟极限寸止</span><span class="item-note">社区纪录刷新带动新一轮挑战</span><span class="item-time">1.8 万人</span></li>
+            <li><span class="item-name">低刺激环境寸止</span><span class="item-note">入门引导音轨上线后增长明显</span><span class="item-time">1.1 万人</span></li>
+            <li><span class="item-name">抗扰阅读寸止</span><span class="item-note">长文干扰模式吸引新用户</span><span class="item-time">9,600 人</span></li>
+            <li><span class="item-name">双人同步寸止</span><span class="item-note">匹配提速后晚间活跃度上升</span><span class="item-time">7,300 人</span></li>
+          </ul>
+        </section>
+
+      </main>
+
+      <!-- 右辅助栏 -->
+      <aside aria-label="辅助信息">
+        <div class="aside-box">
+          <h3>本周挑战热度榜</h3>
+          <ol class="rank-list">
+            <li><span class="rank-no top">1</span><span class="rank-name">七日寸止训练计划</span><span class="rank-score">3.2 万</span></li>
+            <li><span class="rank-no top">2</span><span class="rank-name">21 天稳态控制计划</span><span class="rank-score">2.4 万</span></li>
+            <li><span class="rank-no top">3</span><span class="rank-name">三分钟极限寸止</span><span class="rank-score">1.8 万</span></li>
+            <li><span class="rank-no">4</span><span class="rank-name">低刺激环境寸止</span><span class="rank-score">1.1 万</span></li>
+            <li><span class="rank-no">5</span><span class="rank-name">抗扰阅读寸止</span><span class="rank-score">9,600</span></li>
+            <li><span class="rank-no">6</span><span class="rank-name">双人同步寸止</span><span class="rank-score">7,300</span></li>
+          </ol>
+        </div>
+        <div class="aside-box">
+          <h3>常用标签</h3>
+          <div class="tag-cloud">
+            <a href="/#featured">延迟满足</a>
+            <a href="/#deep">稳态控制分</a>
+            <a href="/#guide">入门路径</a>
+            <a href="/#faq">暂停技巧</a>
+            <a href="/#latest">周期计划</a>
+            <a href="/#featured">抗扰练习</a>
+            <a href="/#comments">复盘模板</a>
+            <a href="/#latest">社区纪录</a>
+          </div>
+        </div>
+        <div class="aside-box">
+          <h3>近期更新速览</h3>
+          <ul class="brief-list" style="font-size:0.82rem;">
+            <li><span class="item-name">评分标准 1.2</span><span class="item-time">11-06</span></li>
+            <li><span class="item-name">七日计划第 4 期</span><span class="item-time">11-08</span></li>
+            <li><span class="item-name">抗扰长文模式</span><span class="item-time">11-04</span></li>
+            <li><span class="item-name">双人匹配扩容</span><span class="item-time">11-03</span></li>
+            <li><span class="item-name">复盘模板 2.0</span><span class="item-time">11-01</span></li>
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- 页尾 -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">寸止挑战</div>
+        <p style="font-size:0.82rem;line-height:1.7;">围绕延迟满足与自我控制的练习玩法，汇集规则解析、训练档案、实战记录与评分标准。</p>
+      </div>
+      <div>
+        <h4>挑战类型</h4>
+        <a href="/#featured">耐力型挑战</a>
+        <a href="/#featured">周期型计划</a>
+        <a href="/#featured">抗扰型练习</a>
+        <a href="/#featured">协作型挑战</a>
+      </div>
+      <div>
+        <h4>学习路径</h4>
+        <a href="/#overview">领域概览</a>
+        <a href="/#guide">体验路径</a>
+        <a href="/#deep">深度解析</a>
+        <a href="/#faq">常见问题</a>
+      </div>
+      <div>
+        <h4>社区</h4>
+        <a href="/#latest">最新动态</a>
+        <a href="/#ranking">热门榜单</a>
+        <a href="/#comments">练习者评论</a>
+        <a href="/#news">相关资讯</a>
+      </div>
+    </div>
+    <div class="footer-note">
+      <span>© 2026 寸止挑战 · 内容聚合示例页面</span>
+      <span>部分内容为示例数据，仅用于展示页面结构</span>
+    </div>
+  </footer>
+
+</body>
+            </html>
