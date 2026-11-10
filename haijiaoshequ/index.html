@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>海角社区 - 兴趣圈子内容聚合</title>
+<meta name="description" content="海角社区汇聚摄影、露营、手作、独立音乐等兴趣圈子内容，提供圈子动态、精选作品、活动召集与经验问答，适合想找到同好并参与线下活动的兴趣爱好者浏览参考。">
+<meta name="keywords" content="兴趣圈子,摄影交流,露营活动,手作教程,独立音乐,同城活动">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f4c5c'/%3E%3Ccircle cx='32' cy='30' r='11' fill='%23f4b860'/%3E%3Cpath d='M10 54c4-12 12-18 22-18s18 6 22 18' fill='none' stroke='%23e8f4f2' stroke-width='4'/%3E%3C/svg%3E">
+<style>
+:root{
+  --ink:#12303a;
+  --ink-soft:#3f5b63;
+  --muted:#6b8189;
+  --line:#d6e3e2;
+  --bg:#f4f8f7;
+  --panel:#ffffff;
+  --brand:#0f4c5c;
+  --brand-deep:#0a3644;
+  --accent:#e08a3c;
+  --accent-soft:#fdf1e3;
+  --teal-soft:#e6f2f0;
+  --radius:14px;
+  --radius-sm:9px;
+  --shadow:0 2px 10px rgba(15,76,92,.07);
+  --shadow-lg:0 10px 30px rgba(15,76,92,.12);
+  --ann-h:38px;
+  --head-h:64px;
+  --maxw:1320px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--ann-h) + var(--head-h) + 14px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;font-size:15px;line-height:1.75}
+img{max-width:100%;display:block}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3,h4{margin:0;line-height:1.35;font-weight:700}
+ul,ol{margin:0;padding:0;list-style:none}
+p{margin:0 0 12px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* 吸顶公告条 */
+.annbar{position:sticky;top:0;z-index:60;background:var(--brand-deep);color:#e8f4f2;height:var(--ann-h);display:flex;align-items:center;font-size:13px}
+.annbar .wrap{display:flex;align-items:center;gap:12px;overflow:hidden;height:100%}
+.annbar .tag{flex:none;background:var(--accent);color:#2a1600;font-weight:700;padding:1px 8px;border-radius:20px;font-size:12px}
+.annbar .tick{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.annbar a{color:#ffd9a8}
+
+/* 页头 */
+.sitehead{position:sticky;top:var(--ann-h);z-index:55;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);height:var(--head-h)}
+.sitehead .wrap{display:flex;align-items:center;gap:20px;height:100%}
+.brand{display:flex;align-items:center;gap:10px;flex:none}
+.brand svg{width:34px;height:34px;flex:none}
+.brand .name{font-size:20px;font-weight:800;color:var(--brand-deep);letter-spacing:.5px;white-space:nowrap}
+.mainnav{display:flex;gap:4px;flex:1;min-width:0;overflow:auto;scrollbar-width:none}
+.mainnav::-webkit-scrollbar{display:none}
+.mainnav a{padding:6px 11px;border-radius:20px;font-size:14px;color:var(--ink-soft);white-space:nowrap}
+.mainnav a:hover{background:var(--teal-soft);text-decoration:none;color:var(--brand)}
+.headtools{display:flex;gap:8px;flex:none;align-items:center}
+.searchbox{display:flex;align-items:center;border:1px solid var(--line);border-radius:20px;padding:2px 4px 2px 12px;background:#fafcfc}
+.searchbox input{border:0;background:transparent;outline:none;width:120px;font-size:13px;color:var(--ink);padding:5px 0}
+.searchbox button{border:0;background:var(--brand);color:#fff;border-radius:16px;padding:5px 12px;font-size:13px;cursor:pointer}
+.searchbox button:focus-visible,.mainnav a:focus-visible,.btn:focus-visible,.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{display:inline-block;background:var(--brand);color:#fff;border-radius:22px;padding:8px 18px;font-size:14px;font-weight:600;cursor:pointer;border:0}
+.btn:hover{background:var(--brand-deep);text-decoration:none;color:#fff}
+.btn.ghost{background:transparent;color:var(--brand);border:1px solid var(--brand)}
+.btn.ghost:hover{background:var(--teal-soft);color:var(--brand)}
+.navtoggle{display:none;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:14px}
+
+/* 首屏 */
+.hero{position:relative;overflow:hidden;background:linear-gradient(160deg,#0f4c5c 0%,#14606f 55%,#1c7a80 100%);color:#eaf5f4;padding:46px 0 52px}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;position:relative;z-index:2}
+.hero h1{font-size:44px;letter-spacing:2px;color:#fff;margin-bottom:14px}
+.hero .kicker{display:inline-block;font-size:13px;letter-spacing:3px;color:#ffd9a8;border:1px solid rgba(255,217,168,.5);border-radius:20px;padding:2px 12px;margin-bottom:16px}
+.hero p.lead{font-size:16px;color:#d5e9e7;max-width:560px;margin-bottom:22px}
+.hero .actions{display:flex;gap:12px;flex-wrap:wrap}
+.hero .btn{background:var(--accent);color:#2a1600}
+.hero .btn:hover{background:#f0a45c;color:#2a1600}
+.hero .btn.ghost{border-color:rgba(255,255,255,.6);color:#fff;background:transparent}
+.hero .btn.ghost:hover{background:rgba(255,255,255,.12);color:#fff}
+.hero-stats{display:flex;gap:26px;margin-top:26px;flex-wrap:wrap}
+.hero-stats div{font-size:13px;color:#c5e0dd}
+.hero-stats b{display:block;font-size:22px;color:#ffd9a8;line-height:1.2}
+.hero-art{position:relative;min-height:280px}
+.hero-art svg{width:100%;height:auto}
+.hero-art .float-card{position:absolute;background:rgba(255,255,255,.95);color:var(--ink);border-radius:12px;padding:10px 14px;font-size:12.5px;box-shadow:var(--shadow-lg);line-height:1.5}
+.hero-art .fc1{top:6%;left:2%;max-width:170px}
+.hero-art .fc2{bottom:8%;right:0;max-width:180px}
+.hero-art .fc1 b,.hero-art .fc2 b{display:block;font-size:13.5px;color:var(--brand-deep)}
+.hero-art .fc1 span,.hero-art .fc2 span{color:var(--muted)}
+
+/* 主内容布局：三栏门户 */
+.layout{display:grid;grid-template-columns:180px minmax(0,1fr) 250px;gap:26px;align-items:start;padding:32px 0 54px}
+.chan-col,.aux-col{position:sticky;top:calc(var(--ann-h) + var(--head-h) + 16px)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.panel-h{padding:12px 16px;border-bottom:1px solid var(--line);font-size:14px;font-weight:700;color:var(--brand-deep);display:flex;justify-content:space-between;align-items:center}
+.panel-b{padding:14px 16px}
+.chan-list a{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:7px 10px;border-radius:8px;font-size:13.5px;color:var(--ink-soft)}
+.chan-list a:hover{background:var(--teal-soft);text-decoration:none;color:var(--brand)}
+.chan-list a .cnt{font-size:11.5px;color:var(--muted);background:var(--bg);border-radius:10px;padding:0 7px}
+.aux-hot li{padding:9px 0;border-bottom:1px dashed var(--line);display:flex;gap:10px;align-items:baseline}
+.aux-hot li:last-child{border-bottom:0}
+.aux-hot .rk{font-weight:800;color:var(--accent);font-size:13px;width:18px;flex:none}
+.aux-hot .t{font-size:13.5px;line-height:1.5}
+.aux-hot .m{font-size:11.5px;color:var(--muted);display:block}
+.aux-tags{display:flex;flex-wrap:wrap;gap:7px}
+.aux-tags a{font-size:12.5px;background:var(--teal-soft);color:var(--brand);padding:3px 10px;border-radius:14px}
+.aux-tags a:hover{background:var(--brand);color:#fff;text-decoration:none}
+.aux-update li{font-size:12.5px;padding:7px 0;border-bottom:1px dashed var(--line);color:var(--ink-soft);line-height:1.55}
+.aux-update li:last-child{border:0}
+.aux-update time{color:var(--muted);font-size:11.5px;display:block}
+
+/* 板块通用 */
+.sec{margin-bottom:34px}
+.sec-h{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:16px;border-bottom:2px solid var(--line);padding-bottom:9px}
+.sec-h h2{font-size:22px;color:var(--brand-deep);position:relative;padding-left:13px}
+.sec-h h2::before{content:"";position:absolute;left:0;top:5px;bottom:5px;width:5px;border-radius:3px;background:var(--accent)}
+.sec-h .sub{font-size:13px;color:var(--muted)}
+.sec-h a.more{font-size:13px;color:var(--brand);white-space:nowrap}
+
+/* 概览 */
+.overview{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow)}
+.overview p{font-size:14.5px;color:var(--ink-soft);margin-bottom:12px}
+.overview p:last-child{margin-bottom:0}
+
+/* 精选卡片 */
+.card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow);transition:.18s}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.card .thumb{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--teal-soft)}
+.card .thumb img{width:100%;height:100%;object-fit:cover}
+.card .type{position:absolute;left:9px;top:9px;background:rgba(15,76,92,.9);color:#fff;font-size:11.5px;padding:2px 9px;border-radius:12px}
+.card .body{padding:12px 14px 14px;display:flex;flex-direction:column;flex:1}
+.card h3{font-size:15.5px;color:var(--brand-deep);margin-bottom:7px}
+.card .desc{font-size:13px;color:var(--ink-soft);flex:1;margin-bottom:10px}
+.card .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.card .tags span{font-size:11.5px;color:var(--brand);background:var(--teal-soft);padding:1px 8px;border-radius:10px}
+.card .meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}
+.card .meta b{color:var(--accent);font-size:13px}
+
+/* 动态列表 */
+.feed{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.feed li{display:flex;gap:14px;padding:13px 18px;border-bottom:1px solid var(--line);align-items:flex-start}
+.feed li:last-child{border-bottom:0}
+.feed .when{flex:none;width:78px;font-size:12px;color:var(--muted);line-height:1.5}
+.feed .when b{display:block;color:var(--brand);font-size:13px}
+.feed .info{flex:1;min-width:0}
+.feed .info strong{font-size:14.5px;color:var(--brand-deep)}
+.feed .info p{font-size:13px;color:var(--ink-soft);margin:2px 0 0}
+.feed .badge{flex:none;font-size:11.5px;background:var(--accent-soft);color:#9c5a15;border-radius:10px;padding:1px 9px;align-self:flex-start;margin-top:2px}
+
+/* 分类入口 */
+.cat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.cat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 15px;box-shadow:var(--shadow);transition:.15s}
+.cat:hover{border-color:var(--brand);text-decoration:none;transform:translateY(-2px)}
+.cat b{display:block;font-size:15px;color:var(--brand-deep);margin-bottom:3px}
+.cat span{font-size:12.5px;color:var(--muted)}
+.filterbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:16px;padding:4px 13px;font-size:13px;color:var(--ink-soft);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+.noresult{display:none;padding:18px;border:1px dashed var(--line);border-radius:var(--radius-sm);color:var(--muted);font-size:13.5px;background:#fff}
+
+/* 深度解析 */
+.article{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:26px 28px;box-shadow:var(--shadow)}
+.article h3{font-size:18px;color:var(--brand-deep);margin:22px 0 10px;padding-left:11px;border-left:4px solid var(--accent)}
+.article h3:first-child{margin-top:0}
+.article p{font-size:14.5px;color:var(--ink-soft)}
+.article ul{margin:0 0 14px;padding-left:0}
+.article ul li{font-size:14px;color:var(--ink-soft);padding:5px 0 5px 20px;position:relative}
+.article ul li::before{content:"";position:absolute;left:4px;top:14px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.article .cmp{width:100%;border-collapse:collapse;margin:8px 0 16px;font-size:13.5px}
+.article .cmp th,.article .cmp td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+.article .cmp th{background:var(--teal-soft);color:var(--brand-deep);font-weight:700}
+
+/* 体验指南步骤 */
+.steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px 18px;box-shadow:var(--shadow);display:flex;gap:14px}
+.step .num{flex:none;width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px}
+.step h3{font-size:15px;color:var(--brand-deep);margin-bottom:4px}
+.step p{font-size:13px;color:var(--ink-soft);margin:0}
+
+/* FAQ */
+.faq details{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);margin-bottom:10px;box-shadow:var(--shadow);overflow:hidden}
+.faq summary{padding:14px 18px;font-size:14.5px;font-weight:600;color:var(--brand-deep);cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--accent);font-size:19px;font-weight:700;line-height:1}
+.faq details[open] summary::after{content:"−"}
+.faq .ans{padding:0 18px 15px;font-size:13.5px;color:var(--ink-soft)}
+
+/* 评论 */
+.comments{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.cmt{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 15px;box-shadow:var(--shadow)}
+.cmt .who{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.cmt .ava{width:28px;height:28px;border-radius:50%;background:var(--teal-soft);color:var(--brand);display:grid;place-items:center;font-size:13px;font-weight:700;flex:none}
+.cmt .who b{font-size:13.5px;color:var(--brand-deep)}
+.cmt .who time{font-size:11.5px;color:var(--muted);margin-left:auto}
+.cmt p{font-size:13px;color:var(--ink-soft);margin:0}
+
+/* 资讯 */
+.news-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.news{display:flex;gap:13px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px;box-shadow:var(--shadow)}
+.news img{width:110px;height:82px;object-fit:cover;border-radius:8px;flex:none}
+.news .txt{min-width:0}
+.news h3{font-size:14.5px;color:var(--brand-deep);margin-bottom:3px}
+.news time{font-size:11.5px;color:var(--muted);display:block;margin-bottom:3px}
+.news p{font-size:12.5px;color:var(--ink-soft);margin:0}
+
+/* 相关推荐标签 */
+.reltags{display:flex;flex-wrap:wrap;gap:9px}
+.reltags a{display:inline-flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:6px 15px;font-size:13.5px;color:var(--brand-deep);box-shadow:var(--shadow)}
+.reltags a:hover{background:var(--brand);color:#fff;border-color:var(--brand);text-decoration:none}
+.reltags a span{font-size:11.5px;color:var(--muted)}
+.reltags a:hover span{color:#d9ecea}
+
+/* 榜单 + 时间线双栏 */
+.duo{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+.rank-list li{display:flex;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line);align-items:center}
+.rank-list li:last-child{border-bottom:0}
+.rank-list .no{font-weight:800;font-size:16px;color:var(--muted);width:24px;flex:none;text-align:center}
+.rank-list li:nth-child(1) .no{color:#d94f2b}
+.rank-list li:nth-child(2) .no{color:#e08a3c}
+.rank-list li:nth-child(3) .no{color:#b98a1f}
+.rank-list .nm{flex:1;min-width:0;font-size:14px;color:var(--brand-deep)}
+.rank-list .nm span{display:block;font-size:12px;color:var(--muted);font-weight:400}
+.rank-list .sc{font-size:13px;color:var(--accent);font-weight:700;flex:none}
+.timeline{padding:6px 18px 16px}
+.timeline li{position:relative;padding:12px 0 12px 24px;border-left:2px solid var(--line)}
+.timeline li:last-child{border-left-color:transparent}
+.timeline li::before{content:"";position:absolute;left:-7px;top:18px;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid #fff}
+.timeline time{font-size:12px;color:var(--muted);display:block}
+.timeline b{font-size:14px;color:var(--brand-deep);display:block;margin:1px 0 2px}
+.timeline p{font-size:12.5px;color:var(--ink-soft);margin:0}
+
+/* 页尾 */
+.sitefoot{background:var(--brand-deep);color:#c9dfdc;padding:38px 0 22px;margin-top:20px}
+.sitefoot .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:26px;margin-bottom:26px}
+.sitefoot h4{font-size:14.5px;color:#fff;margin-bottom:11px}
+.sitefoot ul li{margin-bottom:7px}
+.sitefoot a{color:#c9dfdc;font-size:13px}
+.sitefoot a:hover{color:#ffd9a8;text-decoration:none}
+.sitefoot .brandline{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.sitefoot .brandline svg{width:32px;height:32px}
+.sitefoot .brandline b{font-size:19px;color:#fff;letter-spacing:.5px}
+.sitefoot .about{font-size:13px;line-height:1.7;max-width:340px}
+.sitefoot .bottom{border-top:1px solid rgba(255,255,255,.15);padding-top:16px;font-size:12px;color:#9dbcb8;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+
+@media(max-width:1024px){
+  .layout{grid-template-columns:minmax(0,1fr) 260px;gap:20px}
+  .chan-col{display:none}
+  .card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero .wrap{grid-template-columns:1fr;gap:26px}
+  .hero-art{display:none}
+  .duo{grid-template-columns:1fr}
+  .news-list{grid-template-columns:1fr}
+  .sitefoot .cols{grid-template-columns:1fr 1fr}
+  .searchbox input{width:90px}
+}
+@media(max-width:740px){
+  :root{--ann-h:auto}
+  .annbar{position:sticky;height:auto;padding:6px 0}
+  .annbar .wrap{font-size:12px}
+  .sitehead{position:sticky}
+  .sitehead .wrap{flex-wrap:wrap;height:auto;padding-top:8px;padding-bottom:8px;gap:10px}
+  .mainnav{display:none;order:5;width:100%;flex-direction:column;gap:2px;padding:6px 0}
+  .mainnav.open{display:flex}
+  .mainnav a{border-radius:8px;padding:8px 12px}
+  .navtoggle{display:inline-block;margin-left:auto}
+  .headtools .searchbox{display:none}
+  .layout{grid-template-columns:1fr;gap:22px}
+  .aux-col{position:static}
+  .hero h1{font-size:32px}
+  .card-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .comments{grid-template-columns:1fr}
+  .cat-grid{grid-template-columns:1fr 1fr}
+  .sec-h h2{font-size:19px}
+  .article{padding:20px 18px}
+  .news img{width:88px;height:70px}
+  .sitefoot .cols{grid-template-columns:1fr}
+  .feed li{flex-wrap:wrap;gap:6px}
+  .feed .when{width:auto;display:flex;gap:6px}
+  .feed .when b{display:inline}
+}
+</style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+
+<!-- 吸顶公告条 -->
+<div class="annbar" role="region" aria-label="社区公告">
+  <div class="wrap">
+    <span class="tag">本周新增</span>
+    <span class="tick">11 月 8 日新收录 18 组露营装备清单、7 场同城手作市集、4 期独立音乐现场回顾 · <a href="#latest">查看更新</a></span>
+  </div>
+</div>
+
+<!-- 吸顶页头 -->
+<header class="sitehead">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="海角社区 首页">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#0f4c5c"/>
+        <circle cx="32" cy="27" r="11" fill="#f4b860"/>
+        <path d="M9 56c4-13 12-20 23-20s19 7 23 20" fill="none" stroke="#e8f4f2" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <span class="name">海角社区</span>
+    </a>
+    <nav class="mainnav" id="mainnav" aria-label="主题频道">
+      <a href="#overview">社区概览</a>
+      <a href="#featured">精选作品</a>
+      <a href="#latest">圈子动态</a>
+      <a href="#channels">分类频道</a>
+      <a href="#deep">圈子观察</a>
+      <a href="#guide">参与指南</a>
+      <a href="#faq">常见问答</a>
+      <a href="#comments">圈友评论</a>
+      <a href="#news">相关资讯</a>
+      <a href="#rank">热门榜单</a>
+    </nav>
+    <div class="headtools">
+      <form class="searchbox" id="searchForm" role="search" aria-label="站内搜索">
+        <input type="search" id="siteSearch" placeholder="搜索圈子或作品" aria-label="搜索圈子或作品">
+        <button type="submit">查找</button>
+      </form>
+      <button class="navtoggle" id="navToggle" aria-expanded="false" aria-controls="mainnav">菜单</button>
+    </div>
+  </div>
+</header>
+
+<!-- 首屏 -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <span class="kicker">兴趣圈子 · 同好聚集地</span>
+      <h1>海角社区</h1>
+      <p class="lead">这里汇集摄影、露营、手作、独立音乐、城市骑行等兴趣圈子的作品记录、活动召集与经验问答，你可以按圈子浏览近期更新，也可以从一篇完整的装备清单或拍摄手记开始，找到想一起交流的人。</p>
+      <div class="actions">
+        <a class="btn" href="#featured">浏览精选作品</a>
+        <a class="btn ghost" href="#channels">进入分类频道</a>
+      </div>
+      <div class="hero-stats">
+        <div><b>36</b>个活跃兴趣圈子</div>
+        <div><b>214</b>组本周新增作品</div>
+        <div><b>52</b>场近期同城活动</div>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 460 330" role="presentation">
+        <defs>
+          <linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#f4b860" stop-opacity=".9"/>
+            <stop offset="1" stop-color="#e08a3c" stop-opacity=".5"/>
+          </linearGradient>
+        </defs>
+        <circle cx="330" cy="80" r="58" fill="url(#hg)" opacity=".9"/>
+        <path d="M20 300c40-70 90-105 160-105s120 35 160 105" fill="none" stroke="#a9d6cf" stroke-width="3" opacity=".7"/>
+        <path d="M60 300c30-50 70-78 120-78s90 28 120 78" fill="none" stroke="#7fc0b7" stroke-width="2.5" opacity=".6"/>
+        <g fill="#e8f4f2" opacity=".85">
+          <circle cx="90" cy="70" r="5"/><circle cx="140" cy="52" r="3.5"/><circle cx="200" cy="88" r="4"/>
+          <circle cx="255" cy="46" r="3"/><circle cx="380" cy="150" r="4"/><circle cx="60" cy="150" r="3"/>
+        </g>
+        <rect x="112" y="150" width="120" height="76" rx="10" fill="#0a3644" stroke="#7fc0b7" stroke-width="2"/>
+        <rect x="124" y="162" width="96" height="9" rx="4" fill="#f4b860"/>
+        <rect x="124" y="180" width="72" height="7" rx="3.5" fill="#4c8d8a"/>
+        <rect x="124" y="195" width="86" height="7" rx="3.5" fill="#4c8d8a"/>
+        <rect x="248" y="186" width="96" height="60" rx="10" fill="#0a3644" stroke="#7fc0b7" stroke-width="2"/>
+        <circle cx="272" cy="212" r="12" fill="#f4b860"/>
+        <rect x="292" y="202" width="40" height="7" rx="3.5" fill="#4c8d8a"/>
+        <rect x="292" y="216" width="30" height="7" rx="3.5" fill="#4c8d8a"/>
+      </svg>
+      <div class="float-card fc1"><b>露营装备清单</b><span>3 天 2 夜轻量化方案</span></div>
+      <div class="float-card fc2"><b>城市夜骑召集</b><span>11 月 9 日 · 江畔线</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 主内容：三栏门户 -->
+<div class="wrap">
+  <div class="layout">
+
+    <!-- 左频道索引 -->
+    <aside class="chan-col">
+      <nav class="panel" aria-label="频道索引">
+        <div class="panel-h">频道索引</div>
+        <div class="panel-b chan-list">
+          <a href="#channels">摄影记录 <span class="cnt">42</span></a>
+          <a href="#channels">露营徒步 <span class="cnt">38</span></a>
+          <a href="#channels">手作工坊 <span class="cnt">27</span></a>
+          <a href="#channels">独立音乐 <span class="cnt">31</span></a>
+          <a href="#channels">城市骑行 <span class="cnt">24</span></a>
+          <a href="#channels">咖啡冲煮 <span class="cnt">19</span></a>
+          <a href="#channels">旧物改造 <span class="cnt">16</span></a>
+          <a href="#channels">观鸟记录 <span class="cnt">13</span></a>
+          <a href="#channels">胶片冲洗 <span class="cnt">11</span></a>
+          <a href="#channels">植物养护 <span class="cnt">22</span></a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- 中主内容 -->
+    <main>
+
+      <!-- 1 概览 -->
+      <section class="sec" id="overview">
+        <div class="sec-h">
+          <h2>社区概览：兴趣圈子里正在发生什么</h2>
+          <span class="sub">2026 年 11 月</span>
+        </div>
+        <div class="overview">
+          <p>海角社区以兴趣圈子为基本单位组织内容，每个圈子围绕一类具体爱好展开：有人记录一次完整的露营装备搭配，有人发布城市夜骑路线与集合时间，也有人把一块旧木板改造成书架并留下尺寸与工具清单。圈子内容大致分为三类——作品记录、经验方法、活动召集。</p>
+          <p>当前较活跃的方向是秋季露营与城市骑行。露营圈子集中在装备轻量化、营地选择与低温睡眠方案；骑行圈子则以周末近郊路线、夜骑安全装备、车辆基础保养为主。摄影与胶片冲洗圈子在 10 月下旬迎来一波扫街作品更新，多为人文街景与雨后天光。手作与旧物改造圈子更新频率不高，但单篇内容完整度高，常附材料采购渠道与失败复盘。</p>
+          <p>如果你刚接触某个方向，建议先看该圈子的装备清单或入门记录，再决定是否参加线下活动。圈子里的活动通常由圈友自发组织，规模从 6 人到 30 人不等，报名前可先查看往期活动回顾与组织者发布的其他内容，判断节奏是否适合自己。</p>
+        </div>
+      </section>
+
+      <!-- 2 精选作品 -->
+      <section class="sec" id="featured">
+        <div class="sec-h">
+          <h2>精选作品推荐</h2>
+          <a class="more" href="#latest">查看全部更新 →</a>
+        </div>
+        <div class="card-grid">
+          <article class="card">
+            <div class="thumb"><img src="https://picsum.photos/seed/luying-qingliang01/400/300" width="400" height="300" loading="lazy" alt="轻量化露营装备平铺记录封面"><span class="type">露营徒步</span></div>
+            <div class="body">
+              <h3>三天两夜轻量化装备清单</h3>
+              <p class="desc">作者记录了 8.6 公斤总重的完整打包方案，包含帐篷、睡袋温标选择与三餐食材配比，附每件装备的实际使用反馈。</p>
+              <div class="tags"><span>装备搭配</span><span>低温睡眠</span><span>打包技巧</span></div>
+              <div class="meta"><span>收藏 1,284</span><b>4.8 分</b></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="thumb"><img src="https://picsum.photos/seed/yeqi-jiangpan02/400/300" width="400" height="300" loading="lazy" alt="江畔夜骑路线实拍封面"><span class="type">城市骑行</span></div>
+            <div class="body">
+              <h3>江畔 22 公里夜骑路线实测</h3>
+              <p class="desc">从东堤闸口到旧码头，全程路灯覆盖与补给点位置都有标注，作者还对比了三个时间段的车辆与行人密度。</p>
+              <div class="tags"><span>夜骑路线</span><span>安全装备</span><span>周末活动</span></div>
+              <div class="meta"><span>收藏 962</span><b>4.6 分</b></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="thumb"><img src="https://picsum.photos/seed/jiaopian-saoxiang03/400/300" width="400" height="300" loading="lazy" alt="胶片扫街作品集封面"><span class="type">胶片冲洗</span></div>
+            <div class="body">
+              <h3>雨后天光：一卷 Portra 400 的街景</h3>
+              <p class="desc">36 张成片里保留了 12 张，作者说明了测光偏差、显影时间调整与扫街时的取景取舍，适合刚开始玩胶片的人参考。</p>
+              <div class="tags"><span>人文街景</span><span>显影参数</span><span>测光方法</span></div>
+              <div class="meta"><span>收藏 738</span><b>4.7 分</b></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="thumb"><img src="https://picsum.photos/seed/jiuwu-gaizao04/400/300" width="400" height="300" loading="lazy" alt="旧木板改造书架作品封面"><span class="type">旧物改造</span></div>
+            <div class="body">
+              <h3>旧木板改成窄边书架</h3>
+              <p class="desc">用回收松木板做了一组 60 厘米宽的窄书架，文中列出切割尺寸、连接件型号与上漆遍数，也写了第一次失败的接缝问题。</p>
+              <div class="tags"><span>木工入门</span><span>材料清单</span><span>上漆工艺</span></div>
+              <div class="meta"><span>收藏 611</span><b>4.5 分</b></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="thumb"><img src="https://picsum.photos/seed/duliyinyue-xianchang05/400/300" width="400" height="300" loading="lazy" alt="独立音乐小型现场回顾封面"><span class="type">独立音乐</span></div>
+            <div class="body">
+              <h3>小剧场四组乐队现场回顾</h3>
+              <p class="desc">记录了 10 月 26 日一场 120 人规模的演出，包括调音顺序、曲目编排与观众反应，附三支乐队过往作品推荐。</p>
+              <div class="tags"><span>小型现场</span><span>曲目编排</span><span>乐队推荐</span></div>
+              <div class="meta"><span>收藏 587</span><b>4.6 分</b></div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="thumb"><img src="https://picsum.photos/seed/shouchong-kafei06/400/300" width="400" height="300" loading="lazy" alt="手冲咖啡参数记录封面"><span class="type">咖啡冲煮</span></div>
+            <div class="body">
+              <h3>浅烘豆手冲参数对照记录</h3>
+              <p class="desc">同一支豆子用 V60 与平底滤杯各冲三次，记录水温、研磨度与注水节奏的差异，给出两种器具的风味走向对比。</p>
+              <div class="tags"><span>手冲参数</span><span>器具对比</span><span>风味记录</span></div>
+              <div class="meta"><span>收藏 504</span><b>4.4 分</b></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 3 最新更新 -->
+      <section class="sec" id="latest">
+        <div class="sec-h">
+          <h2>圈子最新动态</h2>
+          <span class="sub">11 月 8 日更新</span>
+        </div>
+        <ul class="feed">
+          <li><div class="when"><b>今天 09:40</b>11-08</div><div class="info"><strong>「三日轻量化露营」追加低温睡眠补充</strong><p>作者根据 11 月 2 日夜间 4℃ 实测，把睡袋温标建议从 0℃ 调整到 -5℃，并替换了防潮垫型号。</p></div><span class="badge">更新</span></li>
+          <li><div class="when"><b>今天 08:15</b>11-08</div><div class="info"><strong>江畔夜骑 11 月 9 日场次开放报名</strong><p>集合点改为东堤闸口，限 24 人，需自备前灯与反光背心，组织者上传了更新后的路线轨迹图。</p></div><span class="badge">召集</span></li>
+          <li><div class="when"><b>昨天 21:10</b>11-07</div><div class="info"><strong>「雨后天光」胶片作品新增 6 张成片</strong><p>补充了同一卷胶片在阴天条件下的三组显影对比，附扫描仪型号与色彩配置。</p></div><span class="badge">作品</span></li>
+          <li><div class="when"><b>昨天 18:32</b>11-07</div><div class="info"><strong>手作市集 11 月 15 日场次公布摊位名单</strong><p>共 22 个摊位，涵盖皮具、陶艺、编织三类，主办方同步放出往期市集人流分布参考。</p></div><span class="badge">活动</span></li>
+          <li><div class="when"><b>11-06</b></div><div class="info"><strong>观鸟记录新增滨江湿地 11 月候鸟观测表</strong><p>本周记录到 17 种水鸟，作者标注了最佳观测时段与望远镜倍率建议。</p></div><span class="badge">记录</span></li>
+          <li><div class="when"><b>11-05</b></div><div class="info"><strong>浅烘豆手冲对照实验更新平底滤杯数据</strong><p>新增研磨度 6.5 与 7.0 两档对比，注水节奏由三段改为四段，风味描述随之调整。</p></div><span class="badge">更新</span></li>
+          <li><div class="when"><b>11-04</b></div><div class="info"><strong>小剧场乐队现场回顾追加调音细节</strong><p>补充了返听音箱摆位与低频反馈处理过程，供小型场地演出参考。</p></div><span class="badge">回顾</span></li>
+          <li><div class="when"><b>11-03</b></div><div class="info"><strong>旧物改造圈子发布 11 月材料采购团</strong><p>集中采购松木板与水性漆，满 20 人成团，组织者贴出三家供应商的报价对比。</p></div><span class="badge">团购</span></li>
+          <li><div class="when"><b>11-02</b></div><div class="info"><strong>植物养护圈子新增冬季控水对照记录</strong><p>记录了 12 盆室内绿植在供暖前后的浇水间隔变化，附温湿度计读数。</p></div><span class="badge">记录</span></li>
+          <li><div class="when"><b>11-01</b></div><div class="info"><strong>摄影记录圈子开放 11 月扫街主题投稿</strong><p>本月主题为「街角的光」，投稿需附拍摄时间与器材信息，月底集中展示。</p></div><span class="badge">投稿</span></li>
+        </ul>
+      </section>
+
+      <!-- 4 分类入口 -->
+      <section class="sec" id="channels">
+        <div class="sec-h">
+          <h2>分类频道入口</h2>
+          <span class="sub">按兴趣方向筛选</span>
+        </div>
+        <div class="filterbar" role="group" aria-label="频道筛选">
+          <button class="chip" aria-pressed="true" data-filter="all">全部</button>
+          <button class="chip" aria-pressed="false" data-filter="outdoor">户外</button>
+          <button class="chip" aria-pressed="false" data-filter="create">创作</button>
+          <button class="chip" aria-pressed="false" data-filter="life">生活</button>
+        </div>
+        <div class="cat-grid" id="catGrid">
+          <a class="cat" href="#featured" data-cat="create"><b>摄影记录</b><span>扫街、人文街景、器材使用手记</span></a>
+          <a class="cat" href="#featured" data-cat="outdoor"><b>露营徒步</b><span>装备清单、营地选择、低温方案</span></a>
+          <a class="cat" href="#featured" data-cat="create"><b>手作工坊</b><span>皮具、陶艺、编织制作过程</span></a>
+          <a class="cat" href="#featured" data-cat="create"><b>独立音乐</b><span>小型现场、曲目编排、乐队推荐</span></a>
+          <a class="cat" href="#featured" data-cat="outdoor"><b>城市骑行</b><span>夜骑路线、安全装备、保养方法</span></a>
+          <a class="cat" href="#featured" data-cat="life"><b>咖啡冲煮</b><span>手冲参数、器具对比、风味记录</span></a>
+          <a class="cat" href="#featured" data-cat="life"><b>旧物改造</b><span>木工入门、材料清单、上漆工艺</span></a>
+          <a class="cat" href="#featured" data-cat="outdoor"><b>观鸟记录</b><span>候鸟观测、时段选择、设备建议</span></a>
+        </div>
+        <p class="noresult" id="noResult">没有匹配当前筛选的频道，请切换其他分类。</p>
+      </section>
+
+      <!-- 5 深度解析 -->
+      <section class="sec" id="deep">
+        <div class="sec-h">
+          <h2>圈子观察：不同兴趣内容的投入方式与判断依据</h2>
+        </div>
+        <div class="article">
+          <h3>一、兴趣圈子的内容类型差异</h3>
+          <p>同样是兴趣内容，不同圈子的产出形态差别很大。摄影与胶片类内容以成片为核心，围绕一张照片展开器材、参数与取景思路；露营与骑行类内容更接近操作手册，重点在装备组合、路线条件与安全余量；手作与旧物改造类内容则常常包含完整的失败复盘，过程本身比成品更有参考价值。</p>
+          <p>理解这种差异，能帮助你在海角社区里快速判断一篇内容是否值得细读。看到标题里出现具体型号、尺寸、温标、公里数，通常意味着作者真的走完了一遍流程；只有形容词而缺少数字的记录，往往更偏分享性质。</p>
+
+          <h3>二、装备清单类内容的判断维度</h3>
+          <p>露营和骑行圈子最常见的是装备清单。判断一份清单是否可靠，可以看四个维度：使用场景是否明确、重量与体积是否有实测、替代方案是否给出、失败或后悔的部分是否提及。一份只列品牌和价格的清单，参考价值有限。</p>
+          <ul>
+            <li>场景：写明季节、海拔、天气与同行人数，比笼统的「适合新手」更有用。</li>
+            <li>实测：总重、打包体积、搭建耗时，三项数据齐全的清单通常可信度较高。</li>
+            <li>替代：给出同价位或更轻的备选，说明为什么最终没选。</li>
+            <li>复盘：提到哪件装备实际没用上、哪件超预期，这类信息最难伪造。</li>
+          </ul>
+
+          <h3>三、作品记录类内容的比较方式</h3>
+          <p>摄影、胶片、手作类内容以作品为主，比较时不必只看得分。更实用的方式是横向对照同主题的多篇记录：同一场景下不同作者的光线处理、同一材料下不同人的接缝做法。下表列出三类作品记录的关注重点。</p>
+          <table class="cmp">
+            <thead><tr><th>内容类型</th><th>先看什么</th><th>常见信息缺口</th></tr></thead>
+            <tbody>
+              <tr><td>胶片扫街</td><td>胶卷型号、显影时间、测光方式</td><td>扫描设备与后期幅度</td></tr>
+              <tr><td>手作木工</td><td>材料尺寸、连接件、上漆遍数</td><td>工具清单与安全防护</td></tr>
+              <tr><td>小型现场回顾</td><td>场地规模、调音顺序、曲目单</td><td>票价与观众构成</td></tr>
+            </tbody>
+          </table>
+
+          <h3>四、活动召集内容的阅读顺序</h3>
+          <p>圈子活动由圈友自发组织，阅读时建议按固定顺序核对：先看时间与集合点是否具体，再看人数上限与装备要求，最后看组织者过往发布的内容。组织者如果有多次活动回顾，且回顾里提到过天气变化、人员迟到等实际问题的处理方式，通常说明其组织经验较足。</p>
+          <p>报名之前，还可以留意活动是否写明退出机制与费用分摊方式。这两项写得越清楚，临时变动时越不容易产生分歧。</p>
+
+          <h3>五、长期参与一个圈子的节奏</h3>
+          <p>兴趣圈子的内容更新并不均匀。露营与骑行在换季时更新密集，手作与旧物改造则常常间隔两三周才有一篇完整记录。把海角社区当作长期浏览的地方，更合理的方式是固定关注三到五个圈子，其余按需查看。这样既不会被大量更新淹没，也能在自己真正想深入的领域里持续跟进。</p>
+        </div>
+      </section>
+
+      <!-- 6 体验指南 -->
+      <section class="sec" id="guide">
+        <div class="sec-h">
+          <h2>参与指南：从浏览到参加活动的四个阶段</h2>
+        </div>
+        <div class="steps">
+          <div class="step"><div class="num">1</div><div><h3>先锁定一个具体方向</h3><p>不要同时看五个圈子。选一个你近期真的会动手的方向，比如「三天内要出发的露营」或「想拍完一卷胶片」，目标越具体，筛选内容越快。</p></div></div>
+          <div class="step"><div class="num">2</div><div><h3>读一篇完整的流程记录</h3><p>优先选择带数字的记录：总重、温标、显影时间、公里数。完整流程能让你知道每个环节大概要花多少时间和预算。</p></div></div>
+          <div class="step"><div class="num">3</div><div><h3>对照两到三篇同类内容</h3><p>同一主题下找两三位不同作者的做法，比较装备选择与操作顺序的差异。分歧点往往就是你需要自己判断的地方。</p></div></div>
+          <div class="step"><div class="num">4</div><div><h3>从小规模活动开始</h3><p>第一次参加线下活动，选 6 到 12 人、路线明确、装备要求清楚的场次。参加后回看组织者的活动回顾，能更快判断是否继续跟进这个圈子。</p></div></div>
+        </div>
+      </section>
+
+      <!-- 7 FAQ -->
+      <section class="sec" id="faq">
+        <div class="sec-h">
+          <h2>常见问答</h2>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>第一次参加露营，装备清单应该从哪几件开始准备？</summary>
+            <div class="ans">先解决睡眠与遮蔽：帐篷、睡袋、防潮垫三件决定夜间体验。其次才是炊具与照明。海角社区里的轻量化清单通常会标注每件的重量与温标，建议按你实际出行的最低夜间温度选睡袋，而不是按季节名称选。</div>
+          </details>
+          <details>
+            <summary>胶片扫街和数码街拍在记录方式上有什么区别？</summary>
+            <div class="ans">胶片记录更依赖前期判断，一卷 36 张意味着每次按下快门都要考虑成本；数码可以大量试拍再筛选。圈子里的胶片作品通常会写明显影时间与测光方式，数码作品则更常讨论后期调整幅度，两者可对照阅读。</div>
+          </details>
+          <details>
+            <summary>城市夜骑需要准备哪些安全装备？</summary>
+            <div class="ans">至少包括前灯、尾灯、反光背心或反光贴，头盔按个人习惯选择。江畔路线实测记录里提到，夜间部分路段路灯间隔较大，前灯亮度建议不低于 400 流明，且要保证续航覆盖全程。</div>
+          </details>
+          <details>
+            <summary>手作木工的入门作品一般选什么比较合适？</summary>
+            <div class="ans">窄边书架、小边几、收纳托盘是常见入门选择，用料少、连接方式简单。建议先看一篇带失败复盘的记录，了解接缝与上漆容易出问题的地方，再决定买哪些工具，避免一次性购入用不上的设备。</div>
+          </details>
+          <details>
+            <summary>圈子里的线下活动一般多久组织一次？</summary>
+            <div class="ans">频率因圈子而异。骑行与露营在换季和周末较密集，通常每周有一到两场；手作市集多为月度场次；独立音乐小型现场则跟随演出排期，间隔不固定。关注具体圈子的动态列表比看整体更新更准确。</div>
+          </details>
+          <details>
+            <summary>同一支浅烘豆，手冲和平底滤杯冲出来差别大吗？</summary>
+            <div class="ans">差别主要体现在口感厚度与酸质表现。参数对照记录显示，V60 更容易突出香气与干净度，平底滤杯萃取更均匀、口感偏厚。研磨度与注水节奏需要分别调整，不能直接套用同一组参数。</div>
+          </details>
+        </div>
+      </section>
+
+      <!-- 8 评论 -->
+      <section class="sec" id="comments">
+        <div class="sec-h">
+          <h2>圈友评论</h2>
+          <span class="sub">来自近期作品与活动</span>
+        </div>
+        <div class="comments">
+          <div class="cmt"><div class="who"><span class="ava">林</span><b>林间慢走</b><time>11-08 10:02</time></div><p>按那份 8.6 公斤清单走了一趟，防潮垫换成更新的型号后确实不冷了，就是打包体积比预想大一点。</p></div>
+          <div class="cmt"><div class="who"><span class="ava">陈</span><b>陈皮不加糖</b><time>11-08 09:21</time></div><p>夜骑路线标注的补给点很实用，东堤那段确实没什么便利店，提前带水是必要的。</p></div>
+          <div class="cmt"><div class="who"><span class="ava">周</span><b>周末修车铺</b><time>11-07 22:47</time></div><p>夜骑召集限 24 人比较合理，人再多路口容易散。建议组织者把返程集合点也写清楚。</p></div>
+          <div class="cmt"><div class="who"><span class="ava">苏</span><b>苏打水汽</b><time>11-07 20:15</time></div><p>雨后天光那组照片的阴天显影参数很有参考价值，我按同样时间冲了一卷，反差确实更柔。</p></div>
+          <div class="cmt"><div class="who"><span class="ava">何</span><b>何同学在拍</b><time>11-07 18:03</time></div><p>扫街主题投稿要求写拍摄时间这点挺好，能看出光线的实际条件，比只发成片有用。</p></div>
+          <div class="cmt"><div class="who"><span class="ava">许</span><b>许多木屑</b><time>11-06 21:36</time></div><p>窄边书架的接缝问题我也遇到过，作者写的连接件型号换掉之后稳多了，感谢复盘。</p></div>
+          <div class="cmt"><div class="who"><span class="ava">罗</span><b>罗盘偏北</b><time>11-06 16:50</time></div><p>手作市集摊位名单里皮具偏多，希望下次多几个陶艺摊，上次想找手捏杯没找到。</p></div>
+          <div class="cmt"><div class="who"><span class="ava">高</span><b>高架桥下</b><time>11-06 11:12</time></div><p>小型现场回顾写调音顺序的部分很少见，一般回顾只写歌单，这段对想办演出的人有帮助。</p></div>
+          <div class="cmt"><div class="who"><span class="ava">吴</span><b>吴桐树下</b><time>11-05 19:44</time></div><p>手冲对照实验如果能加上水质信息就更完整了，不同地区的水硬度影响挺明显的。</p></div>
+          <div class="cmt"><div class="who"><span class="ava">郑</span><b>郑在冲煮</b><time>11-05 14:28</time></div><p>平底滤杯那段描述和我自己的体验接近，酸质确实没那么跳，适合早上喝。</p></div>
+          <div class="cmt"><div class="who"><span class="ava">冯</span><b>冯望远</b><time>11-04 09:05</time></div><p>滨江湿地观测表里的时段建议很准，早上六点半到八点鸟况最好，中午基本看不到。</p></div>
+          <div class="cmt"><div class="who"><span class="ava">邓</span><b>邓小满</b><time>11-03 22:19</time></div><p>旧物改造的材料团购报价对比做得细，不过水性漆的环保等级最好也标一下。</p></div>
+          <div class="cmt"><div class="who"><span class="ava">曹</span><b>曹半杯</b><time>11-03 17:41</time></div><p>冬季控水记录有用，我家供暖后还是按秋天频率浇，结果烂了两盆根。</p></div>
+          <div class="cmt"><div class="who"><span class="ava">彭</span><b>彭于夜骑</b><time>11-02 20:33</time></div><p>前灯 400 流明这个建议偏保守，江畔有几段完全没灯，我一般开到 600 才放心。</p></div>
+          <div class="cmt"><div class="who"><span class="ava">袁</span><b>袁野记录</b><time>11-02 13:07</time></div><p>活动退出机制那段说得到位，上次临时下雨改期，提前写清楚的场次沟通起来顺畅很多。</p></div>
+          <div class="cmt"><div class="who"><span class="ava">蒋</span><b>蒋一页</b><time>11-01 21:58</time></div><p>希望露营圈子多来点短途一天的方案，两天以上对上班族来说时间不太好凑。</p></div>
+        </div>
+      </section>
+
+      <!-- 9 资讯 -->
+      <section class="sec" id="news">
+        <div class="sec-h">
+          <h2>相关资讯</h2>
+        </div>
+        <div class="news-list">
+          <article class="news">
+            <img src="https://picsum.photos/seed/zixun-shouchong11/600/400" width="600" height="400" loading="lazy" alt="手作市集摊位布置现场">
+            <div class="txt"><h3>11 月 15 日手作市集公布 22 个摊位名单</h3><time>2026-11-07</time><p>涵盖皮具、陶艺、编织三类，主办方同步放出往期人流分布，建议错峰前往。</p></div>
+          </article>
+          <article class="news">
+            <img src="https://picsum.photos/seed/zixun-yeqlu12/600/400" width="600" height="400" loading="lazy" alt="江畔夜骑队伍出发前集合">
+            <div class="txt"><h3>江畔夜骑 11 月 9 日场次调整集合点</h3><time>2026-11-08</time><p>集合点移至东堤闸口，限 24 人，组织者上传了更新后的路线轨迹与补给点标注。</p></div>
+          </article>
+          <article class="news">
+            <img src="https://picsum.photos/seed/zixun-jiaopian13/600/400" width="600" height="400" loading="lazy" alt="胶片显影罐与冲洗工具">
+            <div class="txt"><h3>胶片冲洗圈子新增阴天显影对照数据</h3><time>2026-11-06</time><p>同一胶卷在三组显影时间下的反差对比公开，附扫描仪型号与色彩配置说明。</p></div>
+          </article>
+          <article class="news">
+            <img src="https://picsum.photos/seed/zixun-luying14/600/400" width="600" height="400" loading="lazy" alt="低温环境下的露营帐篷">
+            <div class="txt"><h3>露营圈子更新低温睡眠方案建议</h3><time>2026-11-05</time><p>基于 11 月 2 日夜间 4℃ 实测，睡袋温标建议由 0℃ 下调至 -5℃，并替换防潮垫型号。</p></div>
+          </article>
+          <article class="news">
+            <img src="https://picsum.photos/seed/zixun-guanliao15/600/400" width="600" height="400" loading="lazy" alt="滨江湿地候鸟观测现场">
+            <div class="txt"><h3>滨江湿地 11 月候鸟观测表发布</h3><time>2026-11-04</time><p>本周记录 17 种水鸟，标注最佳观测时段与望远镜倍率建议，周末人流较大需提前到。</p></div>
+          </article>
+          <article class="news">
+            <img src="https://picsum.photos/seed/zixun-xianchang16/600/400" width="600" height="400" loading="lazy" alt="小剧场演出现场灯光与舞台">
+            <div class="txt"><h3>小剧场演出排期更新四场小型现场</h3><time>2026-11-03</time><p>11 月中下旬四场演出定档，场地容量 120 人以内，调音与入场时间已在活动页注明。</p></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 10 相关推荐 -->
+      <section class="sec" id="related">
+        <div class="sec-h">
+          <h2>延伸方向推荐</h2>
+          <span class="sub">从已有内容继续深入</span>
+        </div>
+        <div class="reltags">
+          <a href="#featured">轻量化打包技巧 <span>露营</span></a>
+          <a href="#featured">低温睡袋温标选择 <span>装备</span></a>
+          <a href="#featured">夜骑路线规划方法 <span>骑行</span></a>
+          <a href="#featured">胶片显影时间对照 <span>冲洗</span></a>
+          <a href="#featured">木工连接件选型 <span>手作</span></a>
+          <a href="#featured">手冲研磨度与注水节奏 <span>咖啡</span></a>
+          <a href="#featured">候鸟观测时段判断 <span>观鸟</span></a>
+          <a href="#featured">小型现场调音基础 <span>音乐</span></a>
+        </div>
+      </section>
+
+      <!-- 11 补充板块：榜单 + 时间线 -->
+      <section class="sec" id="rank">
+        <div class="sec-h">
+          <h2>圈子热度榜与近期活动时间线</h2>
+          <span class="sub">统计截至 11 月 8 日</span>
+        </div>
+        <div class="duo">
+          <div class="panel">
+            <div class="panel-h">本周圈子热度榜</div>
+            <ul class="rank-list">
+              <li><span class="no">1</span><span class="nm">露营徒步<span>轻量化装备与低温方案讨论集中</span></span><span class="sc">9.4</span></li>
+              <li><span class="no">2</span><span class="nm">城市骑行<span>夜骑路线与安全装备更新频繁</span></span><span class="sc">9.1</span></li>
+              <li><span class="no">3</span><span class="nm">摄影记录<span>11 月扫街主题投稿开放</span></span><span class="sc">8.8</span></li>
+              <li><span class="no">4</span><span class="nm">胶片冲洗<span>阴天显影对照数据发布</span></span><span class="sc">8.5</span></li>
+              <li><span class="no">5</span><span class="nm">手作工坊<span>市集摊位名单带动讨论</span></span><span class="sc">8.2</span></li>
+              <li><span class="no">6</span><span class="nm">咖啡冲煮<span>手冲参数对照持续更新</span></span><span class="sc">7.9</span></li>
+              <li><span class="no">7</span><span class="nm">观鸟记录<span>候鸟观测表引发跟帖</span></span><span class="sc">7.6</span></li>
+            </ul>
+          </div>
+          <div class="panel">
+            <div class="panel-h">近期活动时间线</div>
+            <ul class="timeline">
+              <li><time>11 月 9 日 19:30</time><b>江畔夜骑 · 东堤闸口集合</b><p>限 24 人，需自备前灯与反光背心，全程约 22 公里。</p></li>
+              <li><time>11 月 12 日 20:00</time><b>胶片冲洗线上答疑</b><p>围绕阴天显影与扫描色彩配置，提前提交问题。</p></li>
+              <li><time>11 月 15 日 10:00</time><b>手作市集 · 22 个摊位</b><p>皮具、陶艺、编织三类，建议上午错峰入场。</p></li>
+              <li><time>11 月 16 日 07:00</time><b>滨江湿地观鸟清晨场</b><p>集合于北门，建议携带 8 倍以上望远镜。</p></li>
+              <li><time>11 月 21 日 14:00</time><b>旧物改造材料团购截止</b><p>松木板与水性漆集中采购，满 20 人成团。</p></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- 右辅助栏 -->
+    <aside class="aux-col">
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-h">圈内热榜</div>
+        <div class="panel-b">
+          <ul class="aux-hot">
+            <li><span class="rk">1</span><span class="t">三天两夜轻量化装备清单<span class="m">露营徒步 · 4.8 分</span></span></li>
+            <li><span class="rk">2</span><span class="t">江畔 22 公里夜骑路线实测<span class="m">城市骑行 · 4.6 分</span></span></li>
+            <li><span class="rk">3</span><span class="t">雨后天光：一卷 Portra 400<span class="m">胶片冲洗 · 4.7 分</span></span></li>
+            <li><span class="rk">4</span><span class="t">旧木板改成窄边书架<span class="m">旧物改造 · 4.5 分</span></span></li>
+            <li><span class="rk">5</span><span class="t">浅烘豆手冲参数对照<span class="m">咖啡冲煮 · 4.4 分</span></span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-h">近期更新</div>
+        <div class="panel-b">
+          <ul class="aux-update">
+            <li>露营装备清单追加低温睡眠补充<time>今天 09:40</time></li>
+            <li>江畔夜骑 11 月 9 日场次开放报名<time>今天 08:15</time></li>
+            <li>胶片作品新增 6 张成片<time>昨天 21:10</time></li>
+            <li>手作市集摊位名单公布<time>昨天 18:32</time></li>
+            <li>滨江湿地候鸟观测表更新<time>11-06</time></li>
+          </ul>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-h">常搜方向</div>
+        <div class="panel-b">
+          <div class="aux-tags">
+            <a href="#featured">装备清单</a>
+            <a href="#featured">夜骑路线</a>
+            <a href="#featured">显影参数</a>
+            <a href="#featured">木工入门</a>
+            <a href="#featured">手冲参数</a>
+            <a href="#featured">候鸟观测</a>
+            <a href="#featured">小型现场</a>
+            <a href="#featured">市集摊位</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- 页尾 -->
+<footer class="sitefoot">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <div class="brandline">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <rect width="64" height="64" rx="14" fill="#14606f"/>
+            <circle cx="32" cy="27" r="11" fill="#f4b860"/>
+            <path d="M9 56c4-13 12-20 23-20s19 7 23 20" fill="none" stroke="#e8f4f2" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+          <b>海角社区</b>
+        </div>
+        <p class="about">围绕真实兴趣方向组织内容的圈子社区，覆盖摄影、露营、手作、独立音乐、城市骑行、咖啡冲煮等方向，记录作品、方法与活动。</p>
+      </div>
+      <div>
+        <h4>热门圈子</h4>
+        <ul>
+          <li><a href="#channels">露营徒步</a></li>
+          <li><a href="#channels">城市骑行</a></li>
+          <li><a href="#channels">摄影记录</a></li>
+          <li><a href="#channels">胶片冲洗</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>内容栏目</h4>
+        <ul>
+          <li><a href="#featured">精选作品</a></li>
+          <li><a href="#latest">圈子动态</a></li>
+          <li><a href="#deep">圈子观察</a></li>
+          <li><a href="#guide">参与指南</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>互动与帮助</h4>
+        <ul>
+          <li><a href="#faq">常见问答</a></li>
+          <li><a href="#comments">圈友评论</a></li>
+          <li><a href="#news">相关资讯</a></li>
+          <li><a href="#rank">热门榜单</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="bottom">
+      <span>© 2026 海角社区 · 兴趣圈子内容聚合示例</span>
+      <span>部分内容为示例数据，仅用于展示页面结构</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var navToggle=document.getElementById('navToggle');
+  var nav=document.getElementById('mainnav');
+  if(navToggle&&nav){
+    navToggle.addEventListener('click',function(){
+      var open=nav.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded',open?'true':'false');
+    });
+    nav.addEventListener('click',function(e){
+      if(e.target.tagName==='A'&&window.innerWidth<=740){
+        nav.classList.remove('open');
+        navToggle.setAttribute('aria-expanded','false');
+      }
+    });
+  }
+
+  var chips=document.querySelectorAll('.chip[data-filter]');
+  var cats=document.querySelectorAll('#catGrid .cat');
+  var noResult=document.getElementById('noResult');
+  chips.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      chips.forEach(function(b){b.setAttribute('aria-pressed','false');});
+      btn.setAttribute('aria-pressed','true');
+      var f=btn.getAttribute('data-filter');
+      var shown=0;
+      cats.forEach(function(c){
+        var ok=(f==='all'||c.getAttribute('data-cat')===f);
+        c.style.display=ok?'':'none';
+        if(ok)shown++;
+      });
+      noResult.style.display=shown===0?'block':'none';
+    });
+  });
+
+  var form=document.getElementById('searchForm');
+  var input=document.getElementById('siteSearch');
+  if(form&&input){
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      var q=input.value.trim();
+      if(!q)return;
+      var found=null;
+      var nodes=document.querySelectorAll('main section');
+      for(var i=0;i<nodes.length;i++){
+        if(nodes[i].textContent.indexOf(q)>-1){
+          var target=nodes[i].querySelector('h2,h3');
+          if(target){found=target;}
+          break;
+        }
+      }
+      if(found){
+        found.scrollIntoView({behavior:'smooth',block:'start'});
+        input.blur();
+      }else{
+        alert('未找到与“'+q+'”相关的内容，请尝试其他关键词。');
+      }
+    });
+  }
+})();
+</script>
+</body>
+  </html>
