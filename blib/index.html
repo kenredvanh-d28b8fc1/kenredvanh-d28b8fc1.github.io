@@ -1,0 +1,1520 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blibli - 垂直内容聚合与深度发现</title>
+  <meta name="description" content="Blibli 是一个汇聚动画、漫画、游戏、影视与创作者文化的垂直内容聚合站。这里提供新番速递、独立游戏专题、漫画章节更新、声优访谈与社区热议条目，适合想快速筛选优质二次元内容的读者。">
+  <meta name="keywords" content="新番动画, 独立游戏, 漫画更新, 声优访谈, 二次元社区">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23245cf5'/%3E%3Ccircle cx='36' cy='44' r='12' fill='%23ffd966'/%3E%3Ccircle cx='66' cy='44' r='12' fill='%23ffb347'/%3E%3Cpath d='M32 70 Q50 84 68 70' stroke='white' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --brand: #245cf5;
+      --brand-dark: #0d3bb8;
+      --brand-soft: #e9efff;
+      --accent: #f5a623;
+      --accent-soft: #fff4e0;
+      --text: #1a1e2b;
+      --text-secondary: #4a5168;
+      --text-muted: #7a8099;
+      --bg: #f7f9fc;
+      --panel: #ffffff;
+      --border: #dce2ed;
+      --radius-s: 8px;
+      --radius-m: 14px;
+      --radius-l: 22px;
+      --shadow-s: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-m: 0 6px 18px rgba(26, 30, 43, 0.08);
+      --shadow-l: 0 16px 40px rgba(13, 59, 184, 0.10);
+      --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      --header-height: 64px;
+      --announce-height: 40px;
+      --scroll-offset: calc(var(--announce-height) + var(--header-height) + 12px);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: var(--scroll-offset);
+    }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a {
+      color: var(--brand);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+    /* 吸顶公告条 + 页头 */
+    .top-sticky {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--panel);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    }
+    .announce-bar {
+      background: linear-gradient(90deg, #1a3fc9, #245cf5);
+      color: #fff;
+      font-size: 0.82rem;
+      height: var(--announce-height);
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .announce-bar strong {
+      font-weight: 700;
+      margin-right: 0.6rem;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.15rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+    }
+    .site-header {
+      height: var(--header-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      max-width: 1440px;
+      margin: 0 auto;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .brand svg {
+      width: 34px;
+      height: 34px;
+    }
+    .header-nav {
+      display: flex;
+      gap: 1.2rem;
+      font-weight: 500;
+      font-size: 0.92rem;
+      flex-wrap: wrap;
+    }
+    .header-nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 0.25rem 0;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .header-nav a:hover {
+      color: var(--brand);
+      border-bottom-color: var(--brand);
+      text-decoration: none;
+    }
+    .header-actions {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .btn-outline {
+      border: 1.5px solid var(--border);
+      background: transparent;
+      padding: 0.4rem 1rem;
+      border-radius: 24px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .btn-outline:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+      background: var(--brand-soft);
+    }
+    .btn-primary {
+      background: var(--brand);
+      border: none;
+      padding: 0.4rem 1.1rem;
+      border-radius: 24px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover {
+      background: var(--brand-dark);
+    }
+    .search-wrap {
+      position: relative;
+    }
+    .search-input {
+      padding: 0.4rem 0.9rem 0.4rem 2rem;
+      border-radius: 24px;
+      border: 1.5px solid var(--border);
+      font-size: 0.85rem;
+      width: 160px;
+      font-family: inherit;
+      transition: width 0.2s, border-color 0.15s;
+      background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237a8099' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M21 21l-4.3-4.3'/%3E%3C/svg%3E") no-repeat 10px center;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--brand);
+      width: 200px;
+      background-color: #fff;
+    }
+    .search-feedback {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-s);
+      padding: 0.5rem 0.9rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      box-shadow: var(--shadow-m);
+      display: none;
+      white-space: nowrap;
+      z-index: 110;
+    }
+    .search-feedback.show {
+      display: block;
+    }
+    /* 主容器 */
+    .page-wrap {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 1.5rem 2rem;
+    }
+    /* 首屏 */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 2rem;
+      align-items: center;
+      padding: 2.2rem 0 2rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.8rem;
+    }
+    .hero-content h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 0.8rem;
+    }
+    .hero-desc {
+      font-size: 1.02rem;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-visual svg {
+      width: 100%;
+      max-width: 360px;
+      height: auto;
+      filter: drop-shadow(0 12px 24px rgba(36, 92, 245, 0.12));
+    }
+    /* 三栏布局 */
+    .layout-3col {
+      display: grid;
+      grid-template-columns: 180px 1fr 260px;
+      gap: 1.8rem;
+      align-items: start;
+    }
+    .channel-nav {
+      position: sticky;
+      top: var(--scroll-offset);
+      background: var(--panel);
+      border-radius: var(--radius-m);
+      padding: 1rem 0.75rem;
+      box-shadow: var(--shadow-s);
+      border: 1px solid var(--border);
+    }
+    .channel-nav h3 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      padding: 0 0.5rem 0.6rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+    }
+    .channel-nav ul {
+      list-style: none;
+    }
+    .channel-nav li a {
+      display: block;
+      padding: 0.45rem 0.6rem;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      border-radius: var(--radius-s);
+      text-decoration: none;
+      transition: background 0.12s, color 0.12s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .channel-nav li a:hover {
+      background: var(--brand-soft);
+      color: var(--brand);
+      text-decoration: none;
+    }
+    /* 右侧辅助栏 */
+    .aside-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      position: sticky;
+      top: var(--scroll-offset);
+    }
+    .aside-card {
+      background: var(--panel);
+      border-radius: var(--radius-m);
+      padding: 1.1rem 1rem;
+      box-shadow: var(--shadow-s);
+      border: 1px solid var(--border);
+    }
+    .aside-card h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .aside-card h3 span {
+      font-size: 0.7rem;
+      background: var(--accent-soft);
+      color: #b06d00;
+      padding: 0.1rem 0.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    .hot-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+    .hot-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+    }
+    .hot-list .rank {
+      width: 20px;
+      height: 20px;
+      background: var(--brand-soft);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--brand);
+      flex-shrink: 0;
+    }
+    .hot-list .rank.top1 {
+      background: #ffe9b8;
+      color: #b06d00;
+    }
+    .hot-list a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .hot-list a:hover {
+      color: var(--brand);
+      text-decoration: underline;
+    }
+    .update-stream {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      font-size: 0.82rem;
+    }
+    .update-stream li {
+      padding-bottom: 0.55rem;
+      border-bottom: 1px dashed var(--border);
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+    .update-stream li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .update-stream .time {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      display: block;
+      margin-top: 0.15rem;
+    }
+    /* 主内容区板块 */
+    .main-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2.2rem;
+      min-width: 0;
+    }
+    .section-block {
+      background: var(--panel);
+      border-radius: var(--radius-l);
+      padding: 1.6rem 1.5rem;
+      box-shadow: var(--shadow-s);
+      border: 1px solid var(--border);
+      scroll-margin-top: var(--scroll-offset);
+    }
+    .section-block h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      line-height: 1.3;
+    }
+    .section-block h2 .badge {
+      font-size: 0.65rem;
+      background: var(--accent-soft);
+      color: #b06d00;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .overview-text {
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+      line-height: 1.8;
+    }
+    .overview-text p {
+      margin-bottom: 0.75rem;
+    }
+    .overview-text strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+    /* 精选卡片网格 */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .content-card {
+      background: var(--bg);
+      border-radius: var(--radius-m);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: flex;
+      flex-direction: column;
+    }
+    .content-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-m);
+    }
+    .content-card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      background: #d0d7e8;
+    }
+    .card-body {
+      padding: 0.85rem 0.9rem 1rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-type {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--brand);
+      background: var(--brand-soft);
+      padding: 0.15rem 0.6rem;
+      border-radius: 20px;
+      align-self: flex-start;
+      margin-bottom: 0.5rem;
+    }
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 0.35rem;
+      color: var(--text);
+    }
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      margin-bottom: 0.6rem;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-bottom: 0.5rem;
+    }
+    .card-tags span {
+      font-size: 0.65rem;
+      background: #eef2f9;
+      color: var(--text-secondary);
+      padding: 0.15rem 0.5rem;
+      border-radius: 12px;
+    }
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      border-top: 1px dashed var(--border);
+      padding-top: 0.5rem;
+      margin-top: 0.2rem;
+    }
+    /* 最新动态列表 */
+    .news-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .news-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .news-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .news-item img {
+      width: 72px;
+      height: 72px;
+      border-radius: var(--radius-s);
+      object-fit: cover;
+      flex-shrink: 0;
+      background: #d0d7e8;
+    }
+    .news-content {
+      flex: 1;
+      min-width: 0;
+    }
+    .news-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--text);
+      margin-bottom: 0.15rem;
+    }
+    .news-abs {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .news-time {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      margin-left: 0.8rem;
+    }
+    /* 分类入口 */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+    }
+    .cat-item {
+      background: var(--bg);
+      border-radius: var(--radius-m);
+      padding: 0.9rem 0.8rem;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--text);
+      border: 1px solid var(--border);
+      transition: background 0.12s, border-color 0.12s;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .cat-item:hover {
+      background: var(--brand-soft);
+      border-color: var(--brand);
+      color: var(--brand-dark);
+      text-decoration: none;
+    }
+    /* 深度解析 */
+    .deep-dive h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 1.2rem 0 0.5rem;
+      color: var(--text);
+    }
+    .deep-dive h3:first-of-type {
+      margin-top: 0;
+    }
+    .deep-dive p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 0.7rem;
+    }
+    .deep-dive ul {
+      margin: 0.5rem 0 0.8rem 1.2rem;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.75;
+    }
+    .deep-dive li {
+      margin-bottom: 0.25rem;
+    }
+    /* 体验指南步骤 */
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      counter-reset: step;
+      list-style: none;
+    }
+    .step-list li {
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      counter-increment: step;
+    }
+    .step-list li::before {
+      content: counter(step);
+      width: 26px;
+      height: 26px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+    .step-list strong {
+      color: var(--text);
+    }
+    /* FAQ */
+    .faq-list details {
+      border-bottom: 1px solid var(--border);
+      padding: 0.7rem 0;
+    }
+    .faq-list details:last-child {
+      border-bottom: none;
+    }
+    .faq-list summary {
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--text);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .faq-list summary::-webkit-details-marker {
+      display: none;
+    }
+    .faq-list summary::after {
+      content: '+';
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+    .faq-list details[open] summary::after {
+      content: '−';
+    }
+    .faq-list .faq-answer {
+      padding-top: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    /* 评论 */
+    .comment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.8rem;
+    }
+    .comment-card {
+      background: var(--bg);
+      border-radius: var(--radius-s);
+      padding: 0.75rem 0.8rem;
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+    }
+    .comment-user {
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+      font-size: 0.78rem;
+    }
+    .comment-text {
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+    /* 相关资讯 */
+    .info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+    .info-item {
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px dashed var(--border);
+    }
+    .info-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .info-date {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--brand);
+      background: var(--brand-soft);
+      padding: 0.15rem 0.5rem;
+      border-radius: 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .info-title {
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--text);
+      margin-bottom: 0.1rem;
+    }
+    .info-abs {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    /* 相关推荐标签 */
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .tag-cloud a {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.8rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.12s;
+    }
+    .tag-cloud a:hover {
+      background: var(--brand-soft);
+      border-color: var(--brand);
+      color: var(--brand);
+      text-decoration: none;
+    }
+    /* 榜单补充 */
+    .chart-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .chart-row {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-size: 0.85rem;
+      padding: 0.35rem 0.5rem;
+      border-radius: var(--radius-s);
+      background: var(--bg);
+    }
+    .chart-row .num {
+      font-weight: 800;
+      color: var(--brand);
+      width: 22px;
+      text-align: center;
+      font-size: 0.8rem;
+    }
+    .chart-row .name {
+      flex: 1;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .chart-row .score {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      background: #fff;
+      padding: 0.1rem 0.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    /* 页脚 */
+    .site-footer {
+      background: #121826;
+      color: #b6c0d6;
+      padding: 2.5rem 1.5rem 1.8rem;
+      margin-top: 2.5rem;
+      font-size: 0.85rem;
+    }
+    .footer-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 2rem;
+    }
+    .footer-brand {
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .footer-brand svg {
+      width: 28px;
+      height: 28px;
+    }
+    .footer-desc {
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: #8a94aa;
+      max-width: 280px;
+    }
+    .footer-col h4 {
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.7rem;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .footer-col a {
+      color: #8a94aa;
+      text-decoration: none;
+      font-size: 0.8rem;
+    }
+    .footer-col a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+    .footer-note {
+      max-width: 1360px;
+      margin: 1.8rem auto 0;
+      padding-top: 1.2rem;
+      border-top: 1px solid #2a3146;
+      font-size: 0.72rem;
+      color: #6a7488;
+      line-height: 1.6;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    /* 响应式 */
+    @media (max-width: 1024px) {
+      .layout-3col {
+        grid-template-columns: 1fr 240px;
+      }
+      .channel-nav {
+        grid-column: 1 / -1;
+        position: static;
+        display: flex;
+        overflow-x: auto;
+        gap: 0.5rem;
+        padding: 0.6rem 0.8rem;
+        border-radius: var(--radius-m);
+      }
+      .channel-nav h3 {
+        display: none;
+      }
+      .channel-nav ul {
+        display: flex;
+        gap: 0.4rem;
+      }
+      .channel-nav li a {
+        white-space: nowrap;
+        padding: 0.35rem 0.7rem;
+        font-size: 0.82rem;
+      }
+      .aside-right {
+        position: static;
+      }
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 1.2rem;
+      }
+      .hero-desc {
+        max-width: 100%;
+      }
+      .hero-actions {
+        justify-content: center;
+      }
+      .hero-visual {
+        order: -1;
+      }
+      .hero-visual svg {
+        max-width: 240px;
+      }
+      .category-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .footer-inner {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 740px) {
+      .layout-3col {
+        grid-template-columns: 1fr;
+      }
+      .site-header {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 0.6rem 1rem;
+        gap: 0.6rem;
+      }
+      .header-nav {
+        order: 3;
+        width: 100%;
+        overflow-x: auto;
+        gap: 0.8rem;
+        padding-bottom: 0.2rem;
+      }
+      .header-actions {
+        margin-left: auto;
+      }
+      .search-input {
+        width: 110px;
+      }
+      .search-input:focus {
+        width: 150px;
+      }
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+      .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      .comment-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-inner {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .news-item {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .news-item img {
+        width: 100%;
+        height: 140px;
+      }
+      .info-item {
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+      .section-block {
+        padding: 1.2rem 1rem;
+      }
+      .chart-row {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+  <!-- 吸顶公告条 + 页头 -->
+  <div class="top-sticky">
+    <div class="announce-bar">
+      <strong>今日更新</strong> 新番《星轨遗迹》第 8 话已上线 · 独立游戏《纸境奇缘》全新 DLC 发布 · 11 月 8 日声优访谈直播 20:00 开启
+    </div>
+    <header class="site-header">
+      <a class="brand" href="/#hero" aria-label="Blibli 首页">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="100" height="100" rx="24" fill="#245cf5"/>
+          <circle cx="36" cy="44" r="12" fill="#ffd966"/>
+          <circle cx="66" cy="44" r="12" fill="#ffb347"/>
+          <path d="M32 70 Q50 84 68 70" stroke="white" stroke-width="6" fill="none" stroke-linecap="round"/>
+        </svg>
+        Blibli
+      </a>
+      <nav class="header-nav" aria-label="主导航">
+        <a href="/#overview">领域概览</a>
+        <a href="/#picks">精选推荐</a>
+        <a href="/#updates">最新动态</a>
+        <a href="/#categories">分类入口</a>
+        <a href="/#deep-dive">深度解析</a>
+        <a href="/#faq">常见问答</a>
+      </nav>
+      <div class="header-actions">
+        <div class="search-wrap">
+          <input type="search" class="search-input" id="searchInput" placeholder="搜索条目…" aria-label="搜索站内内容">
+          <div class="search-feedback" id="searchFeedback">未找到相关条目</div>
+        </div>
+        <button class="btn-outline" type="button" onclick="alert('登录功能为演示入口，暂未开放。')">登录</button>
+        <button class="btn-primary" type="button" onclick="alert('收藏功能为演示入口，请登录后使用。')">收藏</button>
+      </div>
+    </header>
+  </div>
+
+  <div class="page-wrap">
+    <!-- 首屏 -->
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <h1>Blibli</h1>
+        <p class="hero-desc">汇聚动画新番、独立游戏、漫画连载、声优访谈与创作者文化的垂直内容站。这里能找到本周更新的具体条目、社区热议的评分对比，以及按类型筛选的观看指南。</p>
+        <div class="hero-actions">
+          <a class="btn-primary" href="/#picks" style="text-decoration:none; display:inline-block;">浏览精选条目</a>
+          <a class="btn-outline" href="/#updates" style="text-decoration:none; display:inline-block;">查看今日更新</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <svg viewBox="0 0 300 240" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="20" y="40" width="260" height="160" rx="24" fill="#e9efff" stroke="#245cf5" stroke-width="2"/>
+          <rect x="40" y="60" width="100" height="60" rx="10" fill="#245cf5" opacity="0.15"/>
+          <circle cx="90" cy="90" r="18" fill="#ffd966"/>
+          <rect x="160" y="60" width="100" height="24" rx="8" fill="#245cf5" opacity="0.25"/>
+          <rect x="160" y="94" width="80" height="16" rx="6" fill="#245cf5" opacity="0.15"/>
+          <rect x="40" y="136" width="220" height="10" rx="5" fill="#245cf5" opacity="0.1"/>
+          <rect x="40" y="156" width="180" height="10" rx="5" fill="#245cf5" opacity="0.1"/>
+          <rect x="40" y="176" width="120" height="10" rx="5" fill="#f5a623" opacity="0.4"/>
+          <circle cx="260" cy="36" r="12" fill="#f5a623" opacity="0.8"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- 三栏布局 -->
+    <div class="layout-3col">
+      <!-- 左侧频道索引 -->
+      <aside class="channel-nav">
+        <h3>频道索引</h3>
+        <ul>
+          <li><a href="/#picks">新番动画</a></li>
+          <li><a href="/#picks">独立游戏</a></li>
+          <li><a href="/#updates">漫画连载</a></li>
+          <li><a href="/#deep-dive">声优访谈</a></li>
+          <li><a href="/#categories">类型筛选</a></li>
+          <li><a href="/#charts">本周榜单</a></li>
+          <li><a href="/#news">社区资讯</a></li>
+          <li><a href="/#comments">用户评论</a></li>
+        </ul>
+      </aside>
+
+      <!-- 主内容区 -->
+      <main class="main-col">
+        <!-- 1. 主题领域概览 -->
+        <section class="section-block" id="overview">
+          <h2>领域概览 <span class="badge">Blibli 内容方向</span></h2>
+          <div class="overview-text">
+            <p><strong>Blibli</strong> 关注的是二次元内容消费的完整链条：从每季新番的播出时间、制作阵容与口碑走势，到独立游戏在 Steam 与主机平台的上架节奏；从漫画单行本与网络连载的章节进度，到声优、导演与创作者的访谈实录。当前这个内容场域大致分为五个方向：<strong>动画新番</strong>（每季 40 部上下，题材覆盖奇幻、日常、悬疑）、<strong>独立游戏</strong>（小团队叙事向与玩法实验作品增多）、<strong>漫画连载</strong>（周刊与月刊平台同步更新）、<strong>角色与声优文化</strong>（访谈、广播与线下活动）以及<strong>创作者生态</strong>（同人展、短篇动画与制作幕后）。</p>
+            <p>值得关注的近期节点包括：10 月开播的几部新番进入中段剧情转折，独立游戏《纸境奇缘》在 11 月 5 日发布 DLC，漫画《夜行灯》第 44 话在 11 月 7 日更新。对于刚接触这个领域的读者，可以先从评分稳定、讨论度集中的条目入手，再按类型标签逐步扩展。</p>
+          </div>
+        </section>
+
+        <!-- 2. 精选内容推荐 -->
+        <section class="section-block" id="picks">
+          <h2>精选内容推荐 <span class="badge">本周编辑关注</span></h2>
+          <div class="card-grid">
+            <article class="content-card">
+              <img src="https://picsum.photos/seed/anime-xinggui08/400/300" alt="星轨遗迹动画视觉图" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <span class="card-type">新番动画</span>
+                <h3 class="card-title">星轨遗迹</h3>
+                <p class="card-desc">科幻冒险题材，第 8 话揭晓主角身世线索，作画在战斗段落保持稳定。适合喜欢太空歌剧与群像叙事的观众。</p>
+                <div class="card-tags"><span>科幻</span><span>冒险</span><span>群像</span></div>
+                <div class="card-meta"><span>更新至第 8 话</span><span>热度 9.2</span></div>
+              </div>
+            </article>
+            <article class="content-card">
+              <img src="https://picsum.photos/seed/game-zhijing/400/300" alt="纸境奇缘独立游戏画面" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <span class="card-type">独立游戏</span>
+                <h3 class="card-title">纸境奇缘</h3>
+                <p class="card-desc">手绘纸片风格解谜，11 月 5 日新增「折纸工坊」章节，包含 12 个新谜题与隐藏结局。剧情温和，适合休闲解谜玩家。</p>
+                <div class="card-tags"><span>解谜</span><span>手绘</span><span>剧情</span></div>
+                <div class="card-meta"><span>DLC 已上线</span><span>好评 94%</span></div>
+              </div>
+            </article>
+            <article class="content-card">
+              <img src="https://picsum.photos/seed/manga-yexingdeng/400/300" alt="夜行灯漫画封面" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <span class="card-type">漫画连载</span>
+                <h3 class="card-title">夜行灯</h3>
+                <p class="card-desc">都市怪谈单元剧，第 44 话聚焦「地铁末班车」传说，画风偏冷色调，分镜节奏紧凑。适合喜欢短篇恐怖故事的读者。</p>
+                <div class="card-tags"><span>悬疑</span><span>怪谈</span><span>单元剧</span></div>
+                <div class="card-meta"><span>第 44 话已更新</span><span>评分 8.9</span></div>
+              </div>
+            </article>
+            <article class="content-card">
+              <img src="https://picsum.photos/seed/seiyu-hanazawa/400/300" alt="声优花泽香菜访谈现场" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <span class="card-type">声优访谈</span>
+                <h3 class="card-title">花泽香菜谈角色塑造</h3>
+                <p class="card-desc">11 月 6 日发布的 40 分钟访谈，聊到《星轨遗迹》女主角的配音细节与情绪处理方式，包含录音棚花絮片段。</p>
+                <div class="card-tags"><span>访谈</span><span>配音</span><span>幕后</span></div>
+                <div class="card-meta"><span>11 月 6 日发布</span><span>播放 12.4w</span></div>
+              </div>
+            </article>
+            <article class="content-card">
+              <img src="https://picsum.photos/seed/game-mistcity/400/300" alt="雾都侦探游戏场景" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <span class="card-type">独立游戏</span>
+                <h3 class="card-title">雾都侦探</h3>
+                <p class="card-desc">像素风推理冒险，11 月 3 日更新中文配音与两章新案件。证物关联系统需要玩家手动整理线索，推理难度中等。</p>
+                <div class="card-tags"><span>推理</span><span>像素</span><span>中文配音</span></div>
+                <div class="card-meta"><span>11 月 3 日更新</span><span>好评 88%</span></div>
+              </div>
+            </article>
+            <article class="content-card">
+              <img src="https://picsum.photos/seed/anime-yinhezhilu/400/300" alt="银河之路动画海报" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <span class="card-type">新番动画</span>
+                <h3 class="card-title">银河之路</h3>
+                <p class="card-desc">公路片结构的太空旅行故事，第 7 话采用单集完结式叙事，配乐与美术获得较多讨论。适合想找短篇单元剧的观众。</p>
+                <div class="card-tags"><span>公路</span><span>太空</span><span>单元剧</span></div>
+                <div class="card-meta"><span>更新至第 7 话</span><span>热度 8.7</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- 3. 最新更新 / 动态 -->
+        <section class="section-block" id="updates">
+          <h2>最新更新与动态 <span class="badge">11 月 8 日</span></h2>
+          <div class="news-list">
+            <div class="news-item">
+              <img src="https://picsum.photos/seed/update-xinggui/72/72" alt="星轨遗迹第8话缩略图" width="72" height="72" loading="lazy">
+              <div class="news-content">
+                <div class="news-title">《星轨遗迹》第 8 话「回声」已上线</div>
+                <div class="news-abs">主角在废弃空间站发现前代船员留下的录音，剧情推进到关键转折点。今天 10:00 更新。</div>
+              </div>
+              <span class="news-time">今天 10:00</span>
+            </div>
+            <div class="news-item">
+              <img src="https://picsum.photos/seed/update-zhijing/72/72" alt="纸境奇缘DLC宣传图" width="72" height="72" loading="lazy">
+              <div class="news-content">
+                <div class="news-title">《纸境奇缘》DLC「折纸工坊」正式发布</div>
+                <div class="news-abs">新增 12 个谜题、2 个可操作角色和隐藏结局，Steam 国区售价 18 元，首发一周九折。</div>
+              </div>
+              <span class="news-time">11 月 5 日</span>
+            </div>
+            <div class="news-item">
+              <img src="https://picsum.photos/seed/update-yexingdeng/72/72" alt="夜行灯第44话分镜" width="72" height="72" loading="lazy">
+              <div class="news-content">
+                <div class="news-title">漫画《夜行灯》第 44 话更新</div>
+                <div class="news-abs">「地铁末班车」单元进入高潮，主角在环线列车中遭遇无脸乘客，结尾留悬念。</div>
+              </div>
+              <span class="news-time">11 月 7 日</span>
+            </div>
+            <div class="news-item">
+              <img src="https://picsum.photos/seed/update-seiyu-live/72/72" alt="声优访谈直播预告图" width="72" height="72" loading="lazy">
+              <div class="news-content">
+                <div class="news-title">声优直播访谈「冬季新番配音幕后」今晚 20:00 开播</div>
+                <div class="news-abs">嘉宾包括花泽香菜、石川界人，聊冬季新番录制花絮与角色理解，B 站同步转播。</div>
+              </div>
+              <span class="news-time">今天 20:00</span>
+            </div>
+            <div class="news-item">
+              <img src="https://picsum.photos/seed/update-wudu/72/72" alt="雾都侦探新章节截图" width="72" height="72" loading="lazy">
+              <div class="news-content">
+                <div class="news-title">《雾都侦探》追加中文配音与两章新案件</div>
+                <div class="news-abs">新案件「钟楼谜案」与「消失的邮差」上线，证物栏新增笔记系统，支持手柄操作。</div>
+              </div>
+              <span class="news-time">11 月 3 日</span>
+            </div>
+            <div class="news-item">
+              <img src="https://picsum.photos/seed/update-yinhe/72/72" alt="银河之路第7话剧照" width="72" height="72" loading="lazy">
+              <div class="news-content">
+                <div class="news-title">《银河之路》第 7 话「旅客」更新</div>
+                <div class="news-abs">本集为单集完结式公路故事，讲述一位老宇航员最后一次跃迁旅程，配乐获较多好评。</div>
+              </div>
+              <span class="news-time">11 月 2 日</span>
+            </div>
+            <div class="news-item">
+              <img src="https://picsum.photos/seed/update-dongmanjie/72/72" alt="冬季新番片单视觉图" width="72" height="72" loading="lazy">
+              <div class="news-content">
+                <div class="news-title">冬季新番片单公开，1 月将上线 38 部作品</div>
+                <div class="news-abs">续作包括《星轨遗迹》第二季、《食堂物语》第三季，原创动画《玻璃海岸》定档 1 月 9 日。</div>
+              </div>
+              <span class="news-time">11 月 6 日</span>
+            </div>
+            <div class="news-item">
+              <img src="https://picsum.photos/seed/update-manzhan/72/72" alt="同人展现场图" width="72" height="72" loading="lazy">
+              <div class="news-content">
+                <div class="news-title">「纸上宇宙」同人展 11 月 15 日开放售票</div>
+                <div class="news-abs">本届设独立游戏试玩区与漫画原稿展，早鸟票 48 元，现场票 65 元。</div>
+              </div>
+              <span class="news-time">11 月 4 日</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. 分类入口 -->
+        <section class="section-block" id="categories">
+          <h2>分类入口 <span class="badge">按类型筛选</span></h2>
+          <div class="category-grid">
+            <a href="/#picks" class="cat-item">科幻动画</a>
+            <a href="/#picks" class="cat-item">悬疑漫画</a>
+            <a href="/#picks" class="cat-item">解谜游戏</a>
+            <a href="/#deep-dive" class="cat-item">声优访谈</a>
+            <a href="/#picks" class="cat-item">日常治愈</a>
+            <a href="/#picks" class="cat-item">像素推理</a>
+            <a href="/#charts" class="cat-item">本周榜单</a>
+            <a href="/#news" class="cat-item">社区资讯</a>
+          </div>
+        </section>
+
+        <!-- 5. 深度解析正文 -->
+        <section class="section-block deep-dive" id="deep-dive">
+          <h2>深度解析：新番与独立游戏的消费判断 <span class="badge">类型差异</span></h2>
+          <h3>新番动画的档期与口碑节奏</h3>
+          <p>日本新番通常按季度划分：1 月冬番、4 月春番、7 月夏番、10 月秋番。每季约 40 部作品，其中 5—8 部会在开播三话内形成明显口碑分化。以 2026 年秋季档为例，《星轨遗迹》在第 3 话战斗作画回之后讨论度上升，而《银河之路》则依靠第 5 话的单集完结式叙事吸引到偏好短篇的观众。判断一部新番是否值得追，可以先看制作公司与系列构成：有稳定改编经验的团队往往在中期保持节奏，原创动画则更需要关注前 3 话的叙事密度。</p>
+          <h3>独立游戏的体量与完成度判断</h3>
+          <p>独立游戏与商业 3A 的消费预期不同，更依赖玩法创意与叙事完成度。商店页面的「好评率」只说明上手体验，还需要看更新日志与 DLC 计划。例如《纸境奇缘》在首发时只有 4 个章节，但 11 月 5 日更新 DLC 后内容量接近翻倍；《雾都侦探》则通过追加中文配音与手柄支持扩大受众。判断时注意三个维度：</p>
+          <ul>
+            <li><strong>流程长度</strong>：主线 4 小时以下的作品适合周末体验，10 小时以上更适合喜欢沉浸的玩家。</li>
+            <li><strong>更新频率</strong>：查看最近 30 天更新日志，持续修补的团队通常对作品有长期规划。</li>
+            <li><strong>社区反馈</strong>：重点看差评中提到的具体问题（如存档丢失、引导不足），而非单纯看总分。</li>
+          </ul>
+          <h3>漫画连载的追更与单行本选择</h3>
+          <p>网络连载与杂志连载的节奏差异明显。以《夜行灯》为例，它在双周刊平台连载，每话 24—30 页，单行本每 4—5 话集结一册。追更读者需要习惯两周一次的更新间隔，而单行本读者可以按卷阅读，体验更接近完整章节。选择时注意：周刊作品情节推进快但单话信息量有限；月刊或双周刊作品单话页数更多，适合喜欢细读分镜的读者。</p>
+          <h3>声优访谈与创作者内容的价值</h3>
+          <p>声优访谈、制作幕后与创作者直播是理解作品细节的补充材料。访谈通常围绕具体角色与录音现场展开，能提供正片之外的表演思路。以 11 月 6 日发布的花泽香菜访谈为例，其中谈到《星轨遗迹》第 6 话哭戏的录音方式，对理解角色情绪有帮助。观看这类内容时，可以优先选择带有具体作品名与时间戳的访谈，避免泛泛而谈的节目。</p>
+        </section>
+
+        <!-- 6. 体验指南 / 消费路径 -->
+        <section class="section-block" id="guide">
+          <h2>体验指南：从哪开始看 <span class="badge">消费路径</span></h2>
+          <ol class="step-list">
+            <li><strong>先确定类型偏好。</strong>喜欢强剧情推进可以从《星轨遗迹》这类连续叙事新番开始；偏好轻松体验可以选择日常治愈类作品或《纸境奇缘》这类解谜游戏。</li>
+            <li><strong>用前三话判断新番。</strong>第 1 话看设定与制作，第 2—3 话看叙事节奏是否稳定。如果第 3 话后仍无法投入，可以暂时搁置。</li>
+            <li><strong>独立游戏先看更新日志。</strong>最近 30 天有内容更新的作品通常维护更积极；再看流程长度是否匹配你的可用时间。</li>
+            <li><strong>漫画从单行本试读。</strong>如果连载进度过长，可以先读单行本第 1 卷判断画风与叙事是否合口味，再决定是否追更。</li>
+            <li><strong>用访谈补充理解。</strong>看完正片或游戏主线后，再找对应声优访谈或制作幕后，能获得更具体的角色与制作信息。</li>
+          </ol>
+        </section>
+
+        <!-- 7. FAQ -->
+        <section class="section-block" id="faq">
+          <h2>常见问答 <span class="badge">6 个问题</span></h2>
+          <div class="faq-list">
+            <details>
+              <summary>新番动画一般多久更新一话？</summary>
+              <div class="faq-answer">日本电视动画通常每周更新一话，每话约 24 分钟。部分网络平台会延迟 1—2 小时上线。遇到总集篇或停播周，更新间隔会延长一周。</div>
+            </details>
+            <details>
+              <summary>《星轨遗迹》和《银河之路》有什么区别？</summary>
+              <div class="faq-answer">《星轨遗迹》是连续叙事，围绕主角身世与太空站谜团展开，适合追长线剧情；《银河之路》采用单集完结式公路结构，每集独立成篇，适合想轻松观看的观众。</div>
+            </details>
+            <details>
+              <summary>独立游戏和商业游戏在体验上有什么不同？</summary>
+              <div class="faq-answer">独立游戏通常体量较小、玩法或叙事更集中，试错成本低；商业游戏内容量大但同质化程度可能更高。选择独立游戏时可以多关注更新日志和社区具体评价。</div>
+            </details>
+            <details>
+              <summary>第一次接触漫画《夜行灯》从哪看起比较好？</summary>
+              <div class="faq-answer">它属于单元剧结构，每话相对独立，从第 1 话或最新话开始都能进入。如果想理解角色关系，建议按单行本顺序从第 1 卷读起。</div>
+            </details>
+            <details>
+              <summary>声优访谈通常在哪里能看到？</summary>
+              <div class="faq-answer">官方频道、动画制作公司账号与视频平台都会发布。Blibli 收录的访谈以带具体作品名与时间戳的完整版为主，方便按条目查找。</div>
+            </details>
+            <details>
+              <summary>解谜游戏《纸境奇缘》的 DLC 需要本体才能玩吗？</summary>
+              <div class="faq-answer">是的，DLC「折纸工坊」需要基础游戏才能运行。它新增独立章节与隐藏结局，建议先完成本体前四章再进入 DLC 内容。</div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 8. 用户评论 -->
+        <section class="section-block" id="comments">
+          <h2>用户评论 <span class="badge">16 条</span></h2>
+          <div class="comment-grid">
+            <div class="comment-card"><div class="comment-user">星野拾光</div><div class="comment-text">《星轨遗迹》第 8 话的录音带线索回收得不错，希望别烂尾。</div></div>
+            <div class="comment-card"><div class="comment-user">纸飞机与海</div><div class="comment-text">《纸境奇缘》新 DLC 谜题量很足，18 块挺值。</div></div>
+            <div class="comment-card"><div class="comment-user">夜行列车员</div><div class="comment-text">《夜行灯》第 44 话结尾那个无脸乘客有点吓人，分镜做得真好。</div></div>
+            <div class="comment-card"><div class="comment-user">像素侦探社</div><div class="comment-text">《雾都侦探》中文配音质量超出预期，证物整理系统比前作顺手。</div></div>
+            <div class="comment-card"><div class="comment-user">香菜拌饭</div><div class="comment-text">花泽香菜那场访谈里提到的哭戏处理方法，回去重看第 6 话确实不一样。</div></div>
+            <div class="comment-card"><div class="comment-user">银河邮差</div><div class="comment-text">《银河之路》第 7 话的配乐太棒了，单集故事也很完整。</div></div>
+            <div class="comment-card"><div class="comment-user">深夜漫画组</div><div class="comment-text">《夜行灯》双周刊更新太慢，攒了三个月才够看一次。</div></div>
+            <div class="comment-card"><div class="comment-user">独立游戏挖掘机</div><div class="comment-text">《纸境奇缘》隐藏结局触发条件有点苛刻，建议看攻略。</div></div>
+            <div class="comment-card"><div class="comment-user">声优观察员</div><div class="comment-text">石川界人在直播里聊的录音习惯挺有意思，希望有完整回放。</div></div>
+            <div class="comment-card"><div class="comment-user">秋季新番追更人</div><div class="comment-text">《星轨遗迹》作画在第八话稳住了，之前担心后期崩坏。</div></div>
+            <div class="comment-card"><div class="comment-user">像素风爱好者</div><div class="comment-text">《雾都侦探》新案件钟楼谜案难度比本体高，证物关联要想很久。</div></div>
+            <div class="comment-card"><div class="comment-user">手绘纸片人</div><div class="comment-text">《纸境奇缘》的美术风格很舒服，适合睡前玩一小章。</div></div>
+            <div class="comment-card"><div class="comment-user">漫画单行本党</div><div class="comment-text">《夜行灯》单行本第 7 卷收录了第 40—44 话，刚好接上最新进度。</div></div>
+            <div class="comment-card"><div class="comment-user">公路片爱好者</div><div class="comment-text">《银河之路》这种单集完结的动画太适合通勤看了。</div></div>
+            <div class="comment-card"><div class="comment-user">同人展常客</div><div class="comment-text">「纸上宇宙」同人展早鸟票已买，期待独立游戏试玩区。</div></div>
+            <div class="comment-card"><div class="comment-user">理性评分派</div><div class="comment-text">《雾都侦探》好评率 88% 合理，推理部分确实有硬伤但氛围到位。</div></div>
+          </div>
+        </section>
+
+        <!-- 9. 相关资讯 -->
+        <section class="section-block" id="news">
+          <h2>相关资讯 <span class="badge">11 月动态</span></h2>
+          <div class="info-list">
+            <div class="info-item">
+              <span class="info-date">11 月 6 日</span>
+              <div>
+                <div class="info-title">冬季新番片单公开，原创动画《玻璃海岸》定档 1 月 9 日</div>
+                <div class="info-abs">本季续作比例较高，《星轨遗迹》第二季与《食堂物语》第三季均在列，原创作品共 7 部。</div>
+              </div>
+            </div>
+            <div class="info-item">
+              <span class="info-date">11 月 5 日</span>
+              <div>
+                <div class="info-title">《纸境奇缘》DLC 上线首日 Steam 好评率 94%</div>
+                <div class="info-abs">玩家反馈集中在谜题设计与新增剧情，部分评价提到隐藏结局触发提示不足。</div>
+              </div>
+            </div>
+            <div class="info-item">
+              <span class="info-date">11 月 4 日</span>
+              <div>
+                <div class="info-title">「纸上宇宙」同人展公布参展社团名单，独立游戏试玩区扩大</div>
+                <div class="info-abs">本届设 120 个社团摊位，独立游戏试玩区从 12 个增至 20 个，漫画原稿展区首次独立分区。</div>
+              </div>
+            </div>
+            <div class="info-item">
+              <span class="info-date">11 月 3 日</span>
+              <div>
+                <div class="info-title">《雾都侦探》追加中文配音，同步更新两章新案件</div>
+                <div class="info-abs">配音覆盖全主线剧情，新案件「钟楼谜案」与「消失的邮差」需要本体通关后解锁。</div>
+              </div>
+            </div>
+            <div class="info-item">
+              <span class="info-date">11 月 2 日</span>
+              <div>
+                <div class="info-title">《银河之路》第 7 话配乐获关注，原声集 12 月发售</div>
+                <div class="info-abs">本集单集完结式叙事在社区引发讨论，官方宣布原声集收录 18 首曲目。</div>
+              </div>
+            </div>
+            <div class="info-item">
+              <span class="info-date">11 月 1 日</span>
+              <div>
+                <div class="info-title">《夜行灯》单行本第 7 卷发售，收录「地铁末班车」单元</div>
+                <div class="info-abs">单行本追加 8 页加笔内容，作者后记提到该单元灵感来自深夜通勤经历。</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 10. 相关推荐 -->
+        <section class="section-block" id="related">
+          <h2>相关推荐 <span class="badge">延伸方向</span></h2>
+          <div class="tag-cloud">
+            <a href="/#picks">太空歌剧动画</a>
+            <a href="/#picks">手绘解谜游戏</a>
+            <a href="/#picks">都市怪谈漫画</a>
+            <a href="/#deep-dive">声优幕后访谈</a>
+            <a href="/#charts">本周新番评分榜</a>
+            <a href="/#updates">独立游戏更新日志</a>
+            <a href="/#guide">漫画单行本试读</a>
+            <a href="/#news">同人展参展指南</a>
+          </div>
+        </section>
+
+        <!-- 11. 补充板块：热门榜单 -->
+        <section class="section-block" id="charts">
+          <h2>本周热门榜单 <span class="badge">11 月 8 日更新</span></h2>
+          <div class="chart-list">
+            <div class="chart-row"><span class="num">1</span><span class="name">星轨遗迹</span><span class="score">热度 9.2</span></div>
+            <div class="chart-row"><span class="num">2</span><span class="name">纸境奇缘</span><span class="score">好评 94%</span></div>
+            <div class="chart-row"><span class="num">3</span><span class="name">夜行灯</span><span class="score">评分 8.9</span></div>
+            <div class="chart-row"><span class="num">4</span><span class="name">雾都侦探</span><span class="score">好评 88%</span></div>
+            <div class="chart-row"><span class="num">5</span><span class="name">银河之路</span><span class="score">热度 8.7</span></div>
+            <div class="chart-row"><span class="num">6</span><span class="name">花泽香菜访谈</span><span class="score">播放 12.4w</span></div>
+          </div>
+        </section>
+      </main>
+
+      <!-- 右侧辅助栏 -->
+      <aside class="aside-right">
+        <div class="aside-card">
+          <h3>热榜 <span>实时</span></h3>
+          <ul class="hot-list">
+            <li><span class="rank top1">1</span><a href="/#picks">星轨遗迹 第 8 话</a></li>
+            <li><span class="rank">2</span><a href="/#picks">纸境奇缘 DLC</a></li>
+            <li><span class="rank">3</span><a href="/#picks">夜行灯 第 44 话</a></li>
+            <li><span class="rank">4</span><a href="/#picks">雾都侦探 中文配音</a></li>
+            <li><span class="rank">5</span><a href="/#picks">银河之路 第 7 话</a></li>
+            <li><span class="rank">6</span><a href="/#picks">花泽香菜访谈</a></li>
+          </ul>
+        </div>
+        <div class="aside-card">
+          <h3>更新流 <span>今日</span></h3>
+          <ul class="update-stream">
+            <li>《星轨遗迹》第 8 话上线<span class="time">今天 10:00</span></li>
+            <li>声优直播访谈开播<span class="time">今天 20:00</span></li>
+            <li>《夜行灯》第 44 话更新<span class="time">11 月 7 日</span></li>
+            <li>冬季新番片单公开<span class="time">11 月 6 日</span></li>
+            <li>《纸境奇缘》DLC 发布<span class="time">11 月 5 日</span></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="100" height="100" rx="24" fill="#245cf5"/>
+            <circle cx="36" cy="44" r="12" fill="#ffd966"/>
+            <circle cx="66" cy="44" r="12" fill="#ffb347"/>
+            <path d="M32 70 Q50 84 68 70" stroke="white" stroke-width="6" fill="none" stroke-linecap="round"/>
+          </svg>
+          Blibli
+        </div>
+        <p class="footer-desc">专注动画新番、独立游戏、漫画连载与声优文化的垂直内容聚合。提供具体条目更新、类型筛选与社区讨论。</p>
+      </div>
+      <div class="footer-col">
+        <h4>内容频道</h4>
+        <ul>
+          <li><a href="/#picks">新番动画</a></li>
+          <li><a href="/#picks">独立游戏</a></li>
+          <li><a href="/#updates">漫画连载</a></li>
+          <li><a href="/#deep-dive">声优访谈</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>发现</h4>
+        <ul>
+          <li><a href="/#charts">本周榜单</a></li>
+          <li><a href="/#categories">分类入口</a></li>
+          <li><a href="/#news">相关资讯</a></li>
+          <li><a href="/#guide">体验指南</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>关于</h4>
+        <ul>
+          <li><a href="/#faq">常见问答</a></li>
+          <li><a href="/#comments">用户评论</a></li>
+          <li><a href="/#overview">领域概览</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-note">
+      <span>© 2026 Blibli 内容聚合示例 · 部分内容为示例数据，仅用于展示页面结构</span>
+      <span>所有条目与日期基于 2026 年 11 月 8 日整理</span>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      // 搜索过滤：在页面内查找匹配的卡片或列表项
+      const searchInput = document.getElementById('searchInput');
+      const feedback = document.getElementById('searchFeedback');
+      if (!searchInput) return;
+
+      // 收集所有可搜索的内容块（卡片、新闻条目、资讯条目、榜单行）
+      function getSearchableElements() {
+        return document.querySelectorAll('.content-card, .news-item, .info-item, .chart-row, .comment-card, .hot-list li, .update-stream li');
+      }
+
+      searchInput.addEventListener('input', function() {
+        const query = this.value.trim().toLowerCase();
+        const elements = getSearchableElements();
+        let visibleCount = 0;
+
+        elements.forEach(el => {
+          const text = el.textContent.toLowerCase();
+          if (!query || text.includes(query)) {
+            el.style.display = '';
+            if (query) visibleCount++;
+          } else {
+            el.style.display = 'none';
+          }
+        });
+
+        if (query && visibleCount === 0) {
+          feedback.textContent = '未找到相关条目';
+          feedback.classList.add('show');
+        } else if (query && visibleCount > 0) {
+          feedback.textContent = '找到 ' + visibleCount + ' 个相关条目';
+          feedback.classList.add('show');
+        } else {
+          feedback.classList.remove('show');
+        }
+      });
+
+      // 点击外部隐藏反馈
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.search-wrap')) {
+          feedback.classList.remove('show');
+        }
+      });
+    })();
+  </script>
+</body>
+      </html>
