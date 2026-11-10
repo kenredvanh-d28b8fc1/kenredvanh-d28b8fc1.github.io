@@ -1,0 +1,1521 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jrs直播 - 赛事聚合与数据追踪</title>
+  <meta name="description" content="jrs直播汇聚NBA、英超、西甲等热门赛事直播入口、实时比分与赛前分析，提供篮球足球赛程、球队数据与球迷讨论专区，适合体育爱好者追踪赛况。">
+  <meta name="keywords" content="NBA赛程,英超直播,足球比分,篮球数据,球迷社区">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231a2a4a'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23f5b83d' font-family='Arial' font-weight='bold'%3EJ%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #f4f6fa;
+      --panel: #ffffff;
+      --ink: #141c2b;
+      --ink-soft: #3a4560;
+      --muted: #6b7690;
+      --line: #dfe4ee;
+      --brand: #1a2a4a;
+      --brand-soft: #2e426b;
+      --accent: #e8a020;
+      --accent-soft: #fdf3dd;
+      --live: #d93b3b;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 2px 10px rgba(20, 28, 43, 0.06);
+      --shadow-hover: 0 6px 20px rgba(20, 28, 43, 0.12);
+      --font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+      --head-h: 112px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: var(--head-h); }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; object-fit: cover; }
+    ul { list-style: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    /* ===== 吸顶公告条 ===== */
+    .announce {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--brand);
+      color: #fff;
+      font-size: 13px;
+      padding: 7px 0;
+    }
+    .announce .wrap {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow: hidden;
+    }
+    .announce .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      box-shadow: 0 0 0 3px rgba(232,160,32,.25);
+    }
+    .announce .txt {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      opacity: .92;
+    }
+    .announce .txt b { color: var(--accent); font-weight: 600; }
+
+    /* ===== 吸顶页头 ===== */
+    .site-head {
+      position: sticky;
+      top: 33px;
+      z-index: 99;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 1px 6px rgba(20,28,43,.05);
+    }
+    .head-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 78px;
+      display: flex;
+      align-items: center;
+      gap: 26px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .brand svg { width: 38px; height: 38px; }
+    .brand-name {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -.5px;
+      color: var(--brand);
+    }
+    .main-nav {
+      display: flex;
+      gap: 4px;
+      flex: 1;
+      overflow-x: auto;
+    }
+    .main-nav a {
+      font-size: 14px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      color: var(--ink-soft);
+      white-space: nowrap;
+      transition: .18s;
+    }
+    .main-nav a:hover { background: var(--accent-soft); color: var(--brand); }
+    .head-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .btn {
+      font-size: 13px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      transition: .18s;
+      white-space: nowrap;
+    }
+    .btn-primary { background: var(--brand); color: #fff; }
+    .btn-primary:hover { background: var(--brand-soft); }
+    .btn-ghost { border: 1px solid var(--line); color: var(--ink-soft); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ===== 首屏 ===== */
+    .hero {
+      background: linear-gradient(135deg, var(--brand) 0%, #24365e 55%, #1e2f52 100%);
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      right: -80px; top: -60px;
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,160,32,.18), transparent 70%);
+    }
+    .hero-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 52px 20px 46px;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 40px;
+      align-items: center;
+      position: relative;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: var(--accent);
+      border: 1px solid rgba(232,160,32,.4);
+      border-radius: 20px;
+      padding: 4px 12px;
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: 44px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .hero-desc {
+      font-size: 15px;
+      color: rgba(255,255,255,.78);
+      max-width: 540px;
+      margin-bottom: 26px;
+      line-height: 1.75;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .hero-actions .btn-primary { background: var(--accent); color: var(--brand); }
+    .hero-actions .btn-primary:hover { background: #f0b545; }
+    .hero-actions .btn-ghost { border-color: rgba(255,255,255,.35); color: #fff; }
+    .hero-actions .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    .scoreboard {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius);
+      padding: 20px;
+      backdrop-filter: blur(6px);
+    }
+    .scoreboard-title {
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      color: var(--accent);
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .scoreboard-title .live-tag {
+      font-size: 10px;
+      background: var(--live);
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 10px;
+      letter-spacing: 0;
+    }
+    .score-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      font-size: 13.5px;
+    }
+    .score-row:last-child { border-bottom: none; }
+    .score-team { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,.9); }
+    .score-team .abbr {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .score-num {
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      letter-spacing: .5px;
+    }
+    .score-time { font-size: 11px; color: rgba(255,255,255,.5); }
+
+    /* ===== 三栏布局 ===== */
+    .layout {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 30px 20px 50px;
+      display: grid;
+      grid-template-columns: 180px minmax(0,1fr) 280px;
+      gap: 26px;
+      align-items: start;
+    }
+
+    /* 左侧频道索引 */
+    .side-left {
+      position: sticky;
+      top: var(--head-h);
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 18px 14px;
+      box-shadow: var(--shadow);
+    }
+    .side-left h3 {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      padding-left: 8px;
+    }
+    .channel-list a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 10px;
+      font-size: 14px;
+      color: var(--ink-soft);
+      border-radius: 7px;
+      transition: .15s;
+      border-left: 3px solid transparent;
+    }
+    .channel-list a:hover {
+      background: var(--accent-soft);
+      color: var(--brand);
+      border-left-color: var(--accent);
+    }
+    .channel-list .cnt {
+      font-size: 11px;
+      color: var(--muted);
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 1px 7px;
+    }
+
+    /* 主内容区 */
+    .main-col { min-width: 0; }
+    .section {
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 24px 24px 26px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--bg);
+      flex-wrap: wrap;
+    }
+    .section-head h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--brand);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .section-head h2::before {
+      content: "";
+      width: 4px; height: 18px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    .section-head .more {
+      font-size: 13px;
+      color: var(--muted);
+      transition: .15s;
+    }
+    .section-head .more:hover { color: var(--accent); }
+
+    .overview-text { font-size: 14.5px; color: var(--ink-soft); line-height: 1.85; }
+    .overview-text p { margin-bottom: 12px; }
+    .overview-text p:last-child { margin-bottom: 0; }
+    .overview-text strong { color: var(--brand); font-weight: 600; }
+
+    /* 精选卡片网格 */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 16px;
+    }
+    .media-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      transition: .2s;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+    .media-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+    .media-card img {
+      width: 100%; height: 140px;
+      object-fit: cover;
+    }
+    .media-card .body { padding: 13px 14px 15px; flex: 1; display: flex; flex-direction: column; }
+    .media-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .media-card .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+    .tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--bg);
+      color: var(--ink-soft);
+      white-space: nowrap;
+    }
+    .tag.hot { background: #fdeaea; color: var(--live); }
+    .tag.gold { background: var(--accent-soft); color: #a06b00; }
+    .media-card .desc {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.6;
+      flex: 1;
+      margin-bottom: 10px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .media-card .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      color: var(--muted);
+      padding-top: 9px;
+      border-top: 1px dashed var(--line);
+    }
+    .meta .heat { color: var(--accent); font-weight: 600; }
+
+    /* 更新列表 */
+    .update-list { display: flex; flex-direction: column; }
+    .update-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--bg);
+      font-size: 13.5px;
+    }
+    .update-item:last-child { border-bottom: none; }
+    .update-item .time {
+      flex-shrink: 0;
+      font-size: 11.5px;
+      color: var(--muted);
+      width: 52px;
+      padding-top: 1px;
+    }
+    .update-item .time.live { color: var(--live); font-weight: 600; }
+    .update-item .info { flex: 1; min-width: 0; }
+    .update-item .info b { color: var(--brand); font-weight: 600; }
+    .update-item .info span { color: var(--muted); }
+
+    /* 分类入口 */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .cat-item {
+      text-align: center;
+      padding: 18px 8px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      transition: .18s;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .cat-item:hover { background: var(--accent-soft); border-color: var(--accent); }
+    .cat-item .icon {
+      font-size: 22px;
+      margin-bottom: 7px;
+      display: block;
+    }
+    .cat-item .name { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+    .cat-item .sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* 深度解析 */
+    .deep-article h3 {
+      font-size: 16.5px;
+      color: var(--brand);
+      margin: 22px 0 10px;
+      padding-left: 10px;
+      border-left: 3px solid var(--accent);
+    }
+    .deep-article h3:first-child { margin-top: 0; }
+    .deep-article p {
+      font-size: 14px;
+      color: var(--ink-soft);
+      line-height: 1.85;
+      margin-bottom: 12px;
+    }
+    .deep-article ul { margin: 8px 0 14px 20px; }
+    .deep-article li {
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      line-height: 1.8;
+      margin-bottom: 5px;
+      list-style: disc;
+    }
+    .deep-article li::marker { color: var(--accent); }
+
+    /* 体验指南 */
+    .guide-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .guide-step {
+      display: flex;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+    .guide-step:last-child { border-bottom: none; }
+    .step-num {
+      flex-shrink: 0;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--brand);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 15px;
+    }
+    .guide-step h4 {
+      font-size: 14.5px;
+      color: var(--brand);
+      margin-bottom: 5px;
+    }
+    .guide-step p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* FAQ */
+    details.faq-item {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: .18s;
+    }
+    details.faq-item[open] { border-color: var(--accent); background: #fffdf7; }
+    details.faq-item summary {
+      padding: 13px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    details.faq-item summary::-webkit-details-marker { display: none; }
+    details.faq-item summary::after {
+      content: "+";
+      font-size: 18px;
+      color: var(--accent);
+      font-weight: 400;
+      flex-shrink: 0;
+    }
+    details.faq-item[open] summary::after { content: "−"; }
+    details.faq-item .answer {
+      padding: 0 16px 15px;
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    /* 评论 */
+    .comment-list { display: flex; flex-direction: column; gap: 14px; }
+    .comment {
+      display: flex;
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--bg);
+    }
+    .comment:last-child { border-bottom: none; padding-bottom: 0; }
+    .avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--brand-soft), var(--brand));
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .comment-body { flex: 1; min-width: 0; }
+    .comment-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 3px;
+      flex-wrap: wrap;
+    }
+    .comment-top .nick { font-size: 13px; font-weight: 600; color: var(--brand); }
+    .comment-top .date { font-size: 11px; color: var(--muted); }
+    .comment-body p { font-size: 13px; color: var(--ink-soft); line-height: 1.7; }
+
+    /* 相关资讯 */
+    .news-item {
+      display: flex;
+      gap: 14px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--bg);
+    }
+    .news-item:last-child { border-bottom: none; }
+    .news-item img {
+      width: 110px; height: 74px;
+      border-radius: 6px;
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+    .news-item .news-body { flex: 1; min-width: 0; }
+    .news-item h4 {
+      font-size: 14px;
+      color: var(--ink);
+      font-weight: 600;
+      margin-bottom: 4px;
+      line-height: 1.45;
+    }
+    .news-item .news-meta { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+    .news-item .news-summary {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* 相关推荐标签 */
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 9px; }
+    .tag-cloud a {
+      font-size: 13px;
+      padding: 7px 14px;
+      border-radius: 20px;
+      background: var(--bg);
+      color: var(--ink-soft);
+      transition: .18s;
+      border: 1px solid transparent;
+    }
+    .tag-cloud a:hover {
+      background: var(--accent-soft);
+      color: var(--brand);
+      border-color: var(--accent);
+    }
+
+    /* 右侧辅助栏 */
+    .side-right { display: flex; flex-direction: column; gap: 22px; position: sticky; top: var(--head-h); }
+    .side-card {
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .side-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--brand);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--bg);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .side-card h3::before {
+      content: "";
+      width: 3px; height: 15px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    .rank-list { display: flex; flex-direction: column; gap: 11px; }
+    .rank-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+    .rank-num {
+      width: 20px; height: 20px;
+      border-radius: 5px;
+      background: var(--bg);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .rank-num.top { background: var(--accent); color: var(--brand); }
+    .rank-item .rank-name { flex: 1; color: var(--ink-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .rank-item .rank-heat { font-size: 11px; color: var(--accent); font-weight: 600; flex-shrink: 0; }
+
+    .timeline { position: relative; padding-left: 16px; }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 3px; top: 4px; bottom: 4px;
+      width: 2px;
+      background: var(--line);
+    }
+    .tl-item {
+      position: relative;
+      padding-bottom: 15px;
+      font-size: 12.5px;
+    }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-item::before {
+      content: "";
+      position: absolute;
+      left: -16px; top: 5px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px var(--line);
+    }
+    .tl-item .tl-date { font-size: 11px; color: var(--muted); margin-bottom: 1px; }
+    .tl-item .tl-txt { color: var(--ink-soft); line-height: 1.55; }
+    .tl-item .tl-txt b { color: var(--brand); font-weight: 600; }
+
+    /* 页尾 */
+    .site-foot {
+      background: var(--brand);
+      color: rgba(255,255,255,.7);
+      margin-top: 10px;
+    }
+    .foot-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 40px 20px 26px;
+    }
+    .foot-top {
+      display: grid;
+      grid-template-columns: 1.4fr repeat(3, 1fr);
+      gap: 36px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .foot-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .foot-brand svg { width: 32px; height: 32px; }
+    .foot-brand span { font-size: 20px; font-weight: 800; color: #fff; }
+    .foot-brand-desc { font-size: 13px; line-height: 1.75; color: rgba(255,255,255,.6); max-width: 280px; }
+    .foot-col h4 { font-size: 14px; color: #fff; margin-bottom: 12px; font-weight: 600; }
+    .foot-col a {
+      display: block;
+      font-size: 13px;
+      color: rgba(255,255,255,.6);
+      padding: 4px 0;
+      transition: .15s;
+    }
+    .foot-col a:hover { color: var(--accent); }
+    .foot-bottom {
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 12px;
+      color: rgba(255,255,255,.45);
+    }
+    .foot-bottom .demo-note { font-size: 11.5px; color: rgba(255,255,255,.4); }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 1100px) {
+      .layout { grid-template-columns: 160px minmax(0,1fr) 250px; gap: 18px; }
+      .hero-inner { grid-template-columns: 1fr 340px; gap: 28px; }
+      .hero h1 { font-size: 38px; }
+    }
+    @media (max-width: 1024px) {
+      .layout { grid-template-columns: minmax(0,1fr) 280px; }
+      .side-left { display: none; }
+      .main-nav { display: none; }
+      .head-inner { height: 68px; justify-content: space-between; }
+      .site-head { top: 31px; }
+      .hero-inner { grid-template-columns: 1fr; gap: 28px; }
+      .scoreboard { max-width: 480px; }
+      .foot-top { grid-template-columns: 1fr 1fr; gap: 24px; }
+    }
+    @media (max-width: 740px) {
+      .layout { grid-template-columns: 1fr; padding: 18px 14px 36px; gap: 18px; }
+      .side-right { position: static; }
+      .hero-inner { padding: 36px 16px 32px; }
+      .hero h1 { font-size: 32px; }
+      .card-grid { grid-template-columns: 1fr; }
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .section { padding: 18px 16px 20px; }
+      .head-inner { padding: 0 14px; }
+      .announce .wrap { padding: 0 14px; }
+      .news-item img { width: 88px; height: 62px; }
+      .foot-top { grid-template-columns: 1fr; gap: 20px; }
+      .foot-bottom { flex-direction: column; align-items: flex-start; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .hero-actions .btn { text-align: center; }
+      .head-actions .btn-ghost { display: none; }
+    }
+    @media (max-width: 360px) {
+      .hero h1 { font-size: 28px; }
+      .cat-grid { grid-template-columns: 1fr; }
+    }
+
+    /* 焦点可见 */
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+  </style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+
+<!-- 吸顶公告条 -->
+<div class="announce">
+  <div class="wrap">
+    <span class="dot"></span>
+    <span class="txt"><b>今日更新</b> NBA 常规赛 8 场战报已同步 · 英超第 11 轮集锦上线 · 西甲国家德比前瞻发布 · 新增 3 场欧冠直播入口</span>
+  </div>
+</div>
+
+<!-- 吸顶页头 -->
+<header class="site-head">
+  <div class="head-inner">
+    <a href="/#top" class="brand" aria-label="jrs直播 首页">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <rect width="100" height="100" rx="22" fill="#1a2a4a"/>
+        <path d="M30 28 h14 v30 a14 14 0 0 1 -14 14 h-6 v-12 h6 a4 4 0 0 0 4 -4 z" fill="#e8a020"/>
+        <circle cx="68" cy="40" r="14" fill="none" stroke="#e8a020" stroke-width="7"/>
+        <path d="M62 52 l-10 18" stroke="#e8a020" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-name">jrs直播</span>
+    </a>
+    <nav class="main-nav" aria-label="主题导航">
+      <a href="/#overview">赛事概览</a>
+      <a href="/#featured">精选推荐</a>
+      <a href="/#updates">最新动态</a>
+      <a href="/#categories">分类入口</a>
+      <a href="/#deep-dive">深度解析</a>
+      <a href="/#guide">观赛指南</a>
+      <a href="/#faq">常见问答</a>
+      <a href="/#comments">球迷评论</a>
+      <a href="/#news">相关资讯</a>
+    </nav>
+    <div class="head-actions">
+      <a href="/#featured" class="btn btn-primary">今日赛事</a>
+      <a href="/#updates" class="btn btn-ghost">比分速报</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <!-- 首屏 -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <span class="hero-badge">● 实时赛事聚合</span>
+        <h1>jrs直播</h1>
+        <p class="hero-desc">汇集 NBA、英超、西甲、欧冠等主流篮球足球赛事的直播入口、实时比分与赛前分析，整理球队战绩、球员数据与球迷讨论，帮助体育爱好者快速定位当天值得关注的比赛。</p>
+        <div class="hero-actions">
+          <a href="/#featured" class="btn btn-primary">查看今日焦点赛</a>
+          <a href="/#updates" class="btn btn-ghost">实时比分更新</a>
+        </div>
+      </div>
+      <div class="scoreboard" aria-label="今日比分速览">
+        <div class="scoreboard-title">
+          <span>今日赛果 · 11月8日</span>
+          <span class="live-tag">LIVE</span>
+        </div>
+        <div class="score-row">
+          <span class="score-team"><span class="abbr">凯</span>凯尔特人</span>
+          <span class="score-num">112</span>
+        </div>
+        <div class="score-row">
+          <span class="score-team"><span class="abbr">湖</span>湖人</span>
+          <span class="score-num">108</span>
+        </div>
+        <div class="score-row">
+          <span class="score-team"><span class="abbr">曼</span>曼城</span>
+          <span class="score-num">3</span>
+        </div>
+        <div class="score-row">
+          <span class="score-team"><span class="abbr">阿</span>阿森纳</span>
+          <span class="score-num">1</span>
+        </div>
+        <div class="score-row">
+          <span class="score-team"><span class="abbr">皇</span>皇家马德里</span>
+          <span class="score-num">2</span>
+        </div>
+        <div class="score-row">
+          <span class="score-team"><span class="abbr">巴</span>巴塞罗那</span>
+          <span class="score-num">2</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 三栏布局 -->
+  <div class="layout">
+
+    <!-- 左侧频道索引 -->
+    <aside class="side-left" aria-label="频道索引">
+      <h3>赛事频道</h3>
+      <nav class="channel-list">
+        <a href="/#featured">NBA <span class="cnt">12</span></a>
+        <a href="/#featured">英超 <span class="cnt">10</span></a>
+        <a href="/#featured">西甲 <span class="cnt">8</span></a>
+        <a href="/#featured">欧冠 <span class="cnt">6</span></a>
+        <a href="/#featured">意甲 <span class="cnt">7</span></a>
+        <a href="/#featured">德甲 <span class="cnt">5</span></a>
+        <a href="/#featured">中超 <span class="cnt">4</span></a>
+        <a href="/#featured">CBA <span class="cnt">6</span></a>
+        <a href="/#categories">球队数据 <span class="cnt">32</span></a>
+        <a href="/#categories">球员统计 <span class="cnt">48</span></a>
+        <a href="/#news">转会动态 <span class="cnt">9</span></a>
+        <a href="/#comments">球迷讨论 <span class="cnt">23</span></a>
+      </nav>
+    </aside>
+
+    <!-- 主内容区 -->
+    <div class="main-col">
+
+      <!-- 1. 主题领域概览 -->
+      <section class="section" id="overview">
+        <div class="section-head">
+          <h2>赛事领域概览</h2>
+          <a href="/#featured" class="more">进入赛事库 →</a>
+        </div>
+        <div class="overview-text">
+          <p>jrs直播所聚合的内容覆盖篮球与足球两大运动体系。篮球方向以 <strong>NBA 常规赛</strong>、<strong>NBA 季中锦标赛</strong>、<strong>CBA 联赛</strong> 为核心，延伸至欧洲篮球联赛与国家队窗口期赛事。足球方向则包含 <strong>英超</strong>、<strong>西甲</strong>、<strong>意甲</strong>、<strong>德甲</strong> 五大联赛，以及 <strong>欧冠</strong>、<strong>欧联</strong> 与国内 <strong>中超</strong> 赛事。</p>
+          <p>当前阶段值得关注的具体内容有：NBA 2026-27 赛季常规赛已进行至第 9 轮，凯尔特人、掘金、雷霆三队战绩领跑东西部；英超第 11 轮曼城与阿森纳的榜首直接对话刚刚结束；西甲国家德比首回合本周日在伯纳乌进行；欧冠小组赛第 4 轮将在 11 月 5 日至 6 日展开。每个赛事频道下均整理有赛程、比分、球队排名与关键球员数据。</p>
+          <p>除赛事直播外，页面还汇集了伤病报告、首发预测、战术复盘与转会传闻等周边信息。访问者可按联赛、球队或日期筛选内容，快速定位到具体比赛与相关分析，不必在多个平台之间来回跳转。</p>
+        </div>
+      </section>
+
+      <!-- 2. 精选内容推荐 -->
+      <section class="section" id="featured">
+        <div class="section-head">
+          <h2>精选赛事与专题</h2>
+          <a href="/#updates" class="more">查看全部 →</a>
+        </div>
+        <div class="card-grid">
+          <article class="media-card">
+            <img src="https://picsum.photos/seed/nba-celtics-lakers/400/300" alt="凯尔特人对阵湖人比赛现场" width="400" height="300" loading="lazy">
+            <div class="body">
+              <h3>凯尔特人 112-108 湖人</h3>
+              <div class="tags">
+                <span class="tag hot">NBA</span>
+                <span class="tag">东部第一</span>
+                <span class="tag gold">塔图姆 34 分</span>
+              </div>
+              <p class="desc">塔图姆末节独得 14 分，帮助凯尔特人客场险胜湖人。詹姆斯空砍 28 分 9 篮板，湖人遭遇两连败。</p>
+              <div class="meta"><span>今日 11:30 结束</span><span class="heat">🔥 8.6 万</span></div>
+            </div>
+          </article>
+          <article class="media-card">
+            <img src="https://picsum.photos/seed/epl-mancity-arsenal/400/300" alt="曼城对阵阿森纳英超比赛" width="400" height="300" loading="lazy">
+            <div class="body">
+              <h3>曼城 3-1 阿森纳</h3>
+              <div class="tags">
+                <span class="tag hot">英超</span>
+                <span class="tag">榜首大战</span>
+                <span class="tag gold">哈兰德梅开二度</span>
+              </div>
+              <p class="desc">哈兰德上下半场各入一球，福登补时锁定胜局。曼城反超阿森纳登顶积分榜，阿尔特塔赛后承认防守失误。</p>
+              <div class="meta"><span>昨天 23:45 结束</span><span class="heat">🔥 12.3 万</span></div>
+            </div>
+          </article>
+          <article class="media-card">
+            <img src="https://picsum.photos/seed/laliga-clasico-bernabeu/400/300" alt="皇马对巴萨国家德比赛前热身" width="400" height="300" loading="lazy">
+            <div class="body">
+              <h3>皇马 vs 巴萨 国家德比前瞻</h3>
+              <div class="tags">
+                <span class="tag hot">西甲</span>
+                <span class="tag">国家德比</span>
+                <span class="tag gold">贝林厄姆首发存疑</span>
+              </div>
+              <p class="desc">西甲第 12 轮焦点战，皇马主场迎战巴萨。贝林厄姆伤愈进入大名单但首发未定，巴萨方面莱万状态回升。</p>
+              <div class="meta"><span>11 月 8 日 22:00 开赛</span><span class="heat">🔥 15.1 万</span></div>
+            </div>
+          </article>
+          <article class="media-card">
+            <img src="https://picsum.photos/seed/ucl-group-stage/400/300" alt="欧冠小组赛球场夜景" width="400" height="300" loading="lazy">
+            <div class="body">
+              <h3>欧冠小组赛第 4 轮赛程</h3>
+              <div class="tags">
+                <span class="tag hot">欧冠</span>
+                <span class="tag">死亡之组</span>
+                <span class="tag gold">拜仁 vs 巴黎</span>
+              </div>
+              <p class="desc">11 月 5 日至 6 日进行第 4 轮争夺。F 组拜仁主场对巴黎成出线关键战，多特蒙德客场挑战纽卡斯尔。</p>
+              <div class="meta"><span>11 月 5 日 03:00 开赛</span><span class="heat">🔥 9.8 万</span></div>
+            </div>
+          </article>
+          <article class="media-card">
+            <img src="https://picsum.photos/seed/nba-thunder-nuggets/400/300" alt="雷霆对掘金比赛对抗瞬间" width="400" height="300" loading="lazy">
+            <div class="body">
+              <h3>雷霆 105-99 掘金</h3>
+              <div class="tags">
+                <span class="tag hot">NBA</span>
+                <span class="tag">西部强强对话</span>
+                <span class="tag gold">亚历山大 31 分</span>
+              </div>
+              <p class="desc">亚历山大砍下 31 分 7 助攻，雷霆末节打出 18-4 攻击波逆转掘金。约基奇贡献 26 分 12 篮板但出现 6 次失误。</p>
+              <div class="meta"><span>11 月 7 日 10:00 结束</span><span class="heat">🔥 7.2 万</span></div>
+            </div>
+          </article>
+          <article class="media-card">
+            <img src="https://picsum.photos/seed/cba-guangdong-liaoning/400/300" alt="CBA广东对辽宁比赛画面" width="400" height="300" loading="lazy">
+            <div class="body">
+              <h3>广东 98-95 辽宁</h3>
+              <div class="tags">
+                <span class="tag hot">CBA</span>
+                <span class="tag">辽粤大战</span>
+                <span class="tag gold">胡明轩绝杀</span>
+              </div>
+              <p class="desc">CBA 常规赛第 6 轮焦点战，胡明轩终场前 2.1 秒命中三分绝杀。辽宁队张镇麟得到 25 分 8 篮板。</p>
+              <div class="meta"><span>11 月 6 日 21:35 结束</span><span class="heat">🔥 6.5 万</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 3. 最新更新 / 动态 -->
+      <section class="section" id="updates">
+        <div class="section-head">
+          <h2>最新赛果与动态</h2>
+          <a href="/#news" class="more">更多动态 →</a>
+        </div>
+        <div class="update-list">
+          <div class="update-item">
+            <span class="time live">今天 09:30</span>
+            <span class="info"><b>NBA 凯尔特人 112-108 湖人</b> <span>— 塔图姆 34 分，詹姆斯 28+9，湖人末节崩盘</span></span>
+          </div>
+          <div class="update-item">
+            <span class="time">今天 08:15</span>
+            <span class="info"><b>英超第 11 轮最佳阵容公布</b> <span>— 哈兰德、萨卡、罗德里领衔，曼城 3 人入选</span></span>
+          </div>
+          <div class="update-item">
+            <span class="time">今天 07:40</span>
+            <span class="info"><b>皇马公布国家德比大名单</b> <span>— 贝林厄姆伤愈回归，维尼修斯、罗德里戈在列</span></span>
+          </div>
+          <div class="update-item">
+            <span class="time">昨天 23:45</span>
+            <span class="info"><b>曼城 3-1 阿森纳</b> <span>— 哈兰德梅开二度，曼城反超登顶英超积分榜</span></span>
+          </div>
+          <div class="update-item">
+            <span class="time">昨天 21:10</span>
+            <span class="info"><b>NBA 伤病报告更新</b> <span>— 杜兰特因左膝酸痛缺席今日太阳对勇士比赛</span></span>
+          </div>
+          <div class="update-item">
+            <span class="time">11 月 7 日</span>
+            <span class="info"><b>欧冠第 4 轮裁判安排出炉</b> <span>— 拜仁对巴黎由奥尔萨托执法，多特对纽卡由拉奥斯主哨</span></span>
+          </div>
+          <div class="update-item">
+            <span class="time">11 月 6 日</span>
+            <span class="info"><b>CBA 广东 98-95 辽宁</b> <span>— 胡明轩三分绝杀，辽宁赛季首败</span></span>
+          </div>
+          <div class="update-item">
+            <span class="time">11 月 5 日</span>
+            <span class="info"><b>西甲第 12 轮开球时间确定</b> <span>— 国家德比定于 11 月 8 日 22:00 在伯纳乌进行</span></span>
+          </div>
+          <div class="update-item">
+            <span class="time">11 月 4 日</span>
+            <span class="info"><b>NBA 季中锦标赛分组揭晓</b> <span>— 湖人、太阳、爵士、开拓者同处西部 B 组</span></span>
+          </div>
+          <div class="update-item">
+            <span class="time">11 月 3 日</span>
+            <span class="info"><b>意甲第 11 轮国米 2-0 罗马</b> <span>— 劳塔罗、图拉姆各入一球，国米继续领跑</span></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. 分类入口 -->
+      <section class="section" id="categories">
+        <div class="section-head">
+          <h2>按类别浏览赛事</h2>
+        </div>
+        <div class="cat-grid">
+          <a href="/#featured" class="cat-item">
+            <span class="icon">🏀</span>
+            <span class="name">NBA 常规赛</span>
+            <span class="sub">东西部排名 · 每日战报</span>
+          </a>
+          <a href="/#featured" class="cat-item">
+            <span class="icon">⚽</span>
+            <span class="name">英超联赛</span>
+            <span class="sub">第 11 轮 · 积分榜</span>
+          </a>
+          <a href="/#featured" class="cat-item">
+            <span class="icon">🇪🇸</span>
+            <span class="name">西甲联赛</span>
+            <span class="sub">国家德比 · 射手榜</span>
+          </a>
+          <a href="/#featured" class="cat-item">
+            <span class="icon">🏆</span>
+            <span class="name">欧冠</span>
+            <span class="sub">小组赛第 4 轮 · 出线形势</span>
+          </a>
+          <a href="/#featured" class="cat-item">
+            <span class="icon">🇮🇹</span>
+            <span class="name">意甲</span>
+            <span class="sub">国米领跑 · 米兰德比回顾</span>
+          </a>
+          <a href="/#featured" class="cat-item">
+            <span class="icon">🇩🇪</span>
+            <span class="name">德甲</span>
+            <span class="sub">拜仁强势 · 勒沃库森追击</span>
+          </a>
+          <a href="/#featured" class="cat-item">
+            <span class="icon">🇨🇳</span>
+            <span class="name">中超 / CBA</span>
+            <span class="sub">国内赛事 · 辽粤对决</span>
+          </a>
+          <a href="/#news" class="cat-item">
+            <span class="icon">📊</span>
+            <span class="name">数据与转会</span>
+            <span class="sub">球员统计 · 转会传闻</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- 5. 深度解析正文 -->
+      <section class="section deep-article" id="deep-dive">
+        <div class="section-head">
+          <h2>深度解析：如何判断一场比赛值得看</h2>
+        </div>
+        <h3>联赛阶段与关键节点</h3>
+        <p>不同联赛的赛程节奏差异明显。NBA 常规赛共 82 场，11 月处于赛季初段，各队仍在磨合阵容，但背靠背比赛密集，轮休与伤病管理会直接影响比赛质量。英超、西甲在 11 月进入第 11 至 12 轮，积分榜开始分层，榜首与保级区的直接对话往往比单场强弱悬殊的比赛更具观赏价值。欧冠小组赛第 4 轮则是出线分水岭，前两轮失分的球队此轮必须抢分。</p>
+        <p>判断一场比赛是否值得投入时间，可以先看三个维度：<strong>排名权重</strong>（是否涉及榜首、欧战资格或保级）、<strong>历史对抗强度</strong>（如国家德比、曼城对阿森纳、辽粤大战）、<strong>球星状态</strong>（核心球员是否健康、近期数据是否爆发）。三者叠加时，通常意味着比赛会有更高的对抗强度和战术博弈。</p>
+        <h3>球队数据怎么看</h3>
+        <ul>
+          <li><strong>进攻效率</strong>：NBA 看每百回合得分与真实命中率，足球看预期进球（xG）与射门转化率，比单纯看进球数更能反映持续性。</li>
+          <li><strong>防守稳定性</strong>：篮球看防守效率与对手失误率，足球看被射门次数与定位球失球占比。</li>
+          <li><strong>主客场差异</strong>：英超、西甲的主场胜率普遍偏高，但曼城、皇马等强队客场表现同样稳定，需结合具体对阵判断。</li>
+          <li><strong>近期状态</strong>：最近 5 场的对手强度不同，直接比较胜场数容易失真，应参考对手平均排名与比赛分差。</li>
+        </ul>
+        <h3>直播入口与信息同步</h3>
+        <p>jrs直播聚合的直播入口按联赛和日期排列，赛前 30 分钟更新首发名单与伤停信息，赛中同步比分与关键事件，赛后汇总技术统计与球员评分。对于无法观看全场的访问者，集锦与战报会在比赛结束后 15 分钟内上线，重点比赛还会附上战术板截图与关键回合拆解。</p>
+        <p>需要留意的是，不同联赛的转播节奏与官方信号源不同，部分场次的直播入口会在开赛前 1 小时才最终确认。建议在赛前查看对应频道的状态标注，避免等待。数据类内容以联赛官方统计为准，赛后评论与球迷观点则属于社区讨论，阅读时可作区分。</p>
+      </section>
+
+      <!-- 6. 体验指南 -->
+      <section class="section" id="guide">
+        <div class="section-head">
+          <h2>观赛选择指南</h2>
+        </div>
+        <div class="guide-steps">
+          <div class="guide-step">
+            <span class="step-num">1</span>
+            <div>
+              <h4>先定赛事类型</h4>
+              <p>篮球优先看 NBA 当日赛程与东西部排名卡位战；足球优先看英超、西甲积分榜前六的直接对话，或欧冠小组赛出线关键场。时间有限时，跳过强弱悬殊的对阵。</p>
+            </div>
+          </div>
+          <div class="guide-step">
+            <span class="step-num">2</span>
+            <div>
+              <h4>核对首发与伤停</h4>
+              <p>赛前 30 分钟查看首发名单。核心球员缺阵会显著改变比赛走势，例如贝林厄姆是否首发直接影响国家德比的攻防结构。伤停信息在对应赛事频道内实时更新。</p>
+            </div>
+          </div>
+          <div class="guide-step">
+            <span class="step-num">3</span>
+            <div>
+              <h4>选择观看方式</h4>
+              <p>能看全场则优先直播；时间碎片化时，赛后 15 分钟上线的集锦与关键回合拆解更适合。数据型读者可直接查看技术统计与球员评分，快速掌握比赛脉络。</p>
+            </div>
+          </div>
+          <div class="guide-step">
+            <span class="step-num">4</span>
+            <div>
+              <h4>赛后复盘与对比</h4>
+              <p>同一轮次的多场比赛可横向比较：预期进球与实际比分差异、替补得分占比、关键球处理。连续追踪同一支球队 3 至 5 场，比单场数据更能判断其真实水平。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. FAQ -->
+      <section class="section" id="faq">
+        <div class="section-head">
+          <h2>常见问题</h2>
+        </div>
+        <details class="faq-item">
+          <summary>NBA 常规赛一般几点开赛？国内看直播方便吗？</summary>
+          <div class="answer">NBA 常规赛多数场次在北京时间上午 8:00 至 11:30 之间开赛，周末会有凌晨场。国内访问者通常上午观看，部分背靠背比赛会在中午结束。jrs直播的赛程按北京时间标注，可直接对照。</div>
+        </details>
+        <details class="faq-item">
+          <summary>英超和西甲的比赛时间有什么区别？</summary>
+          <div class="answer">英超多数比赛安排在周六、周日晚上 20:30 至 23:00（北京时间），部分场次在凌晨 3:00。西甲因当地时间安排，国家德比等重点场次常在北京时间 22:00 至次日 4:00 之间。具体以各赛事频道公布的赛程为准。</div>
+        </details>
+        <details class="faq-item">
+          <summary>第一次看足球比赛，从哪类场次开始比较合适？</summary>
+          <div class="answer">建议从英超或西甲积分榜前六的直接对话开始，这类比赛节奏快、对抗激烈、战术意图清晰。国家德比、曼城对阿森纳、米兰德比都是典型选择。不建议从实力悬殊的杯赛首轮入手。</div>
+        </details>
+        <details class="faq-item">
+          <summary>怎么判断一支球队的数据是否有参考价值？</summary>
+          <div class="answer">看数据是否覆盖足够场次（至少 5 场）、对手强度是否接近、主客场是否区分。单场高分或大胜容易失真，连续多场的预期进球、防守效率与净胜分更有参考意义。</div>
+        </details>
+        <details class="faq-item">
+          <summary>欧冠小组赛的晋级规则是什么？</summary>
+          <div class="answer">欧冠小组赛每组 4 队，主客场双循环共 6 轮，小组前两名晋级 16 强，第三名进入欧联淘汰赛附加赛。积分相同依次比较相互战绩、净胜球和进球数。</div>
+        </details>
+        <details class="faq-item">
+          <summary>CBA 和 NBA 的规则差异大吗？</summary>
+          <div class="answer">主要差异在比赛时长（CBA 每节 12 分钟，与 NBA 相同，但犯规次数和暂停规则不同）以及三分线距离。CBA 的对抗尺度与裁判吹罚风格也与 NBA 有区别，观看时需注意节奏变化。</div>
+        </details>
+      </section>
+
+      <!-- 8. 用户评论 -->
+      <section class="section" id="comments">
+        <div class="section-head">
+          <h2>球迷讨论</h2>
+          <a href="/#comments" class="more">参与讨论 →</a>
+        </div>
+        <div class="comment-list">
+          <div class="comment">
+            <div class="avatar">绿</div>
+            <div class="comment-body">
+              <div class="comment-top"><span class="nick">绿军铁粉老陈</span><span class="date">今天 10:12</span></div>
+              <p>塔图姆今天末节那几个干拔太硬了，湖人防守换防完全跟不上。凯尔特人这赛季替补深度比去年好，普里查德上来就能得分。</p>
+            </div>
+          </div>
+          <div class="comment">
+            <div class="avatar">蓝</div>
+            <div class="comment-body">
+              <div class="comment-top"><span class="nick">蓝月亮不眠夜</span><span class="date">今天 09:48</span></div>
+              <p>哈兰德第二个球跑位太聪明了，萨利巴盯人稍一走神就被甩开。阿森纳中场控制力还是差曼城一档，罗德里一个人就把节奏压住了。</p>
+            </div>
+          </div>
+          <div class="comment">
+            <div class="avatar">伯</div>
+            <div class="comment-body">
+              <div class="comment-top"><span class="nick">伯纳乌南看台</span><span class="date">今天 09:05</span></div>
+              <p>国家德比贝林厄姆要是能首发，皇马中场推进就顺畅多了。巴萨这边亚马尔状态不错，右路对位会很有看头。</p>
+            </div>
+          </div>
+          <div class="comment">
+            <div class="avatar">雷</div>
+            <div class="comment-body">
+              <div class="comment-top"><span class="nick">雷霆青年军观察员</span><span class="date">昨天 22:30</span></div>
+              <p>亚历山大这赛季中距离命中率又涨了，掘金用戈登防他都吃力。雷霆防守轮转比上赛季快，切特护框进步明显。</p>
+            </div>
+          </div>
+          <div class="comment">
+            <div class="avatar">辽</div>
+            <div class="comment-body">
+              <div class="comment-top"><span class="nick">辽篮老球迷</span><span class="date">11 月 6 日 22:01</span></div>
+              <p>胡明轩那个绝杀确实漂亮，但辽宁最后防守布置有问题，竟然没包夹。不过赛季还长，输一场不是坏事，早暴露早调整。</p>
+            </div>
+          </div>
+          <div class="comment">
+            <div class="avatar">战</div>
+            <div class="comment-body">
+              <div class="comment-top"><span class="nick">战术板爱好者</span><span class="date">11 月 5 日 19:20</span></div>
+              <p>欧冠 F 组拜仁对巴黎这场，图赫尔大概率会让基米希盯维蒂尼亚，切断巴黎中场出球。巴黎速度点太多，拜仁后防要小心反击。</p>
+            </div>
+          </div>
+          <div class="comment">
+            <div class="avatar">意</div>
+            <div class="comment-body">
+              <div class="comment-top"><span class="nick">意甲数据控</span><span class="date">11 月 4 日 16:35</span></div>
+              <p>国米这赛季预期进球和实际进球几乎持平，说明进攻效率很稳定。劳塔罗的跑位和恰尔汗奥卢的传球配合越来越默契。</p>
+            </div>
+          </div>
+          <div class="comment">
+            <div class="avatar">勇</div>
+            <div class="comment-body">
+              <div class="comment-top"><span class="nick">勇士板凳席</span><span class="date">11 月 4 日 12:10</span></div>
+              <p>杜兰特不打太阳进攻确实差一截，布克被包夹后其他人处理球能力不够。不过勇士这边维金斯状态回暖是个好消息。</p>
+            </div>
+          </div>
+          <div class="comment">
+            <div class="avatar">曼</div>
+            <div class="comment-body">
+              <div class="comment-top"><span class="nick">曼彻斯特蓝</span><span class="date">11 月 3 日 21:44</span></div>
+              <p>福登补时那个球其实越位嫌疑不大，回放看得很清楚。阿森纳输在临场调整，阿尔特塔换人太晚了。</p>
+            </div>
+          </div>
+          <div class="comment">
+            <div class="avatar">西</div>
+            <div class="comment-body">
+              <div class="comment-top"><span class="nick">西甲散人</span><span class="date">11 月 3 日 14:28</span></div>
+              <p>国家德比每次都是战术博弈，今年皇马中场更硬，巴萨边路更快，五五开的球。贝林厄姆如果替补，皇马下半场后手更强。</p>
+            </div>
+          </div>
+          <div class="comment">
+            <div class="avatar">数</div>
+            <div class="comment-body">
+              <div class="comment-top"><span class="nick">数据看球不迷路</span><span class="date">11 月 2 日 10:15</span></div>
+              <p>建议看比赛前先扫一眼两队最近五场的 xG 和 xGA，比单纯看比分靠谱。比如阿森纳虽然赢了前几轮，但 xG 并不高。</p>
+            </div>
+          </div>
+          <div class="comment">
+            <div class="avatar">篮</div>
+            <div class="comment-body">
+              <div class="comment-top"><span class="nick">篮球不打铁</span><span class="date">11 月 1 日 20:50</span></div>
+              <p>NBA 季中锦标赛分组出来，湖人太阳同组挺有意思。季中赛的场地和地板颜色每年都要吐槽一下，但比赛强度确实高。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. 相关资讯 -->
+      <section class="section" id="news">
+        <div class="section-head">
+          <h2>赛事资讯</h2>
+        </div>
+        <div class="news-item">
+          <img src="https://picsum.photos/seed/nba-injury-report/600/400" alt="NBA伤病报告数据图表" width="600" height="400" loading="lazy">
+          <div class="news-body">
+            <div class="news-meta">2026-11-08 · NBA</div>
+            <h4>杜兰特左膝酸痛缺席太阳对勇士，布克单核带队</h4>
+            <p class="news-summary">太阳官方更新伤病报告，杜兰特因左膝酸痛确定缺席今日对阵勇士的比赛。布克将承担更多持球任务，太阳轮换阵容相应调整。</p>
+          </div>
+        </div>
+        <div class="news-item">
+          <img src="https://picsum.photos/seed/epl-round11-review/600/400" alt="英超第11轮比赛精彩瞬间" width="600" height="400" loading="lazy">
+          <div class="news-body">
+            <div class="news-meta">2026-11-07 · 英超</div>
+            <h4>英超第 11 轮最佳阵容：曼城 3 人入选，哈兰德领衔锋线</h4>
+            <p class="news-summary">本轮最佳阵容公布，曼城哈兰德、罗德里、格瓦迪奥尔入选，阿森纳萨卡、赖斯在列。哈兰德梅开二度成为本轮最佳球员。</p>
+          </div>
+        </div>
+        <div class="news-item">
+          <img src="https://picsum.photos/seed/laliga-clasico-squad/600/400" alt="皇马国家德比训练画面" width="600" height="400" loading="lazy">
+          <div class="news-body">
+            <div class="news-meta">2026-11-07 · 西甲</div>
+            <h4>皇马公布国家德比大名单：贝林厄姆伤愈回归</h4>
+            <p class="news-summary">皇马公布对阵巴萨的 23 人大名单，贝林厄姆伤愈复出，维尼修斯、罗德里戈、巴尔韦德悉数在列。库尔图瓦继续缺阵。</p>
+          </div>
+        </div>
+        <div class="news-item">
+          <img src="https://picsum.photos/seed/ucl-referee-announce/600/400" alt="欧冠裁判安排公告" width="600" height="400" loading="lazy">
+          <div class="news-body">
+            <div class="news-meta">2026-11-06 · 欧冠</div>
+            <h4>欧冠第 4 轮裁判安排：奥尔萨托执法拜仁对巴黎</h4>
+            <p class="news-summary">欧足联公布第 4 轮裁判名单，意大利名哨奥尔萨托执法拜仁对巴黎焦点战，西班牙裁判拉奥斯主哨多特蒙德客场对纽卡斯尔。</p>
+          </div>
+        </div>
+        <div class="news-item">
+          <img src="https://picsum.photos/seed/cba-guangdong-win/600/400" alt="CBA广东队庆祝绝杀" width="600" height="400" loading="lazy">
+          <div class="news-body">
+            <div class="news-meta">2026-11-06 · CBA</div>
+            <h4>胡明轩三分绝杀，广东 98-95 送辽宁赛季首败</h4>
+            <p class="news-summary">CBA 常规赛第 6 轮，广东主场 98-95 险胜辽宁。胡明轩终场前 2.1 秒命中三分绝杀，辽宁队张镇麟空砍 25 分 8 篮板。</p>
+          </div>
+        </div>
+        <div class="news-item">
+          <img src="https://picsum.photos/seed/nba-ist-group/600/400" alt="NBA季中锦标赛分组抽签" width="600" height="400" loading="lazy">
+          <div class="news-body">
+            <div class="news-meta">2026-11-04 · NBA</div>
+            <h4>NBA 季中锦标赛分组揭晓：湖人太阳同处西部 B 组</h4>
+            <p class="news-summary">2026-27 赛季 NBA 季中锦标赛分组公布，湖人、太阳、爵士、开拓者同处西部 B 组。小组赛将于 11 月 12 日开打。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. 相关推荐 -->
+      <section class="section" id="related">
+        <div class="section-head">
+          <h2>延伸内容方向</h2>
+        </div>
+        <div class="tag-cloud">
+          <a href="/#featured">NBA 季中锦标赛赛制</a>
+          <a href="/#featured">英超积分榜前六对阵</a>
+          <a href="/#featured">西甲国家德比历史战绩</a>
+          <a href="/#featured">欧冠小组赛出线形势</a>
+          <a href="/#news">五大联赛冬窗转会传闻</a>
+          <a href="/#categories">CBA 季后赛席位竞争</a>
+          <a href="/#comments">球迷票选本轮最佳进球</a>
+          <a href="/#deep-dive">预期进球数据入门</a>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- 右侧辅助栏 -->
+    <aside class="side-right" aria-label="辅助信息">
+      <div class="side-card">
+        <h3>今日热度榜</h3>
+        <div class="rank-list">
+          <div class="rank-item">
+            <span class="rank-num top">1</span>
+            <span class="rank-name">皇马 vs 巴萨 国家德比</span>
+            <span class="rank-heat">15.1w</span>
+          </div>
+          <div class="rank-item">
+            <span class="rank-num top">2</span>
+            <span class="rank-name">曼城 3-1 阿森纳</span>
+            <span class="rank-heat">12.3w</span>
+          </div>
+          <div class="rank-item">
+            <span class="rank-num top">3</span>
+            <span class="rank-name">凯尔特人 112-108 湖人</span>
+            <span class="rank-heat">8.6w</span>
+          </div>
+          <div class="rank-item">
+            <span class="rank-num">4</span>
+            <span class="rank-name">欧冠第 4 轮赛程</span>
+            <span class="rank-heat">9.8w</span>
+          </div>
+          <div class="rank-item">
+            <span class="rank-num">5</span>
+            <span class="rank-name">雷霆 105-99 掘金</span>
+            <span class="rank-heat">7.2w</span>
+          </div>
+          <div class="rank-item">
+            <span class="rank-num">6</span>
+            <span class="rank-name">广东 98-95 辽宁</span>
+            <span class="rank-heat">6.5w</span>
+          </div>
+          <div class="rank-item">
+            <span class="rank-num">7</span>
+            <span class="rank-name">杜兰特伤缺太阳勇士</span>
+            <span class="rank-heat">5.9w</span>
+          </div>
+          <div class="rank-item">
+            <span class="rank-num">8</span>
+            <span class="rank-name">国米 2-0 罗马</span>
+            <span class="rank-heat">4.4w</span>
+          </div>
+        </div>
+      </div>
+      <div class="side-card">
+        <h3>赛事时间线</h3>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-date">11 月 8 日 22:00</div>
+            <div class="tl-txt"><b>西甲国家德比</b> 皇马 vs 巴萨</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">11 月 9 日 08:00</div>
+            <div class="tl-txt"><b>NBA</b> 掘金 vs 勇士</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">11 月 9 日 23:30</div>
+            <div class="tl-txt"><b>英超</b> 利物浦 vs 切尔西</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">11 月 12 日</div>
+            <div class="tl-txt"><b>NBA 季中锦标赛</b> 小组赛开打</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">11 月 15 日</div>
+            <div class="tl-txt"><b>世预赛</b> 国家队窗口期开启</div>
+          </div>
+        </div>
+      </div>
+      <div class="side-card">
+        <h3>数据说明</h3>
+        <p style="font-size:12.5px;color:var(--muted);line-height:1.75;">比分与排名数据来自联赛官方统计，更新至 2026 年 11 月 8 日。球员评分与热度值为社区综合指标，仅供参考。</p>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<!-- 页尾 -->
+<footer class="site-foot">
+  <div class="foot-inner">
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <rect width="100" height="100" rx="22" fill="#e8a020"/>
+            <path d="M30 28 h14 v30 a14 14 0 0 1 -14 14 h-6 v-12 h6 a4 4 0 0 0 4 -4 z" fill="#1a2a4a"/>
+            <circle cx="68" cy="40" r="14" fill="none" stroke="#1a2a4a" stroke-width="7"/>
+            <path d="M62 52 l-10 18" stroke="#1a2a4a" stroke-width="7" stroke-linecap="round"/>
+          </svg>
+          <span>jrs直播</span>
+        </div>
+        <p class="foot-brand-desc">聚合 NBA、英超、西甲、欧冠等主流赛事直播入口、实时比分与数据分析，服务体育爱好者的观赛与追踪需求。</p>
+      </div>
+      <div class="foot-col">
+        <h4>赛事频道</h4>
+        <a href="/#featured">NBA 常规赛</a>
+        <a href="/#featured">英超联赛</a>
+        <a href="/#featured">西甲联赛</a>
+        <a href="/#featured">欧冠</a>
+        <a href="/#featured">CBA</a>
+      </div>
+      <div class="foot-col">
+        <h4>内容栏目</h4>
+        <a href="/#updates">最新赛果</a>
+        <a href="/#news">赛事资讯</a>
+        <a href="/#deep-dive">深度解析</a>
+        <a href="/#faq">常见问答</a>
+        <a href="/#comments">球迷讨论</a>
+      </div>
+      <div class="foot-col">
+        <h4>数据工具</h4>
+        <a href="/#categories">分类浏览</a>
+        <a href="/#related">延伸方向</a>
+        <a href="/#overview">赛事概览</a>
+        <a href="/#guide">观赛指南</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 jrs直播 · 赛事聚合展示页面</span>
+      <span class="demo-note">部分内容为示例数据，仅用于展示页面结构</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // 平滑锚点已由 CSS scroll-behavior 处理；此处仅补充对无目标链接的防御
+  document.querySelectorAll('a[href^="/#"]').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      var id = link.getAttribute('href').slice(2);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.replaceState(null, '', '/' + '#' + id);
+      }
+    });
+  });
+</script>
+
+</body>
+            </html>
